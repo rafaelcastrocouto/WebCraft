@@ -10,13 +10,14 @@
 		<link href="style/main.css" rel="stylesheet" type="text/css">
 		
 		<!-- Modules -->
-		<script src="js/glMatrix-1.2.min.js" type="text/javascript"></script>
+		<script src="js/glMatrix-1.2.min.js" type="text/javascript"></script> 
 		<script src="js/blocks.js" type="text/javascript"></script>
 		<script src="js/helpers.js" type="text/javascript"></script>
 		<script src="js/world.js" type="text/javascript"></script>
 		<script src="js/render.js" type="text/javascript"></script>
 		<script src="js/physics.js" type="text/javascript"></script>
 		<script src="js/player.js" type="text/javascript"></script>
+		<script src="js/fps.js" type="text/javascript"></script>
 	</head>
 	
 	<body oncontextmenu="return false">
@@ -28,16 +29,29 @@
 			<tr></tr>
 		</table>
 		
+		<div id="blockselector">
+			
+		</div>
+		
+		<div id="blocks" style="display: none;">
+			Wybor klocka:
+		</div>
+		<!-- Infobox -->
+		<div id="chatbox">
+			<span id="chatbox_text">WebCraft v0.0.42</br>
+			<div id="fps"></div></span>
+		</div>
+		
 		<!-- Initialisation code -->
 		<script type="text/javascript">			
 			// Create a new flat world
-			var world = new World( 16, 16, 16 );
-			world.createFlatWorld( 6 );
+			var world = new World( 130, 130, 40 );
+			world.createFlatWorld( 3 );
 			
 			// Set up renderer
 			var render = new Renderer( "renderSurface" );
 			render.setWorld( world, 8 );
-			render.setPerspective( 60, 0.01, 200 );
+			render.setPerspective( 90, 0.01, 220 );
 			
 			// Create physics simulator
 			var physics = new Physics();
@@ -61,7 +75,7 @@
 				player.update();
 				
 				// Build a chunk
-				render.buildChunks( 1 );
+				render.buildChunks( 6 );
 				
 				// Draw world
 				render.setCamera( player.getEyePos().toArray(), player.angles );

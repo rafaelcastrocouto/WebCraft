@@ -38,7 +38,7 @@ Physics.prototype.simulate = function()
 	this.lastStep = step;
 	
 	// Gravity
-	if ( step % 1 == 0 )
+	if ( step % 2 == 0 )
 	{
 		for ( var x = 0; x < world.sx; x++ ) {
 			for ( var y = 0; y < world.sy; y++ ) {

@@ -58,49 +58,6 @@ body {
 	opacity: 0.8;
 }
 
-/* Username input */
-
-#nickname {
-	position: absolute;
-	top: 40%;
-	left: 42%;
-	
-	width: 300px;
-	
-	cursor: default;
-	
-	color: #fff;
-}
-
-#nickname input {
-	width: 100%;
-	
-	background: none;
-	border: none;
-	border-bottom: 1px solid #888;
-	outline: none;
-	
-	color: white;
-	
-	font-family: minecraftia;
-	font-size: 24px;
-}
-
-/* Join information */
-
-#joininfo {
-	position: absolute;
-	top: 42%;
-	
-	width: 99%;
-	
-	cursor: default;
-	
-	text-align: center;
-	color: #fff;
-	font-size: 24px;
-}
-
 /* Chatbox */
 
 #chatbox {
@@ -108,8 +65,8 @@ body {
 	left: 20px;
 	bottom: 55px;
 	
-	width: 600px;
-	height: 195px;
+	width: 320px;
+	height: 115px;
 	overflow: hidden;
 	
 	padding-left: 10px;
@@ -133,7 +90,7 @@ body {
 	left: 20px;
 	bottom: 18px;
 	
-	width: 610px;
+	width: 310px;
 	height: 30px;
 	
 	padding-left: 10px;
@@ -145,5 +102,50 @@ body {
 	
 	color: white;
 	font-family: minecraftia;
-	font-size: 16px;
+	font-size: 15px;
+}
+
+
+#blocks {
+	position: absolute;
+	
+	width: 720px;
+	height: 600px;
+	
+	margin-left: 30%;
+	margin-right: 30%;
+	margin-top: 100px;
+	margin-bottom: 30px;
+	
+	cursor: default;
+	
+	background: rgba( 0, 0, 0, 0.6 );
+	color: white;
+}
+
+#blocks_text {
+	position: absolute;
+	bottom: 8px;
+	
+	text-shadow: none;
+}
+
+#blocks_entry {
+	position: absolute;
+	left: 20px;
+	bottom: 18px;
+	
+	width: 310px;
+	height: 30px;
+	
+	padding-left: 10px;
+	padding-bottom: 2px;
+	
+	background: rgba( 0, 0, 0, 0.6 );
+	border: none;
+	outline: none;
+	
+	color: white;
+	font-family: minecraftia;
+	font-size: 15px;
 }

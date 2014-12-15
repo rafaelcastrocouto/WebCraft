@@ -6,6 +6,8 @@
 // ==========================================
 
 // Shaders
+var mat4;
+
 var vertexSource =
 	"uniform mat4 uProjMatrix;"+
 	"uniform mat4 uViewMatrix;"+
@@ -30,6 +32,8 @@ var fragmentSource =
 	"	if ( color.a < 0.1 ) discard;"+
 	"	gl_FragColor = vec4( color.rgb, vColor.a );"+
 	"}";
+	
+
 
 // Constructor( id )
 //
@@ -64,10 +68,6 @@ function Renderer( id )
 	// Load shaders
 	this.loadShaders();
 	
-	// Load player model
-	this.loadPlayerHeadModel();
-	this.loadPlayerBodyModel();
-	
 	// Create projection and view matrices
 	var projMatrix = this.projMatrix = mat4.create();
 	var viewMatrix = this.viewMatrix = mat4.create();
@@ -87,18 +87,6 @@ function Renderer( id )
 	gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST );
 	gl.uniform1i(  this.uSampler, 0 );
 	
-	// Load player texture
-	var playerTexture = this.texPlayer = gl.createTexture();
-	playerTexture.image = new Image();
-	playerTexture.image.onload = function()
-	{
-		gl.bindTexture( gl.TEXTURE_2D, playerTexture );
-		gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, playerTexture.image );
-		gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST );
-		gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST );
-	};
-	playerTexture.image.src = "media/player.png";
-	
 	// Load terrain texture
 	var terrainTexture = this.texTerrain = gl.createTexture();
 	terrainTexture.image = new Image();
@@ -110,17 +98,6 @@ function Renderer( id )
 		gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST );
 	};
 	terrainTexture.image.src = "media/terrain.png";
-	
-	// Create canvas used to draw name tags
-	var textCanvas = this.textCanvas = document.createElement( "canvas" );
-	textCanvas.width = 256;
-	textCanvas.height = 64;
-	textCanvas.style.display = "none";
-	var ctx = this.textContext = textCanvas.getContext( "2d" );
-	ctx.textAlign = "left";
-	ctx.textBaseline = "middle";
-	ctx.font = "24px Minecraftia";
-	document.getElementsByTagName( "body" )[0].appendChild( textCanvas );
 }
 
 // draw()
@@ -150,143 +127,9 @@ Renderer.prototype.draw = function()
 		}
 	}
 	
-	// Draw players
-	var players = this.world.players;
-	
-	gl.enable( gl.BLEND );
-	
-	for ( var p in world.players )
-	{
-		var player = world.players[p];
-
-		if(player.moving || Math.abs(player.aniframe) > 0.1){
-			player.aniframe += 0.15;
-			if(player.aniframe > Math.PI)
-				player.aniframe  = -Math.PI;
-			aniangle = Math.PI/2 * Math.sin(player.aniframe);
-			if(!player.moving && Math.abs(aniangle) < 0.1 )
-				player.aniframe = 0;
-
-
-		}
-		else
-			aniangle = 0;
-		
-		// Draw head		
-		var pitch = player.pitch;
-		if ( pitch < -0.32 ) pitch = -0.32;
-		if ( pitch > 0.32 ) pitch = 0.32;
-		
-		mat4.identity( this.modelMatrix );
-		mat4.translate( this.modelMatrix, [ player.x, player.y, player.z + 1.7 ] );
-		mat4.rotateZ( this.modelMatrix, Math.PI - player.yaw );
-		mat4.rotateX( this.modelMatrix, -pitch );
-		gl.uniformMatrix4fv( this.uModelMat, false, this.modelMatrix );
-		
-		gl.bindTexture( gl.TEXTURE_2D, this.texPlayer );
-		this.drawBuffer( this.playerHead );
-		
-		// Draw body
-		mat4.identity( this.modelMatrix );
-		mat4.translate( this.modelMatrix, [ player.x, player.y, player.z + 0.01 ] );
-		mat4.rotateZ( this.modelMatrix, Math.PI - player.yaw );
-		gl.uniformMatrix4fv( this.uModelMat, false, this.modelMatrix );
-		this.drawBuffer( this.playerBody );
-
-		mat4.translate( this.modelMatrix, [ 0, 0, 1.4 ] );
-		mat4.rotateX( this.modelMatrix, 0.75* aniangle);
-		gl.uniformMatrix4fv( this.uModelMat, false, this.modelMatrix );
-		this.drawBuffer( this.playerLeftArm );
-
-		mat4.rotateX( this.modelMatrix, -1.5*aniangle);
-		gl.uniformMatrix4fv( this.uModelMat, false, this.modelMatrix );
-		this.drawBuffer( this.playerRightArm );
-		mat4.rotateX( this.modelMatrix, 0.75*aniangle);
-
-		mat4.translate( this.modelMatrix, [ 0, 0, -0.67 ] );
-		
-		mat4.rotateX( this.modelMatrix, 0.5*aniangle);
-		gl.uniformMatrix4fv( this.uModelMat, false, this.modelMatrix );
-		this.drawBuffer( this.playerRightLeg );
-
-		mat4.rotateX( this.modelMatrix, -aniangle);
-		gl.uniformMatrix4fv( this.uModelMat, false, this.modelMatrix );
-		this.drawBuffer( this.playerLeftLeg );
-		
-		// Draw player name		
-		if ( !player.nametag ) {
-			player.nametag = this.buildPlayerName( player.nick );
-		}
-		
-		// Calculate angle so that the nametag always faces the local player
-		var ang = -Math.PI/2 + Math.atan2( this.camPos[1] - player.y, this.camPos[0] - player.x );
-		
-		mat4.identity( this.modelMatrix );
-		mat4.translate( this.modelMatrix, [ player.x, player.y, player.z + 2.05 ] );
-		mat4.rotateZ( this.modelMatrix, ang );
-		mat4.scale( this.modelMatrix, [ 0.005, 1, 0.005 ] );
-		gl.uniformMatrix4fv( this.uModelMat, false, this.modelMatrix );
-		
-		gl.bindTexture( gl.TEXTURE_2D, player.nametag.texture );
-		this.drawBuffer( player.nametag.model );
-	}
-	
-	gl.disable( gl.BLEND );
-	
 	mat4.identity( this.modelMatrix );
 	gl.uniformMatrix4fv( this.uModelMat, false, this.modelMatrix );
-}
-
-// buildPlayerName( nickname )
-//
-// Returns the texture and vertex buffer for drawing the name
-// tag of the specified player.
-
-Renderer.prototype.buildPlayerName = function( nickname )
-{
-	var gl = this.gl;
-	var canvas = this.textCanvas;
-	var ctx = this.textContext;
-	
-	nickname = nickname.replace( /&lt;/g, "<" ).replace( /&gt;/g, ">" ).replace( /&quot;/, "\"" );
-	
-	var w = ctx.measureText( nickname ).width + 16;
-	var h = 45;
-	
-	// Draw text box
-	ctx.fillStyle = "#000";
-	ctx.fillRect( 0, 0, w, 45 );
-	
-	ctx.fillStyle = "#fff";
-	ctx.fillText( nickname, 10, 20 );
-	
-	// Create texture
-	var tex = gl.createTexture();
-	gl.bindTexture( gl.TEXTURE_2D, tex );
-	gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas );
-	gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR );
-	gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR );
-	
-	// Create model
-	var vertices = [
-		-w/2, 0, h, w/256, 0, 1, 1, 1, 0.7,
-		w/2, 0, h, 0, 0, 1, 1, 1, 0.7,
-		w/2, 0, 0, 0, h/64, 1, 1, 1, 0.7,
-		w/2, 0, 0, 0, h/64, 1, 1, 1, 0.7,
-		-w/2, 0, 0, w/256, h/64, 1, 1, 1, 0.7,
-		-w/2, 0, h, w/256, 0, 1, 1, 1, 0.7
-	];
-	
-	var buffer = gl.createBuffer();
-	buffer.vertices = vertices.length / 9;
-	gl.bindBuffer( gl.ARRAY_BUFFER, buffer );
-	gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( vertices ), gl.STATIC_DRAW );
-	
-	return {
-		texture: tex,
-		model: buffer
-	};
-}
+};
 
 // pickAt( min, max, mx, myy )
 //
@@ -380,11 +223,11 @@ Renderer.prototype.pickAt = function( min, max, mx, my )
 			y: pixel[1],
 			z: pixel[2],
 			n: normal
-		}
+		};
 	} else {
 		return false;
 	}
-}
+};
 
 // updateViewport()
 //
@@ -407,7 +250,7 @@ Renderer.prototype.updateViewport = function()
 		// Update perspective projection based on new w/h ratio
 		this.setPerspective( this.fov, this.min, this.max );
 	}
-}
+};
 
 // loadShaders()
 //
@@ -427,7 +270,7 @@ Renderer.prototype.loadShaders = function()
 	gl.attachShader( program, vertexShader );
 	
 	if ( !gl.getShaderParameter( vertexShader, gl.COMPILE_STATUS ) )
-		throw "Could not compile vertex shader!\n" + gl.getShaderInfoLog( vertexShader );
+		throw "Could not compile vertex shader!";
 	
 	// Compile fragment shader
 	var fragmentShader = gl.createShader( gl.FRAGMENT_SHADER );
@@ -436,7 +279,7 @@ Renderer.prototype.loadShaders = function()
 	gl.attachShader( program, fragmentShader );
 	
 	if ( !gl.getShaderParameter( fragmentShader, gl.COMPILE_STATUS ) )
-		throw "Could not compile fragment shader!\n" + gl.getShaderInfoLog( fragmentShader );
+		throw "Could not compile fragment shader!";
 	
 	// Finish program
 	gl.linkProgram( program );
@@ -459,7 +302,7 @@ Renderer.prototype.loadShaders = function()
 	gl.enableVertexAttribArray( this.aPos );
 	gl.enableVertexAttribArray( this.aColor );
 	gl.enableVertexAttribArray( this.aTexCoord );
-}
+};
 
 // setWorld( world, chunkSize )
 //
@@ -487,7 +330,7 @@ Renderer.prototype.setWorld = function( world, chunkSize )
 			}
 		}
 	}
-}
+};
 
 // onBlockChanged( x, y, z )
 //
@@ -510,7 +353,7 @@ Renderer.prototype.onBlockChanged = function( x, y, z )
 		else if ( y >= chunks[i].start[1] && y < chunks[i].end[1] && z >= chunks[i].start[2] && z < chunks[i].end[2] && ( x == chunks[i].end[0] || x == chunks[i].start[0] - 1 ) )
 			chunks[i].dirty = true;
 	}
-}
+};
 
 // buildChunks( count )
 //
@@ -579,9 +422,9 @@ Renderer.prototype.buildChunks = function( count )
 			count--;
 		}
 		
-		if ( count == 0 ) break;
+		if ( count === 0 ) break;
 	}
-}
+};
 
 // setPerspective( fov, min, max )
 //
@@ -597,7 +440,7 @@ Renderer.prototype.setPerspective = function( fov, min, max )
 	
 	mat4.perspective( fov, gl.viewportWidth / gl.viewportHeight, min, max, this.projMatrix );
 	gl.uniformMatrix4fv( this.uProjMat, false, this.projMatrix );
-}
+};
 
 // setCamera( pos, ang )
 //
@@ -621,7 +464,7 @@ Renderer.prototype.setCamera = function( pos, ang )
 	mat4.translate( this.viewMatrix, [ -pos[0], -pos[1], -pos[2] ], this.viewMatrix );
 	
 	gl.uniformMatrix4fv( this.uViewMat, false, this.viewMatrix );
-}
+};
 
 Renderer.prototype.drawBuffer = function( buffer )
 {
@@ -634,366 +477,4 @@ Renderer.prototype.drawBuffer = function( buffer )
 	gl.vertexAttribPointer( this.aTexCoord, 2, gl.FLOAT, false, 9*4, 3*4 );
 	
 	gl.drawArrays( gl.TRIANGLES, 0, buffer.vertices );
-}
-
-// loadPlayerHeadModel()
-//
-// Loads the player head model into a vertex buffer for rendering.
-
-Renderer.prototype.loadPlayerHeadModel = function()
-{
-	var gl = this.gl;
-	
-	// Player head
-	var vertices = [
-		// Top
-		-0.25, -0.25, 0.25, 8/64, 0, 1, 1, 1, 1,
-		0.25, -0.25, 0.25, 16/64, 0, 1, 1, 1, 1,
-		0.25, 0.25, 0.25, 16/64, 8/32, 1, 1, 1, 1,
-		0.25, 0.25, 0.25, 16/64, 8/32, 1, 1, 1, 1,
-		-0.25, 0.25, 0.25, 8/64, 8/32, 1, 1, 1, 1,
-		-0.25, -0.25, 0.25, 8/64, 0, 1, 1, 1, 1,
-		
-		// Bottom
-		-0.25, -0.25, -0.25, 16/64, 0, 1, 1, 1, 1,
-		-0.25, 0.25, -0.25, 16/64, 8/32, 1, 1, 1, 1,
-		0.25, 0.25, -0.25, 24/64, 8/32, 1, 1, 1, 1,
-		0.25, 0.25, -0.25, 24/64, 8/32, 1, 1, 1, 1,
-		0.25, -0.25, -0.25, 24/64, 0, 1, 1, 1, 1,
-		-0.25, -0.25, -0.25, 16/64, 0, 1, 1, 1, 1,
-		
-		// Front		
-		-0.25, -0.25, 0.25, 8/64, 8/32, 1, 1, 1, 1,
-		-0.25, -0.25, -0.25, 8/64, 16/32, 1, 1, 1, 1,
-		0.25, -0.25, -0.25, 16/64, 16/32, 1, 1, 1, 1,
-		0.25, -0.25, -0.25, 16/64, 16/32, 1, 1, 1, 1,
-		0.25, -0.25, 0.25, 16/64, 8/32, 1, 1, 1, 1,
-		-0.25, -0.25, 0.25, 8/64, 8/32, 1, 1, 1, 1,
-		
-		// Rear		
-		-0.25, 0.25, 0.25, 24/64, 8/32, 1, 1, 1, 1,
-		0.25, 0.25, 0.25, 32/64, 8/32, 1, 1, 1, 1,
-		0.25, 0.25, -0.25, 32/64, 16/32, 1, 1, 1, 1,
-		0.25, 0.25, -0.25, 32/64, 16/32, 1, 1, 1, 1,
-		-0.25, 0.25, -0.25, 24/64, 16/32, 1, 1, 1, 1,
-		-0.25, 0.25, 0.25, 24/64, 8/32, 1, 1, 1, 1,
-		
-		// Right
-		-0.25, -0.25, 0.25, 16/64, 8/32, 1, 1, 1, 1,
-		-0.25, 0.25, 0.25, 24/64, 8/32, 1, 1, 1, 1,
-		-0.25, 0.25, -0.25, 24/64, 16/32, 1, 1, 1, 1,
-		-0.25, 0.25, -0.25, 24/64, 16/32, 1, 1, 1, 1,
-		-0.25, -0.25, -0.25, 16/64, 16/32, 1, 1, 1, 1,
-		-0.25, -0.25, 0.25, 16/64, 8/32, 1, 1, 1, 1,
-		
-		// Left
-		0.25, -0.25, 0.25, 0, 8/32, 1, 1, 1, 1,
-		0.25, -0.25, -0.25, 0, 16/32, 1, 1, 1, 1,
-		0.25, 0.25, -0.25, 8/64, 16/32, 1, 1, 1, 1,
-		0.25, 0.25, -0.25, 8/64, 16/32, 1, 1, 1, 1,
-		0.25, 0.25, 0.25, 8/64, 8/32, 1, 1, 1, 1,
-		0.25, -0.25, 0.25, 0, 8/32, 1, 1, 1, 1
-	];
-	
-	var buffer = this.playerHead = gl.createBuffer();
-	buffer.vertices = vertices.length / 9;
-	gl.bindBuffer( gl.ARRAY_BUFFER, buffer );
-	gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( vertices ), gl.DYNAMIC_DRAW );
-}
-
-// loadPlayerBodyModel()
-//
-// Loads the player body model into a vertex buffer for rendering.
-
-Renderer.prototype.loadPlayerBodyModel = function()
-{
-	var gl = this.gl;
-	
-	var vertices = [
-		// Player torso
-		
-		// Top
-		-0.30, -0.125, 1.45, 20/64, 16/32, 1, 1, 1, 1,
-		0.30, -0.125, 1.45, 28/64, 16/32, 1, 1, 1, 1,
-		0.30, 0.125, 1.45, 28/64, 20/32, 1, 1, 1, 1,
-		0.30, 0.125, 1.45, 28/64, 20/32, 1, 1, 1, 1,
-		-0.30, 0.125, 1.45, 20/64, 20/32, 1, 1, 1, 1,
-		-0.30, -0.125, 1.45, 20/64, 16/32, 1, 1, 1, 1,
-		
-		// Bottom
-		-0.30, -0.125, 0.73, 28/64, 16/32, 1, 1, 1, 1,
-		-0.30, 0.125, 0.73, 28/64, 20/32, 1, 1, 1, 1,
-		0.30, 0.125, 0.73, 36/64, 20/32, 1, 1, 1, 1,
-		0.30, 0.125, 0.73, 36/64, 20/32, 1, 1, 1, 1,
-		0.30, -0.125, 0.73, 36/64, 16/32, 1, 1, 1, 1,
-		-0.30, -0.125, 0.73, 28/64, 16/32, 1, 1, 1, 1,
-		
-		// Front		
-		-0.30, -0.125, 1.45, 20/64, 20/32, 1, 1, 1, 1,
-		-0.30, -0.125, 0.73, 20/64, 32/32, 1, 1, 1, 1,
-		0.30, -0.125, 0.73, 28/64, 32/32, 1, 1, 1, 1,
-		0.30, -0.125, 0.73, 28/64, 32/32, 1, 1, 1, 1,
-		0.30, -0.125, 1.45, 28/64, 20/32, 1, 1, 1, 1,
-		-0.30, -0.125, 1.45, 20/64, 20/32, 1, 1, 1, 1,
-		
-		// Rear		
-		-0.30, 0.125, 1.45, 40/64, 20/32, 1, 1, 1, 1,
-		0.30, 0.125, 1.45, 32/64, 20/32, 1, 1, 1, 1,
-		0.30, 0.125, 0.73, 32/64, 32/32, 1, 1, 1, 1,
-		0.30, 0.125, 0.73, 32/64, 32/32, 1, 1, 1, 1,
-		-0.30, 0.125, 0.73, 40/64, 32/32, 1, 1, 1, 1,
-		-0.30, 0.125, 1.45, 40/64, 20/32, 1, 1, 1, 1,
-		
-		// Right
-		-0.30, -0.125, 1.45, 16/64, 20/32, 1, 1, 1, 1,
-		-0.30, 0.125, 1.45, 20/64, 20/32, 1, 1, 1, 1,
-		-0.30, 0.125, 0.73, 20/64, 32/32, 1, 1, 1, 1,
-		-0.30, 0.125, 0.73, 20/64, 32/32, 1, 1, 1, 1,
-		-0.30, -0.125, 0.73, 16/64, 32/32, 1, 1, 1, 1,
-		-0.30, -0.125, 1.45, 16/64, 20/32, 1, 1, 1, 1,
-		
-		// Left
-		0.30, -0.125, 1.45, 28/64, 20/32, 1, 1, 1, 1,
-		0.30, -0.125, 0.73, 28/64, 32/32, 1, 1, 1, 1,
-		0.30, 0.125, 0.73, 32/64, 32/32, 1, 1, 1, 1,
-		0.30, 0.125, 0.73, 32/64, 32/32, 1, 1, 1, 1,
-		0.30, 0.125, 1.45, 32/64, 20/32, 1, 1, 1, 1,
-		0.30, -0.125, 1.45, 28/64, 20/32, 1, 1, 1, 1,
-		
-	];
-	
-	var buffer = this.playerBody = gl.createBuffer();
-	buffer.vertices = vertices.length / 9;
-	gl.bindBuffer( gl.ARRAY_BUFFER, buffer );
-	gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( vertices ), gl.DYNAMIC_DRAW );
-
-	var vertices = [
-		// Left arm
-		
-		// Top
-		0.30, -0.125, 0.05, 44/64, 16/32, 1, 1, 1, 1,
-		0.55, -0.125, 0.05, 48/64, 16/32, 1, 1, 1, 1,
-		0.55,  0.125, 0.05, 48/64, 20/32, 1, 1, 1, 1,
-		0.55,  0.125, 0.05, 48/64, 20/32, 1, 1, 1, 1,
-		0.30,  0.125, 0.05, 44/64, 20/32, 1, 1, 1, 1,
-		0.30, -0.125, 0.05, 44/64, 16/32, 1, 1, 1, 1,
-		
-		// Bottom
-		0.30, -0.125, -0.67, 48/64, 16/32, 1, 1, 1, 1,
-		0.30,  0.125, -0.67, 48/64, 20/32, 1, 1, 1, 1,
-		0.55,  0.125, -0.67, 52/64, 20/32, 1, 1, 1, 1,
-		0.55,  0.125, -0.67, 52/64, 20/32, 1, 1, 1, 1,
-		0.55, -0.125, -0.67, 52/64, 16/32, 1, 1, 1, 1,
-		0.30, -0.125, -0.67, 48/64, 16/32, 1, 1, 1, 1,
-		
-		// Front		
-		0.30, -0.125,  0.05, 48/64, 20/32, 1, 1, 1, 1,
-		0.30, -0.125, -0.67, 48/64, 32/32, 1, 1, 1, 1,
-		0.55, -0.125, -0.67, 44/64, 32/32, 1, 1, 1, 1,
-		0.55, -0.125, -0.67, 44/64, 32/32, 1, 1, 1, 1,
-		0.55, -0.125,  0.05, 44/64, 20/32, 1, 1, 1, 1,
-		0.30, -0.125,  0.05, 48/64, 20/32, 1, 1, 1, 1,
-		
-		// Rear		
-		0.30, 0.125,  0.05, 52/64, 20/32, 1, 1, 1, 1,
-		0.55, 0.125,  0.05, 56/64, 20/32, 1, 1, 1, 1,
-		0.55, 0.125, -0.67, 56/64, 32/32, 1, 1, 1, 1,
-		0.55, 0.125, -0.67, 56/64, 32/32, 1, 1, 1, 1,
-		0.30, 0.125, -0.67, 52/64, 32/32, 1, 1, 1, 1,
-		0.30, 0.125,  0.05, 52/64, 20/32, 1, 1, 1, 1,
-		
-		// Right
-		0.30, -0.125,  0.05, 48/64, 20/32, 1, 1, 1, 1,
-		0.30,  0.125,  0.05, 52/64, 20/32, 1, 1, 1, 1,
-		0.30,  0.125, -0.67, 52/64, 32/32, 1, 1, 1, 1,
-		0.30,  0.125, -0.67, 52/64, 32/32, 1, 1, 1, 1,
-		0.30, -0.125, -0.67, 48/64, 32/32, 1, 1, 1, 1,
-		0.30, -0.125,  0.05, 48/64, 20/32, 1, 1, 1, 1,
-		
-		// Left
-		0.55, -0.125,  0.05, 44/64, 20/32, 1, 1, 1, 1,
-		0.55, -0.125, -0.67, 44/64, 32/32, 1, 1, 1, 1,
-		0.55,  0.125, -0.67, 40/64, 32/32, 1, 1, 1, 1,
-		0.55,  0.125, -0.67, 40/64, 32/32, 1, 1, 1, 1,
-		0.55,  0.125,  0.05, 40/64, 20/32, 1, 1, 1, 1,
-		0.55, -0.125,  0.05, 44/64, 20/32, 1, 1, 1, 1,
-		
-	];
-	
-	var buffer = this.playerLeftArm = gl.createBuffer();
-	buffer.vertices = vertices.length / 9;
-	gl.bindBuffer( gl.ARRAY_BUFFER, buffer );
-	gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( vertices ), gl.DYNAMIC_DRAW );
-
-	var vertices = [
-		// Right arm
-		
-		// Top
-		-0.55, -0.125, 0.05, 44/64, 16/32, 1, 1, 1, 1,
-		-0.30, -0.125, 0.05, 48/64, 16/32, 1, 1, 1, 1,
-		-0.30,  0.125, 0.05, 48/64, 20/32, 1, 1, 1, 1,
-		-0.30,  0.125, 0.05, 48/64, 20/32, 1, 1, 1, 1,
-		-0.55,  0.125, 0.05, 44/64, 20/32, 1, 1, 1, 1,
-		-0.55, -0.125, 0.05, 44/64, 16/32, 1, 1, 1, 1,
-		
-		// Bottom
-		-0.55, -0.125, -0.67, 52/64, 16/32, 1, 1, 1, 1,
-		-0.55,  0.125, -0.67, 52/64, 20/32, 1, 1, 1, 1,
-		-0.30,  0.125, -0.67, 48/64, 20/32, 1, 1, 1, 1,
-		-0.30,  0.125, -0.67, 48/64, 20/32, 1, 1, 1, 1,
-		-0.30, -0.125, -0.67, 48/64, 16/32, 1, 1, 1, 1,
-		-0.55, -0.125, -0.67, 52/64, 16/32, 1, 1, 1, 1,
-		
-		// Front		
-		-0.55, -0.125,  0.05, 44/64, 20/32, 1, 1, 1, 1,
-		-0.55, -0.125, -0.67, 44/64, 32/32, 1, 1, 1, 1,
-		-0.30, -0.125, -0.67, 48/64, 32/32, 1, 1, 1, 1,
-		-0.30, -0.125, -0.67, 48/64, 32/32, 1, 1, 1, 1,
-		-0.30, -0.125,  0.05, 48/64, 20/32, 1, 1, 1, 1,
-		-0.55, -0.125,  0.05, 44/64, 20/32, 1, 1, 1, 1,
-		
-		// Rear		
-		-0.55, 0.125,  0.05, 56/64, 20/32, 1, 1, 1, 1,
-		-0.30, 0.125,  0.05, 52/64, 20/32, 1, 1, 1, 1,
-		-0.30, 0.125, -0.67, 52/64, 32/32, 1, 1, 1, 1,
-		-0.30, 0.125, -0.67, 52/64, 32/32, 1, 1, 1, 1,
-		-0.55, 0.125, -0.67, 56/64, 32/32, 1, 1, 1, 1,
-		-0.55, 0.125,  0.05, 56/64, 20/32, 1, 1, 1, 1,
-		
-		// Right
-		-0.55, -0.125,  0.05, 44/64, 20/32, 1, 1, 1, 1,
-		-0.55,  0.125,  0.05, 40/64, 20/32, 1, 1, 1, 1,
-		-0.55,  0.125, -0.67, 40/64, 32/32, 1, 1, 1, 1,
-		-0.55,  0.125, -0.67, 40/64, 32/32, 1, 1, 1, 1,
-		-0.55, -0.125, -0.67, 44/64, 32/32, 1, 1, 1, 1,
-		-0.55, -0.125,  0.05, 44/64, 20/32, 1, 1, 1, 1,
-		
-		// Left
-		-0.30, -0.125,  0.05, 48/64, 20/32, 1, 1, 1, 1,
-		-0.30, -0.125, -0.67, 48/64, 32/32, 1, 1, 1, 1,
-		-0.30,  0.125, -0.67, 52/64, 32/32, 1, 1, 1, 1,
-		-0.30,  0.125, -0.67, 52/64, 32/32, 1, 1, 1, 1,
-		-0.30,  0.125,  0.05, 52/64, 20/32, 1, 1, 1, 1,
-		-0.30, -0.125,  0.05, 48/64, 20/32, 1, 1, 1, 1,
-		
-	];
-	
-	var buffer = this.playerRightArm = gl.createBuffer();
-	buffer.vertices = vertices.length / 9;
-	gl.bindBuffer( gl.ARRAY_BUFFER, buffer );
-	gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( vertices ), gl.DYNAMIC_DRAW );
-
-	var vertices = [
-		// Left leg
-		
-		// Top
-		0.01, -0.125, 0, 4/64, 16/32, 1, 1, 1, 1,
-		0.3,  -0.125, 0, 8/64, 16/32, 1, 1, 1, 1,
-		0.3,   0.125, 0, 8/64, 20/32, 1, 1, 1, 1,
-		0.3,   0.125, 0, 8/64, 20/32, 1, 1, 1, 1,
-		0.01,  0.125, 0, 4/64, 20/32, 1, 1, 1, 1,
-		0.01, -0.125, 0, 4/64, 16/32, 1, 1, 1, 1,
-		
-		// Bottom
-		0.01, -0.125, -0.73,  8/64, 16/32, 1, 1, 1, 1,
-		0.01,  0.125, -0.73,  8/64, 20/32, 1, 1, 1, 1,
-		0.3,   0.125, -0.73, 12/64, 20/32, 1, 1, 1, 1,
-		0.3,   0.125, -0.73, 12/64, 20/32, 1, 1, 1, 1,
-		0.3,  -0.125, -0.73, 12/64, 16/32, 1, 1, 1, 1,
-		0.01, -0.125, -0.73,  8/64, 16/32, 1, 1, 1, 1,
-		
-		// Front		
-		0.01, -0.125,     0, 4/64, 20/32, 1, 1, 1, 1,
-		0.01, -0.125, -0.73, 4/64, 32/32, 1, 1, 1, 1,
-		0.3,  -0.125, -0.73, 8/64, 32/32, 1, 1, 1, 1,
-		0.3,  -0.125, -0.73, 8/64, 32/32, 1, 1, 1, 1,
-		0.3,  -0.125,     0, 8/64, 20/32, 1, 1, 1, 1,
-		0.01, -0.125,     0, 4/64, 20/32, 1, 1, 1, 1,
-		
-		// Rear		
-		0.01, 0.125,     0, 12/64, 20/32, 1, 1, 1, 1,
-		0.3,  0.125,     0, 16/64, 20/32, 1, 1, 1, 1,
-		0.3,  0.125, -0.73, 16/64, 32/32, 1, 1, 1, 1,
-		0.3,  0.125, -0.73, 16/64, 32/32, 1, 1, 1, 1,
-		0.01, 0.125, -0.73, 12/64, 32/32, 1, 1, 1, 1,
-		0.01, 0.125,     0, 12/64, 20/32, 1, 1, 1, 1,
-		
-		// Right
-		0.01, -0.125,     0,  8/64, 20/32, 1, 1, 1, 1,
-		0.01,  0.125,     0, 12/64, 20/32, 1, 1, 1, 1,
-		0.01,  0.125, -0.73, 12/64, 32/32, 1, 1, 1, 1,
-		0.01,  0.125, -0.73, 12/64, 32/32, 1, 1, 1, 1,
-		0.01, -0.125, -0.73,  8/64, 32/32, 1, 1, 1, 1,
-		0.01, -0.125,     0,  8/64, 20/32, 1, 1, 1, 1,
-		
-		// Left
-		0.3, -0.125,     0, 4/64, 20/32, 1, 1, 1, 1,
-		0.3, -0.125, -0.73, 4/64, 32/32, 1, 1, 1, 1,
-		0.3,  0.125, -0.73, 0/64, 32/32, 1, 1, 1, 1,
-		0.3,  0.125, -0.73, 0/64, 32/32, 1, 1, 1, 1,
-		0.3,  0.125,     0, 0/64, 20/32, 1, 1, 1, 1,
-		0.3, -0.125,     0, 4/64, 20/32, 1, 1, 1, 1,
-	];
-	
-	var buffer = this.playerLeftLeg = gl.createBuffer();
-	buffer.vertices = vertices.length / 9;
-	gl.bindBuffer( gl.ARRAY_BUFFER, buffer );
-	gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( vertices ), gl.DYNAMIC_DRAW );
-
-	var vertices = [
-		// Right leg
-		
-		// Top
-		-0.3,  -0.125, 0, 4/64, 16/32, 1, 1, 1, 1,
-		-0.01, -0.125, 0, 8/64, 16/32, 1, 1, 1, 1,
-		-0.01,  0.125, 0, 8/64, 20/32, 1, 1, 1, 1,
-		-0.01,  0.125, 0, 8/64, 20/32, 1, 1, 1, 1,
-		-0.3,   0.125, 0, 4/64, 20/32, 1, 1, 1, 1,
-		-0.3,  -0.125, 0, 4/64, 16/32, 1, 1, 1, 1,
-		
-		// Bottom
-		-0.3,  -0.125, -0.73,  8/64, 16/32, 1, 1, 1, 1,
-		-0.3,   0.125, -0.73,  8/64, 20/32, 1, 1, 1, 1,
-		-0.01,  0.125, -0.73, 12/64, 20/32, 1, 1, 1, 1,
-		-0.01,  0.125, -0.73, 12/64, 20/32, 1, 1, 1, 1,
-		-0.01, -0.125, -0.73, 12/64, 16/32, 1, 1, 1, 1,
-		-0.3,  -0.125, -0.73,  8/64, 16/32, 1, 1, 1, 1,
-		
-		// Front		
-		-0.3,  -0.125,     0, 4/64, 20/32, 1, 1, 1, 1,
-		-0.3,  -0.125, -0.73, 4/64, 32/32, 1, 1, 1, 1,
-		-0.01, -0.125, -0.73, 8/64, 32/32, 1, 1, 1, 1,
-		-0.01, -0.125, -0.73, 8/64, 32/32, 1, 1, 1, 1,
-		-0.01, -0.125,     0, 8/64, 20/32, 1, 1, 1, 1,
-		-0.3,  -0.125,     0, 4/64, 20/32, 1, 1, 1, 1,
-		
-		// Rear		
-		-0.3,  0.125,     0, 16/64, 20/32, 1, 1, 1, 1,
-		-0.01, 0.125,     0, 12/64, 20/32, 1, 1, 1, 1,
-		-0.01, 0.125, -0.73, 12/64, 32/32, 1, 1, 1, 1,
-		-0.01, 0.125, -0.73, 12/64, 32/32, 1, 1, 1, 1,
-		-0.3,  0.125, -0.73, 16/64, 32/32, 1, 1, 1, 1,
-		-0.3,  0.125,     0, 16/64, 20/32, 1, 1, 1, 1,
-		
-		// Right
-		-0.3, -0.125,     0, 4/64, 20/32, 1, 1, 1, 1,
-		-0.3,  0.125,     0, 0/64, 20/32, 1, 1, 1, 1,
-		-0.3,  0.125, -0.73, 0/64, 32/32, 1, 1, 1, 1,
-		-0.3,  0.125, -0.73, 0/64, 32/32, 1, 1, 1, 1,
-		-0.3, -0.125, -0.73, 4/64, 32/32, 1, 1, 1, 1,
-		-0.3, -0.125,     0, 4/64, 20/32, 1, 1, 1, 1,
-		
-		// Left
-		-0.01, -0.125,    0,   8/64, 20/32, 1, 1, 1, 1,
-		-0.01, -0.125, -0.73,  8/64, 32/32, 1, 1, 1, 1,
-		-0.01,  0.125, -0.73, 12/64, 32/32, 1, 1, 1, 1,
-		-0.01,  0.125, -0.73, 12/64, 32/32, 1, 1, 1, 1,
-		-0.01,  0.125,     0, 12/64, 20/32, 1, 1, 1, 1,
-		-0.01, -0.125,     0,  8/64, 20/32, 1, 1, 1, 1
-	];
-	
-	var buffer = this.playerRightLeg = gl.createBuffer();
-	buffer.vertices = vertices.length / 9;
-	gl.bindBuffer( gl.ARRAY_BUFFER, buffer );
-	gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( vertices ), gl.DYNAMIC_DRAW );
-}
+};

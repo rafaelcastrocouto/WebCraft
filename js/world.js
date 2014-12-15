@@ -45,9 +45,59 @@ World.prototype.createFlatWorld = function( height )
 	
 	for ( var x = 0; x < this.sx; x++ )
 		for ( var y = 0; y < this.sy; y++ )
-			for ( var z = 0; z < this.sz; z++ )
+			for ( var z = 1; z < this.sz; z++ ){
 				this.blocks[x][y][z] = z < height ? BLOCK.DIRT : BLOCK.AIR;
+				if(z == height){
+					var rnd = Math.random() * 100;
+					if(rnd < 5.00){
+						console.log("Wygenerowano drzewo");
+						this.createTree(x,y,z);
+					}
+					var rndLake = Math.random() * 100;
+					if(rndLake < 2.00){
+						console.log("Wygenerowano jeziorko");
+						this.createLake(x,y,z);
+					}
+				}
+				this.blocks[x][y][0] = BLOCK.BEDROCK;
+			}
+};
+
+World.prototype.createLake = function(x,y,z) {
+	this.blocks[x][y][z-1] = BLOCK.WATER;
 }
+
+World.prototype.createTree = function( x, y, z)
+{
+	this.blocks[x][y][z] = BLOCK.WOOD;
+	this.blocks[x][y][z + 1] = BLOCK.WOOD;
+	this.blocks[x][y][z + 2] = BLOCK.WOOD;
+	this.blocks[x][y][z + 3] = BLOCK.WOOD;
+	this.blocks[x][y][z + 4] = BLOCK.WOOD;
+	this.blocks[x][y][z + 5] = BLOCK.WOOD;
+	
+	//Liscie
+
+	// this.blocks[x - 1][y][z + 5] = BLOCK.LEAVES;
+	// this.blocks[x - 2][y][z + 5] = BLOCK.LEAVES;
+	// this.blocks[x - 3][y][z + 5] = BLOCK.LEAVES;
+	// this.blocks[x - 1][y - 1][z + 5] = BLOCK.LEAVES;
+	// this.blocks[x - 2][y - 2][z + 5] = BLOCK.LEAVES;
+	// this.blocks[x - 3][y - 3][z + 5] = BLOCK.LEAVES;
+	// this.blocks[x - 1][y + 1][z + 5] = BLOCK.LEAVES;
+	// this.blocks[x - 2][y + 2][z + 5] = BLOCK.LEAVES;
+	// this.blocks[x - 3][y + 3][z + 5] = BLOCK.LEAVES;
+
+	// this.blocks[x + 1][y][z + 5] = BLOCK.LEAVES;
+	// this.blocks[x + 2][y][z + 5] = BLOCK.LEAVES;
+	// this.blocks[x + 3][y][z + 5] = BLOCK.LEAVES;
+	// this.blocks[x + 1][y - 1][z + 5] = BLOCK.LEAVES;
+	// this.blocks[x + 2][y - 2][z + 5] = BLOCK.LEAVES;
+	// this.blocks[x + 3][y - 3][z + 5] = BLOCK.LEAVES;
+	// this.blocks[x + 1][y + 1][z + 5] = BLOCK.LEAVES;
+	// this.blocks[x + 2][y + 2][z + 5] = BLOCK.LEAVES;
+	// this.blocks[x + 3][y + 3][z + 5] = BLOCK.LEAVES;
+};
 
 // createFromString( str )
 //
@@ -69,7 +119,7 @@ World.prototype.createFromString = function( str )
 			}
 		}
 	}
-}
+};
 
 // getBlock( x, y, z )
 //
@@ -81,7 +131,7 @@ World.prototype.getBlock = function( x, y, z )
 {
 	if ( x < 0 || y < 0 || z < 0 || x > this.sx - 1 || y > this.sy - 1 || z > this.sz - 1 ) return BLOCK.AIR;
 	return this.blocks[x][y][z];
-}
+};
 
 // setBlock( x, y, z )
 
@@ -89,7 +139,7 @@ World.prototype.setBlock = function( x, y, z, type )
 {
 	this.blocks[x][y][z] = type;
 	if ( this.renderer != null ) this.renderer.onBlockChanged( x, y, z );
-}
+};
 
 // toNetworkString()
 //
@@ -105,7 +155,7 @@ World.prototype.toNetworkString = function()
 				blockArray.push( String.fromCharCode( 97 + this.blocks[x][y][z].id ) );
 	
 	return blockArray.join( "" );
-}
+};
 
 // Export to node.js
 if ( typeof( exports ) != "undefined" )
@@ -128,7 +178,7 @@ if ( typeof( exports ) != "undefined" )
 		} catch ( e ) {
 			return false;
 		}
-	}
+	};
 	
 	// saveToFile( filename )
 	//
@@ -139,7 +189,7 @@ if ( typeof( exports ) != "undefined" )
 	{
 		var data = this.spawnPoint.x + "," + this.spawnPoint.y + "," + this.spawnPoint.z + "," + this.toNetworkString();
 		require( "fs" ).writeFileSync( filename, data );	
-	}
+	};
 	
 	exports.World = World;
 }

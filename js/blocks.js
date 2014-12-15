@@ -13,7 +13,7 @@ DIRECTION.RIGHT = 4;
 DIRECTION.FORWARD = 5;
 DIRECTION.BACK = 6;
 
-BLOCK = {};
+var BLOCK = {};
 
 // Air
 BLOCK.AIR = {
@@ -40,12 +40,7 @@ BLOCK.DIRT = {
 	fluid: false,
 	texture: function( world, lightmap, lit, x, y, z, dir )
 	{
-		if ( dir == DIRECTION.UP && lit )
-			return [ 14/16, 0/16, 15/16, 1/16 ];
-		else if ( dir == DIRECTION.DOWN || !lit ) 
-			return [ 2/16, 0/16, 3/16, 1/16 ];
-		else
-			return [ 3/16, 0/16, 4/16, 1/16 ];
+		return [ 2/16, 0/16, 3/16, 1/16 ];
 	}
 };
 
@@ -106,7 +101,7 @@ BLOCK.LAVA = {
 	spawnable: false,
 	transparent: true,
 	selflit: true,
-	gravity: true,
+	gravity: false,
 	fluid: true,
 	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 13/16, 14/16, 14/16, 15/16 ]; }
 };
@@ -243,6 +238,29 @@ BLOCK.SPONGE = {
 	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 0/16, 3/16, 1/16, 4/16 ]; }
 };
 
+// Leaves
+BLOCK.LEAVES = {
+	id: 19,
+	spawnable: false,
+	transparent: true,
+	selflit: false,
+	gravity: false,
+	fluid: false,
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 4/16, 3/16, 5/16, 4/16 ]; }
+};
+
+// Lava
+BLOCK.WATER = {
+	id: 20,
+	spawnable: false,
+	transparent: true,
+	selflit: true,
+	gravity: false,
+	fluid: true,
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 14/16, 0/16, 15/16, 1/16 ]; }
+};
+
+
 // fromId( id )
 //
 // Returns a block structure for the given id.
@@ -253,7 +271,7 @@ BLOCK.fromId = function( id )
 		if ( typeof( BLOCK[mat] ) == "object" && BLOCK[mat].id == id )
 			return BLOCK[mat];
 	return null;
-}
+};
 
 // pushVertices( vertices, world, lightmap, x, y, z )
 //
@@ -365,7 +383,7 @@ BLOCK.pushVertices = function( vertices, world, lightmap, x, y, z )
 			[ x + 1.0, y, z + bH, c[0], c[1], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ]
 		);
 	}
-}
+};
 
 // pushPickingVertices( vertices, x, y, z )
 //
@@ -428,7 +446,7 @@ BLOCK.pushPickingVertices = function( vertices, x, y, z )
 		[ x + 1, y + 1, z + 1, 1, 1, color.r, color.g, color.b, 6/255 ],
 		[ x + 1, y, z + 1, 0, 0, color.r, color.g, color.b, 6/255 ]
 	);
-}
+};
 
 // Export to node.js
 if ( typeof( exports ) != "undefined" )

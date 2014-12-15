@@ -13,9 +13,8 @@ MOUSE.MOVE = 3;
 // Constructor()
 //
 // Creates a new local player manager.
-
 function Player()
-{	
+{
 }
 
 // setWorld( world )
@@ -33,7 +32,7 @@ Player.prototype.setWorld = function( world )
 	this.keys = {};
 	this.buildMaterial = BLOCK.DIRT;
 	this.eventHandlers = {};
-}
+};
 
 // setClient( client )
 //
@@ -42,7 +41,7 @@ Player.prototype.setWorld = function( world )
 Player.prototype.setClient = function( client )
 {
 	this.client = client;
-}
+};
 
 // setInputCanvas( id )
 //
@@ -53,12 +52,12 @@ Player.prototype.setInputCanvas = function( id )
 	var canvas = this.canvas = document.getElementById( id );
 
 	var t = this;
-	document.onkeydown = function( e ) { if ( e.target.tagName != "INPUT" ) { t.onKeyEvent( e.keyCode, true ); return false; } }
-	document.onkeyup = function( e ) { if ( e.target.tagName != "INPUT" ) { t.onKeyEvent( e.keyCode, false ); return false; } }
-	canvas.onmousedown = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.DOWN, e.which == 3 ); return false; }
-	canvas.onmouseup = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.UP, e.which == 3 ); return false; }
-	canvas.onmousemove = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.MOVE, e.which == 3 ); return false; }
-}
+	document.onkeydown = function( e ) { if ( e.target.tagName != "INPUT" ) { t.onKeyEvent( e.keyCode, true ); return false; } };
+	document.onkeyup = function( e ) { if ( e.target.tagName != "INPUT" ) { t.onKeyEvent( e.keyCode, false ); return false; } };
+	canvas.onmousedown = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.DOWN, e.which == 3 ); return false; };
+	canvas.onmouseup = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.UP, e.which == 3 ); return false; };
+	canvas.onmousemove = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.MOVE, e.which == 3 ); return false; };
+};
 
 // setMaterialSelector( id )
 //
@@ -86,7 +85,7 @@ Player.prototype.setMaterialSelector = function( id )
 				pl.prevSelector = this;
 
 				pl.buildMaterial = this.material;
-			}
+			};
 
 			if ( mat == "DIRT" ) {
 				this.prevSelector = selector;
@@ -97,7 +96,7 @@ Player.prototype.setMaterialSelector = function( id )
 			texOffset -= 70;
 		}
 	}
-}
+};
 
 // on( event, callback )
 //
@@ -106,11 +105,21 @@ Player.prototype.setMaterialSelector = function( id )
 Player.prototype.on = function( event, callback )
 {
 	this.eventHandlers[event] = callback;
-}
+};
 
 // onKeyEvent( keyCode, down )
 //
 // Hook for keyboard input.
+
+
+// Player.prototype.onKeyEvent = function( keyCode, down )
+// {
+// 	var key = String.fromCharCode( keyCode ).toLowerCase();
+// 	this.keys[key] = down;
+// 	this.keys[keyCode] = down;
+	
+// 	if ( !down && key == "t" && this.eventHandlers["openChat"] ) this.eventHandlers.openChat();
+// }
 
 Player.prototype.onKeyEvent = function( keyCode, down )
 {
@@ -118,8 +127,19 @@ Player.prototype.onKeyEvent = function( keyCode, down )
 	this.keys[key] = down;
 	this.keys[keyCode] = down;
 	
-	if ( !down && key == "t" && this.eventHandlers["openChat"] ) this.eventHandlers.openChat();
-}
+	if (key == "r" ){
+		this.pos = this.world.spawnPoint;
+		this.pos.z += 1;
+	}
+	if (key == "b"){
+		var blockSelect = document.getElementById("blocks").style;
+		if(blockSelect.display == "none"){
+			blockSelect.display = "";
+		}else{
+			blockSelect.display = "none";
+		}
+	}
+};
 
 // onMouseEvent( x, y, type, rmb )
 //
@@ -144,9 +164,9 @@ Player.prototype.onMouseEvent = function( x, y, type, rmb )
 		this.targetPitch = this.pitchStart - ( y - this.dragStart.y ) / 200;
 		this.targetYaw = this.yawStart + ( x - this.dragStart.x ) / 200;
 
-		this.canvas.style.cursor = "move";
+		this.canvas.style.cursor = "default";
 	}
-}
+};
 
 // doBlockAction( x, y )
 //
@@ -157,16 +177,17 @@ Player.prototype.doBlockAction = function( x, y, destroy )
 	var bPos = new Vector( Math.floor( this.pos.x ), Math.floor( this.pos.y ), Math.floor( this.pos.z ) );
 	var block = this.canvas.renderer.pickAt( new Vector( bPos.x - 4, bPos.y - 4, bPos.z - 4 ), new Vector( bPos.x + 4, bPos.y + 4, bPos.z + 4 ), x, y );
 	
-	if ( block != false )
+	if ( block !== false )
 	{
 		var obj = this.client ? this.client : this.world;
-		
-		if ( destroy )
+
+		if (destroy){
 			obj.setBlock( block.x, block.y, block.z, BLOCK.AIR );
+		}
 		else
 			obj.setBlock( block.x + block.n.x, block.y + block.n.y, block.z + block.n.z, this.buildMaterial );
 	}
-}
+};
 
 // getEyePos()
 //
@@ -175,7 +196,7 @@ Player.prototype.doBlockAction = function( x, y, destroy )
 Player.prototype.getEyePos = function()
 {
 	return this.pos.add( new Vector( 0.0, 0.0, 1.7 ) );
-}
+};
 
 // update()
 //
@@ -183,13 +204,12 @@ Player.prototype.getEyePos = function()
 
 Player.prototype.update = function()
 {
-	var world = this.world;
 	var velocity = this.velocity;
 	var pos = this.pos;
-	var bPos = new Vector( Math.floor( pos.x ), Math.floor( pos.y ), Math.floor( pos.z ) );
 
 	if ( this.lastUpdate != null )
 	{
+		var bPos = new Vector( Math.floor( pos.x ), Math.floor( pos.y ), Math.floor( pos.z ) );
 		var delta = ( new Date().getTime() - this.lastUpdate ) / 1000;
 
 		// View
@@ -207,44 +227,43 @@ Player.prototype.update = function()
 
 		// Jumping
 		if ( this.keys[" "] && !this.falling )
-			velocity.z = 8;
+			velocity.z = 7.7;
 
 		// Walking
 		var walkVelocity = new Vector( 0, 0, 0 );
-		if ( !this.falling )
-		{
-			if ( this.keys["w"] ) {
-				walkVelocity.x += Math.cos( Math.PI / 2 - this.angles[1] );
-				walkVelocity.y += Math.sin( Math.PI / 2 - this.angles[1] );
-			}
-			if ( this.keys["s"] ) {
-				walkVelocity.x += Math.cos( Math.PI + Math.PI / 2 - this.angles[1] );
-				walkVelocity.y += Math.sin( Math.PI + Math.PI / 2 - this.angles[1] );
-			}
-			if ( this.keys["a"] ) {
-				walkVelocity.x += Math.cos( Math.PI / 2 + Math.PI / 2 - this.angles[1] );
-				walkVelocity.y += Math.sin( Math.PI / 2 + Math.PI / 2 - this.angles[1] );
-			}
-			if ( this.keys["d"] ) {
-				walkVelocity.x += Math.cos( -Math.PI / 2 + Math.PI / 2 - this.angles[1] );
-				walkVelocity.y += Math.sin( -Math.PI / 2 + Math.PI / 2 - this.angles[1] );
-			}
+		if ( this.keys["w"] ) {
+			walkVelocity.x += Math.cos( Math.PI / 2 - this.angles[1] );
+			walkVelocity.y += Math.sin( Math.PI / 2 - this.angles[1] );
 		}
+		if ( this.keys["s"] ) {
+			walkVelocity.x += Math.cos( Math.PI + Math.PI / 2 - this.angles[1] );
+			walkVelocity.y += Math.sin( Math.PI + Math.PI / 2 - this.angles[1] );
+		}
+		if ( this.keys["a"] ) {
+			walkVelocity.x += Math.cos( Math.PI / 2 + Math.PI / 2 - this.angles[1] );
+			walkVelocity.y += Math.sin( Math.PI / 2 + Math.PI / 2 - this.angles[1] );
+		}
+		if ( this.keys["d"] ) {
+			walkVelocity.x += Math.cos( -Math.PI / 2 + Math.PI / 2 - this.angles[1] );
+			walkVelocity.y += Math.sin( -Math.PI / 2 + Math.PI / 2 - this.angles[1] );
+		}
+		
 		if ( walkVelocity.length() > 0 ) {
 				walkVelocity = walkVelocity.normal();
 				velocity.x = walkVelocity.x * 4;
 				velocity.y = walkVelocity.y * 4;
-		} else {
+		}else {
 			velocity.x /= this.falling ? 1.01 : 1.5;
 			velocity.y /= this.falling ? 1.01 : 1.5;
 		}
-
 		// Resolve collision
 		this.pos = this.resolveCollision( pos, bPos, velocity.mul( delta ) );
 	}
-
+	if(this.pos.z < 0){
+		this.pos = this.world.spawnPoint;
+	}
 	this.lastUpdate = new Date().getTime();
-}
+};
 
 // resolveCollision( pos, bPos, velocity )
 //
@@ -264,7 +283,7 @@ Player.prototype.resolveCollision = function( pos, bPos, velocity )
 		{
 			for ( var z = bPos.z; z <= bPos.z + 1; z++ )
 			{
-				if ( world.getBlock( x, y, z ) != BLOCK.AIR )
+				if ( world.getBlock( x, y, z ) != BLOCK.AIR)
 				{
 					if ( world.getBlock( x - 1, y, z ) == BLOCK.AIR ) collisionCandidates.push( { x: x, dir: -1, y1: y, y2: y + 1 } );
 					if ( world.getBlock( x + 1, y, z ) == BLOCK.AIR ) collisionCandidates.push( { x: x + 1, dir: 1, y1: y, y2: y + 1 } );
@@ -335,4 +354,4 @@ Player.prototype.resolveCollision = function( pos, bPos, velocity )
 
 	// Return solution
 	return pos.add( velocity );
-}
+};
