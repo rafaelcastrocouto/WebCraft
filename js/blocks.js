@@ -34,9 +34,6 @@ BLOCK.BEDROCK = {
 BLOCK.DIRT = {
 	id: 2,
 	spawnable: true,
-	transparent: false,
-	selflit: false,
-	gravity: false,
 	fluid: false,
 	texture: function( world, lightmap, lit, x, y, z, dir )
 	{
@@ -392,7 +389,6 @@ BLOCK.pushVertices = function( vertices, world, lightmap, x, y, z )
 BLOCK.pushPickingVertices = function( vertices, x, y, z )
 {
 	var color = { r: x/255, g: y/255, b: z/255 };
-	
 	// Top
 	pushQuad(
 		vertices,

@@ -38,12 +38,12 @@ Physics.prototype.simulate = function()
 	this.lastStep = step;
 	
 	// Gravity
-	if ( step % 2 == 0 )
+	if ( step % 2 === 0 )
 	{
 		for ( var x = 0; x < world.sx; x++ ) {
 			for ( var y = 0; y < world.sy; y++ ) {
 				for ( var z = 0; z < world.sz; z++ ) {
-					if ( blocks[x][y][z].gravity && z > 0 && blocks[x][y][z-1] == BLOCK.AIR )
+					if ( blocks[x][y][z].gravity && z > 0 && blocks[x][y][z-1] === BLOCK.AIR )
 					{
 						world.setBlock( x, y, z - 1, blocks[x][y][z] );
 						world.setBlock( x, y, z, BLOCK.AIR );
@@ -54,7 +54,7 @@ Physics.prototype.simulate = function()
 	}
 	
 	// Fluids
-	if ( step % 10 == 0 )
+	if ( step % 4 == 0 )
 	{
 		// Newly spawned fluid blocks are stored so that those aren't
 		// updated in the same step, creating a simulation avalanche.

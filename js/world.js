@@ -44,37 +44,54 @@ World.prototype.createFlatWorld = function( height )
 	this.spawnPoint = new Vector( this.sx / 2 + 0.5, this.sy / 2 + 0.5, height );
 	
 	for ( var x = 0; x < this.sx; x++ )
-		for ( var y = 0; y < this.sy; y++ )
-			for ( var z = 1; z < this.sz; z++ ){
-				this.blocks[x][y][z] = z < height ? BLOCK.DIRT : BLOCK.AIR;
-				if(z == height){
-					var rnd = Math.random() * 100;
-					if(rnd < 5.00){
-						console.log("Wygenerowano drzewo");
-						this.createTree(x,y,z);
-					}
-					var rndLake = Math.random() * 100;
-					if(rndLake < 2.00){
-						console.log("Wygenerowano jeziorko");
-						this.createLake(x,y,z);
-					}
+		for ( var y = 0; y < this.sy; y++ ){
+			this.blocks[x][y][0] = BLOCK.BEDROCK;
+			this.blocks[x][y][1] = BLOCK.CONCRETE;
+			this.blocks[x][y][2] = BLOCK.CONCRETE;
+			this.blocks[x][y][3] = BLOCK.CONCRETE;
+			this.blocks[x][y][4] = BLOCK.CONCRETE;
+			this.blocks[x][y][5] = BLOCK.CONCRETE;
+			this.blocks[x][y][6] = BLOCK.DIRT;
+			this.blocks[x][y][7] = BLOCK.AIR;
+			this.blocks[x][y][8] = BLOCK.AIR;
+			this.blocks[x][y][9] = BLOCK.AIR;
+			for ( var z = 10; z < this.sz; z++ ){
+				this.blocks[x][y][z] = BLOCK.AIR;
+				var random = Math.random() * 100;
+				if(random < 0.7){
+					this.createTree(x,y,7);
 				}
-				this.blocks[x][y][0] = BLOCK.BEDROCK;
 			}
+		}
+			// for ( var z = 1; z < this.sz; z++ ){
+			// 	this.blocks[x][y][z] = z < height ? BLOCK.DIRT : BLOCK.AIR;
+			// 	if(z == height){
+			// 		var rnd = Math.random() * 100;
+			// 		if(rnd < 0.7){
+			// 			console.log("Wygenerowano drzewo");
+			// 			this.createTree(x,y,z);
+			// 		}
+			// 		var rndLake = Math.random() * 100;
+			// 		if(rndLake < 2.00){
+			// 			console.log("Wygenerowano jeziorko");
+			// 			//this.createLake(x,y,z);
+			// 		}
+			// 	}
+			// 	this.blocks[x][y][0] = BLOCK.BEDROCK;
+			// }
 };
 
 World.prototype.createLake = function(x,y,z) {
 	this.blocks[x][y][z-1] = BLOCK.WATER;
-}
+};
 
-World.prototype.createTree = function( x, y, z)
+World.prototype.createTree = function(x,y,z)
 {
 	this.blocks[x][y][z] = BLOCK.WOOD;
-	this.blocks[x][y][z + 1] = BLOCK.WOOD;
-	this.blocks[x][y][z + 2] = BLOCK.WOOD;
-	this.blocks[x][y][z + 3] = BLOCK.WOOD;
-	this.blocks[x][y][z + 4] = BLOCK.WOOD;
-	this.blocks[x][y][z + 5] = BLOCK.WOOD;
+	this.blocks[x][y][(z + 1)] = BLOCK.WOOD;
+	this.blocks[x][y][(z + 2)] = BLOCK.WOOD;
+	this.blocks[x][y][(z + 3)] = BLOCK.WOOD;
+	this.blocks[x][y][(z + 4)] = BLOCK.WOOD;
 	
 	//Liscie
 
