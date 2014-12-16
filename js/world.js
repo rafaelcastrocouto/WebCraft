@@ -52,14 +52,52 @@ World.prototype.createFlatWorld = function( height )
 			this.blocks[x][y][4] = BLOCK.CONCRETE;
 			this.blocks[x][y][5] = BLOCK.CONCRETE;
 			this.blocks[x][y][6] = BLOCK.DIRT;
-			this.blocks[x][y][7] = BLOCK.AIR;
-			this.blocks[x][y][8] = BLOCK.AIR;
-			this.blocks[x][y][9] = BLOCK.AIR;
-			for ( var z = 10; z < this.sz; z++ ){
+			for ( var z = 7; z < this.sz; z++ ){
 				this.blocks[x][y][z] = BLOCK.AIR;
-				var random = Math.random() * 100;
-				if(random < 0.7){
-					this.createTree(x,y,7);
+			}
+			// for( var a = 1; a < 2; a++){
+			// 	if(x < this.sx - 5 || x + 5 < this.sx - 5){
+			// 		if(y < this.sy - 5 || y + 5 < this.sy - 5){
+			// 			var random = Math.random() * 100;
+			// 			if(random < 1){
+			// 				this.createTree(x,y,7);
+			// 			}
+			// 		}
+			// 	}
+			// }
+			for( var a = 1; a < 2; a++){
+				if(x > 10){
+					if(y > 10){
+						if(x < (this.sx - 10)){
+							if(y < (this.sy - 10)){
+								var random = Math.random() * 100;
+								if(random < 40){
+									this.blocks[x][y][7] = BLOCK.DIRT;
+									this.blocks[x - 1][y][7] = BLOCK.DIRT;
+									this.blocks[x - 1][y - 1][7] = BLOCK.DIRT;
+									this.blocks[x + 1][y][7] = BLOCK.DIRT;
+									this.blocks[x - 1][y + 1][7] = BLOCK.DIRT;
+									if(random < 30){
+										this.blocks[x][y][8] = BLOCK.DIRT;
+										if(random < 0.5){
+											this.createTree(x,y,8);
+											console.log("Wygenerowano drzewo na " + x + "," + y);
+										}
+									}else{
+										if(random < 0.5){
+											this.createTree(x,y,7);
+											console.log("Wygenerowano drzewo na " + x + "," + y);
+										}
+									}
+								}else{
+									if(random < 0.02){
+										this.createTree(x,y,7);
+										console.log("Wygenerowano drzewo na " + x + "," + y);
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 		}
@@ -94,26 +132,136 @@ World.prototype.createTree = function(x,y,z)
 	this.blocks[x][y][(z + 4)] = BLOCK.WOOD;
 	
 	//Liscie
-
-	// this.blocks[x - 1][y][z + 5] = BLOCK.LEAVES;
-	// this.blocks[x - 2][y][z + 5] = BLOCK.LEAVES;
-	// this.blocks[x - 3][y][z + 5] = BLOCK.LEAVES;
-	// this.blocks[x - 1][y - 1][z + 5] = BLOCK.LEAVES;
-	// this.blocks[x - 2][y - 2][z + 5] = BLOCK.LEAVES;
-	// this.blocks[x - 3][y - 3][z + 5] = BLOCK.LEAVES;
-	// this.blocks[x - 1][y + 1][z + 5] = BLOCK.LEAVES;
-	// this.blocks[x - 2][y + 2][z + 5] = BLOCK.LEAVES;
-	// this.blocks[x - 3][y + 3][z + 5] = BLOCK.LEAVES;
-
-	// this.blocks[x + 1][y][z + 5] = BLOCK.LEAVES;
-	// this.blocks[x + 2][y][z + 5] = BLOCK.LEAVES;
-	// this.blocks[x + 3][y][z + 5] = BLOCK.LEAVES;
-	// this.blocks[x + 1][y - 1][z + 5] = BLOCK.LEAVES;
-	// this.blocks[x + 2][y - 2][z + 5] = BLOCK.LEAVES;
-	// this.blocks[x + 3][y - 3][z + 5] = BLOCK.LEAVES;
-	// this.blocks[x + 1][y + 1][z + 5] = BLOCK.LEAVES;
-	// this.blocks[x + 2][y + 2][z + 5] = BLOCK.LEAVES;
-	// this.blocks[x + 3][y + 3][z + 5] = BLOCK.LEAVES;
+	
+	this.blocks[x][y][z + 5] = BLOCK.LEAVES;
+	this.blocks[x][y][z + 6] = BLOCK.LEAVES;
+	this.blocks[x][y][z + 7] = BLOCK.LEAVES;
+	
+	this.blocks[x - 1][y][z + 5] = BLOCK.LEAVES;
+	this.blocks[x - 1][y][z + 6] = BLOCK.LEAVES;
+	this.blocks[x - 1][y][z + 7] = BLOCK.LEAVES;
+	this.blocks[x - 2][y][z + 5] = BLOCK.LEAVES;
+	this.blocks[x - 2][y][z + 6] = BLOCK.LEAVES;
+	this.blocks[x - 2][y][z + 7] = BLOCK.LEAVES;
+	this.blocks[x - 3][y][z + 5] = BLOCK.LEAVES;
+	this.blocks[x - 3][y][z + 6] = BLOCK.LEAVES;
+	
+	this.blocks[x - 1][y - 1][z + 5] = BLOCK.LEAVES;
+	this.blocks[x - 1][y - 1][z + 6] = BLOCK.LEAVES;
+	this.blocks[x - 1][y - 1][z + 7] = BLOCK.LEAVES;
+	this.blocks[x - 2][y - 1][z + 5] = BLOCK.LEAVES;
+	this.blocks[x - 2][y - 1][z + 6] = BLOCK.LEAVES;
+	this.blocks[x - 2][y - 1][z + 7] = BLOCK.LEAVES;
+	this.blocks[x - 3][y - 1][z + 5] = BLOCK.LEAVES;
+	this.blocks[x - 3][y - 1][z + 6] = BLOCK.LEAVES;
+	
+	this.blocks[x - 1][y - 2][z + 5] = BLOCK.LEAVES;
+	this.blocks[x - 1][y - 2][z + 6] = BLOCK.LEAVES;
+	this.blocks[x - 1][y - 2][z + 7] = BLOCK.LEAVES;
+	this.blocks[x - 2][y - 2][z + 5] = BLOCK.LEAVES;
+	this.blocks[x - 2][y - 2][z + 6] = BLOCK.LEAVES;
+	this.blocks[x - 2][y - 2][z + 7] = BLOCK.LEAVES;
+	this.blocks[x - 3][y - 2][z + 5] = BLOCK.LEAVES;
+	this.blocks[x - 3][y - 2][z + 6] = BLOCK.LEAVES;
+	
+	this.blocks[x - 1][y - 3][z + 5] = BLOCK.LEAVES;
+	this.blocks[x - 1][y - 3][z + 6] = BLOCK.LEAVES;
+	this.blocks[x - 1][y - 3][z + 7] = BLOCK.LEAVES;
+	this.blocks[x - 2][y - 3][z + 5] = BLOCK.LEAVES;
+	this.blocks[x - 2][y - 3][z + 6] = BLOCK.LEAVES;
+	this.blocks[x - 2][y - 3][z + 7] = BLOCK.LEAVES;
+	this.blocks[x - 3][y - 3][z + 5] = BLOCK.LEAVES;
+	this.blocks[x - 3][y - 3][z + 6] = BLOCK.LEAVES;
+	
+	this.blocks[x - 1][y + 1][z + 5] = BLOCK.LEAVES;
+	this.blocks[x - 1][y + 1][z + 6] = BLOCK.LEAVES;
+	this.blocks[x - 1][y + 1][z + 7] = BLOCK.LEAVES;
+	this.blocks[x - 2][y + 1][z + 5] = BLOCK.LEAVES;
+	this.blocks[x - 2][y + 1][z + 6] = BLOCK.LEAVES;
+	this.blocks[x - 2][y + 1][z + 7] = BLOCK.LEAVES;
+	this.blocks[x - 3][y + 1][z + 5] = BLOCK.LEAVES;
+	this.blocks[x - 3][y + 1][z + 6] = BLOCK.LEAVES;
+	
+	this.blocks[x - 1][y + 2][z + 5] = BLOCK.LEAVES;
+	this.blocks[x - 1][y + 2][z + 6] = BLOCK.LEAVES;
+	this.blocks[x - 1][y + 2][z + 7] = BLOCK.LEAVES;
+	this.blocks[x - 2][y + 2][z + 5] = BLOCK.LEAVES;
+	this.blocks[x - 2][y + 2][z + 6] = BLOCK.LEAVES;
+	this.blocks[x - 2][y + 2][z + 7] = BLOCK.LEAVES;
+	this.blocks[x - 3][y + 2][z + 5] = BLOCK.LEAVES;
+	this.blocks[x - 3][y + 2][z + 6] = BLOCK.LEAVES;
+	
+	this.blocks[x - 1][y + 3][z + 5] = BLOCK.LEAVES;
+	this.blocks[x - 1][y + 3][z + 6] = BLOCK.LEAVES;
+	this.blocks[x - 1][y + 3][z + 7] = BLOCK.LEAVES;
+	this.blocks[x - 2][y + 3][z + 5] = BLOCK.LEAVES;
+	this.blocks[x - 2][y + 3][z + 6] = BLOCK.LEAVES;
+	this.blocks[x - 2][y + 3][z + 7] = BLOCK.LEAVES;
+	this.blocks[x - 3][y + 3][z + 5] = BLOCK.LEAVES;
+	this.blocks[x - 3][y + 3][z + 6] = BLOCK.LEAVES;
+	
+	this.blocks[x + 1][y][z + 5] = BLOCK.LEAVES;
+	this.blocks[x + 1][y][z + 6] = BLOCK.LEAVES;
+	this.blocks[x + 1][y][z + 7] = BLOCK.LEAVES;
+	this.blocks[x + 2][y][z + 5] = BLOCK.LEAVES;
+	this.blocks[x + 2][y][z + 6] = BLOCK.LEAVES;
+	this.blocks[x + 2][y][z + 7] = BLOCK.LEAVES;
+	this.blocks[x + 3][y][z + 5] = BLOCK.LEAVES;
+	this.blocks[x + 3][y][z + 6] = BLOCK.LEAVES;
+	
+	this.blocks[x + 1][y - 1][z + 5] = BLOCK.LEAVES;
+	this.blocks[x + 1][y - 1][z + 6] = BLOCK.LEAVES;
+	this.blocks[x + 1][y - 1][z + 7] = BLOCK.LEAVES;
+	this.blocks[x + 2][y - 1][z + 5] = BLOCK.LEAVES;
+	this.blocks[x + 2][y - 1][z + 6] = BLOCK.LEAVES;
+	this.blocks[x + 2][y - 1][z + 7] = BLOCK.LEAVES;
+	this.blocks[x + 3][y - 1][z + 5] = BLOCK.LEAVES;
+	this.blocks[x + 3][y - 1][z + 6] = BLOCK.LEAVES;
+	
+	this.blocks[x + 1][y - 2][z + 5] = BLOCK.LEAVES;
+	this.blocks[x + 1][y - 2][z + 6] = BLOCK.LEAVES;
+	this.blocks[x + 1][y - 2][z + 7] = BLOCK.LEAVES;
+	this.blocks[x + 2][y - 2][z + 5] = BLOCK.LEAVES;
+	this.blocks[x + 2][y - 2][z + 6] = BLOCK.LEAVES;
+	this.blocks[x + 2][y - 2][z + 7] = BLOCK.LEAVES;
+	this.blocks[x + 3][y - 2][z + 5] = BLOCK.LEAVES;
+	this.blocks[x + 3][y - 2][z + 6] = BLOCK.LEAVES;
+	
+	this.blocks[x + 1][y - 3][z + 5] = BLOCK.LEAVES;
+	this.blocks[x + 1][y - 3][z + 6] = BLOCK.LEAVES;
+	this.blocks[x + 1][y - 3][z + 7] = BLOCK.LEAVES;
+	this.blocks[x + 2][y - 3][z + 5] = BLOCK.LEAVES;
+	this.blocks[x + 2][y - 3][z + 6] = BLOCK.LEAVES;
+	this.blocks[x + 2][y - 3][z + 7] = BLOCK.LEAVES;
+	this.blocks[x + 3][y - 3][z + 5] = BLOCK.LEAVES;
+	this.blocks[x + 3][y - 3][z + 6] = BLOCK.LEAVES;
+	
+	this.blocks[x + 1][y + 1][z + 5] = BLOCK.LEAVES;
+	this.blocks[x + 1][y + 1][z + 6] = BLOCK.LEAVES;
+	this.blocks[x + 1][y + 1][z + 7] = BLOCK.LEAVES;
+	this.blocks[x + 2][y + 1][z + 5] = BLOCK.LEAVES;
+	this.blocks[x + 2][y + 1][z + 6] = BLOCK.LEAVES;
+	this.blocks[x + 2][y + 1][z + 7] = BLOCK.LEAVES;
+	this.blocks[x + 3][y + 1][z + 5] = BLOCK.LEAVES;
+	this.blocks[x + 3][y + 1][z + 6] = BLOCK.LEAVES;
+	
+	this.blocks[x + 1][y + 2][z + 5] = BLOCK.LEAVES;
+	this.blocks[x + 1][y + 2][z + 6] = BLOCK.LEAVES;
+	this.blocks[x + 1][y + 2][z + 7] = BLOCK.LEAVES;
+	this.blocks[x + 2][y + 2][z + 5] = BLOCK.LEAVES;
+	this.blocks[x + 2][y + 2][z + 6] = BLOCK.LEAVES;
+	this.blocks[x + 2][y + 2][z + 7] = BLOCK.LEAVES;
+	this.blocks[x + 3][y + 2][z + 5] = BLOCK.LEAVES;
+	this.blocks[x + 3][y + 2][z + 6] = BLOCK.LEAVES;
+	
+	this.blocks[x + 1][y + 3][z + 5] = BLOCK.LEAVES;
+	this.blocks[x + 1][y + 3][z + 6] = BLOCK.LEAVES;
+	this.blocks[x + 1][y + 3][z + 7] = BLOCK.LEAVES;
+	this.blocks[x + 2][y + 3][z + 5] = BLOCK.LEAVES;
+	this.blocks[x + 2][y + 3][z + 6] = BLOCK.LEAVES;
+	this.blocks[x + 2][y + 3][z + 7] = BLOCK.LEAVES;
+	this.blocks[x + 3][y + 3][z + 5] = BLOCK.LEAVES;
+	this.blocks[x + 3][y + 3][z + 6] = BLOCK.LEAVES;
 };
 
 // createFromString( str )
