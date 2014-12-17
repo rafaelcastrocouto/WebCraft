@@ -25,9 +25,7 @@
 		<canvas id="renderSurface"></canvas>
 		
 		<!-- Material selection -->
-		<table id="materialSelector">
-			<tr></tr>
-		</table>
+
 		
 		<div id="blockselector">
 			
@@ -35,17 +33,22 @@
 		
 		<div id="blocks" style="display: none;">
 			Wybor klocka:
+			<tr></tr>
 		</div>
 		<!-- Infobox -->
 		<div id="chatbox">
-			<span id="chatbox_text">WebCraft v0.0.93</br>
+			<span id="chatbox_text">WebCraft v0.1.73</br>
 			<div id="fps"></div></span>
 		</div>
+		
+		<table id="materialSelector">
+			<tr></tr>
+		</table>
 		
 		<!-- Initialisation code -->
 		<script type="text/javascript">			
 			// Create a new flat world
-			var world = new World( 130, 130, 20 );
+			var world = new World( 170, 170, 20 );
 			world.createFlatWorld( 7 );
 			
 			// Set up renderer
@@ -75,7 +78,7 @@
 				player.update();
 				
 				// Build a chunk
-				render.buildChunks( 6 );
+				render.buildChunks( 12 );
 				
 				// Draw world
 				render.setCamera( player.getEyePos().toArray(), player.angles );
