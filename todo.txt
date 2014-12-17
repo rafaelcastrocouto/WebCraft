@@ -1,0 +1,9 @@
+Lista todo:
+* Nieskonczona mapa
+* Normalny generator
+* HP
+* Niszczenie klockow jak na surivalu w mc
+* "blokowanie" kursora (jak w minecrafcie)
+* Optymilizacja
+* Zapis map
+* Ladowanie map
