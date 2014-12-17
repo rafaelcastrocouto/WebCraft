@@ -33,7 +33,7 @@ body {
 #materialSelector {
 	position: relative;
 	margin: auto;
-	
+	bottom: 20px;
 	background: rgba( 0, 0, 0, 0.6 );
 }
 

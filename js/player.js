@@ -111,16 +111,6 @@ Player.prototype.on = function( event, callback )
 //
 // Hook for keyboard input.
 
-
-// Player.prototype.onKeyEvent = function( keyCode, down )
-// {
-// 	var key = String.fromCharCode( keyCode ).toLowerCase();
-// 	this.keys[key] = down;
-// 	this.keys[keyCode] = down;
-	
-// 	if ( !down && key == "t" && this.eventHandlers["openChat"] ) this.eventHandlers.openChat();
-// }
-
 Player.prototype.onKeyEvent = function( keyCode, down )
 {
 	var key = String.fromCharCode( keyCode ).toLowerCase();
@@ -129,7 +119,6 @@ Player.prototype.onKeyEvent = function( keyCode, down )
 	
 	if (key == "r" ){
 		this.pos = this.world.spawnPoint;
-		this.pos.z += 1;
 	}
 	if (key == "b"){
 		var blockSelect = document.getElementById("blocks").style;
@@ -180,7 +169,6 @@ Player.prototype.doBlockAction = function( x, y, destroy )
 	if ( block !== false )
 	{
 		var obj = this.client ? this.client : this.world;
-
 		if (destroy){
 			obj.setBlock( block.x, block.y, block.z, BLOCK.AIR );
 		}
