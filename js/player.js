@@ -50,13 +50,51 @@ Player.prototype.setClient = function( client )
 Player.prototype.setInputCanvas = function( id )
 {
 	var canvas = this.canvas = document.getElementById( id );
+	
+	var pad = this.pad = {center: document.getElementById("pad_center"), up: document.getElementById("pad_up"), down: document.getElementById("pad_down"), left: document.getElementById("pad_left"), right: document.getElementById("pad_right")};
 
+	
 	var t = this;
+	pad.center.ontouchstart = function( e ) { t.onKeyEvent( "32" , true) };
+	pad.center.ontouchend = function( e ) { t.onKeyEvent( "32" , false) };
+	pad.up.ontouchstart = function( e ) { t.onKeyEvent( "119" , true) };
+	pad.up.ontouchend = function( e ) { t.onKeyEvent( "119" , false) };
+	pad.down.ontouchstart = function( e ) { t.onKeyEvent( "115" , true) };
+	pad.down.ontouchend = function( e ) { t.onKeyEvent( "115" , false) };
+	pad.left.ontouchstart = function( e ) { t.onKeyEvent( "97" , true) };
+	pad.left.ontouchend = function( e ) { t.onKeyEvent( "97" , false) };
+	pad.right.ontouchstart = function( e ) { t.onKeyEvent( "100" , true) };
+	pad.right.ontouchend = function( e ) { t.onKeyEvent( "100" , false) };
+	
 	document.onkeydown = function( e ) { if ( e.target.tagName != "INPUT" ) { t.onKeyEvent( e.keyCode, true ); return false; } };
 	document.onkeyup = function( e ) { if ( e.target.tagName != "INPUT" ) { t.onKeyEvent( e.keyCode, false ); return false; } };
 	canvas.onmousedown = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.DOWN, e.which == 3 ); return false; };
 	canvas.onmouseup = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.UP, e.which == 3 ); return false; };
 	canvas.onmousemove = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.MOVE, e.which == 3 ); return false; };
+	canvas.ontouchstart = function( e ) {
+		var touches = e.changedTouches;
+		var length = touches.length;
+		t.onTouchEvent( e.changedTouches[length - 1].pageX, e.changedTouches[length - 1].pageY, MOUSE.DOWN, e.which == 3 );
+		return false;
+	};
+	canvas.ontouchend = function( e ) {  
+		var touches = e.changedTouches;
+		var length = touches.length;
+		t.onTouchEvent( e.changedTouches[length - 1].pageX, e.changedTouches[length - 1].pageY, MOUSE.UP, e.which == 3 );
+		return false;
+	};
+	canvas.ontouchleave = function( e ) {
+		var touches = e.changedTouches;
+		var length = touches.length;
+		t.onTouchEvent( e.changedTouches[length - 1].pageX, e.changedTouches[length - 1].pageY, MOUSE.UP, e.which == 3 );
+		return false;
+	};
+	canvas.ontouchmove = function( e ) {
+		var touches = e.changedTouches;
+		var length = touches.length;
+		t.onTouchEvent(e.changedTouches[length - 1].pageX, e.changedTouches[length - 1].pageY, MOUSE.MOVE, e.which == 3 );
+		return false;
+	};
 };
 
 // setMaterialSelector( id )
@@ -156,6 +194,31 @@ Player.prototype.onMouseEvent = function( x, y, type, rmb )
 		this.canvas.style.cursor = "default";
 	}
 };
+
+
+Player.prototype.onTouchEvent = function( x, y, type, rmb )
+{
+	if ( type == MOUSE.DOWN ) {
+		this.dragStart = { x: x, y: y };
+		this.mouseDown = true;
+		this.yawStart = this.targetYaw = this.angles[1];
+		this.pitchStart = this.targetPitch = this.angles[0];
+	} else if ( type == MOUSE.UP ) {
+		if ( Math.abs( this.dragStart.x - x ) + Math.abs( this.dragStart.y - y ) < 4 )	
+			this.doBlockAction( x, y, !rmb );
+
+		this.dragging = false;
+		this.mouseDown = false;
+		this.canvas.style.cursor = "default";
+	} else if ( type == MOUSE.MOVE && this.mouseDown ) {
+		this.dragging = true;
+		this.targetPitch = this.pitchStart + ( y - this.dragStart.y ) / 500;
+		this.targetYaw = this.yawStart - ( x - this.dragStart.x ) / 500;
+
+		this.canvas.style.cursor = "default";
+	}
+};
+
 
 // doBlockAction( x, y )
 //

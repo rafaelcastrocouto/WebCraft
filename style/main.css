@@ -78,6 +78,16 @@ body {
 	color: white;
 }
 
+#pad div {
+	display: none;
+}
+
+#pad #pad_down {
+	position: absolute;
+	right: 105px;
+	bottom: 55px;
+}
+
 #chatbox_text {
 	position: absolute;
 	bottom: 8px;
