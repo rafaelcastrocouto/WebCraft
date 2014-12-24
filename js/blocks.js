@@ -36,14 +36,26 @@ BLOCK.DIRT = {
 	spawnable: true,
 	fluid: false,
 	texture: function( world, lightmap, lit, x, y, z, dir )
-	{
+	{	
 		return [ 2/16, 0/16, 3/16, 1/16 ];
+	}
+};
+// Grass
+BLOCK.GRASS = {
+	id: 3,
+	spawnable: true,
+	fluid: false,
+	texture: function( world, lightmap, lit, x, y, z, dir )
+	{
+		if(dir == DIRECTION.UP)return [ 8/16, 2/16, 9/16, 3/16 ];
+		else if(dir == DIRECTION.DOWN)return [ 2/16, 0/16, 3/16, 1/16 ];
+		else return [ 3/16, 0/16, 4/16, 1/16 ];
 	}
 };
 
 // Wood
 BLOCK.WOOD = {
-	id: 3,
+	id: 4,
 	spawnable: true,
 	transparent: false,
 	selflit: false,
@@ -60,7 +72,7 @@ BLOCK.WOOD = {
 
 // TNT
 BLOCK.TNT = {
-	id: 4,
+	id: 5,
 	spawnable: true,
 	transparent: false,
 	selflit: false,
@@ -77,7 +89,7 @@ BLOCK.TNT = {
 
 // Bookcase
 BLOCK.BOOKCASE = {
-	id: 5,
+	id: 6,
 	spawnable: true,
 	transparent: false,
 	selflit: false,
@@ -94,7 +106,7 @@ BLOCK.BOOKCASE = {
 
 // Lava
 BLOCK.LAVA = {
-	id: 6,
+	id: 7,
 	spawnable: false,
 	transparent: true,
 	selflit: true,
@@ -105,7 +117,7 @@ BLOCK.LAVA = {
 
 // Plank
 BLOCK.PLANK = {
-	id: 7,
+	id: 8,
 	spawnable: true,
 	transparent: false,
 	selflit: false,
@@ -116,7 +128,7 @@ BLOCK.PLANK = {
 
 // Cobblestone
 BLOCK.COBBLESTONE = {
-	id: 8,
+	id: 9,
 	spawnable: true,
 	transparent: false,
 	selflit: false,
@@ -127,7 +139,7 @@ BLOCK.COBBLESTONE = {
 
 // Concrete
 BLOCK.CONCRETE = {
-	id: 9,
+	id: 10,
 	spawnable: true,
 	transparent: false,
 	selflit: false,
@@ -138,7 +150,7 @@ BLOCK.CONCRETE = {
 
 // Brick
 BLOCK.BRICK = {
-	id: 10,
+	id: 11,
 	spawnable: true,
 	transparent: false,
 	selflit: false,
@@ -149,7 +161,7 @@ BLOCK.BRICK = {
 
 // Sand
 BLOCK.SAND = {
-	id: 11,
+	id: 12,
 	spawnable: true,
 	transparent: false,
 	selflit: false,
@@ -160,7 +172,7 @@ BLOCK.SAND = {
 
 // Gravel
 BLOCK.GRAVEL = {
-	id: 12,
+	id: 13,
 	spawnable: true,
 	transparent: false,
 	selflit: false,
@@ -171,7 +183,7 @@ BLOCK.GRAVEL = {
 
 // Iron
 BLOCK.IRON = {
-	id: 13,
+	id: 14,
 	spawnable: true,
 	transparent: false,
 	selflit: false,
@@ -182,7 +194,7 @@ BLOCK.IRON = {
 
 // Gold
 BLOCK.GOLD = {
-	id: 14,
+	id: 15,
 	spawnable: true,
 	transparent: false,
 	selflit: false,
@@ -193,7 +205,7 @@ BLOCK.GOLD = {
 
 // Diamond
 BLOCK.DIAMOND = {
-	id: 15,
+	id: 16,
 	spawnable: true,
 	transparent: false,
 	selflit: false,
@@ -204,7 +216,7 @@ BLOCK.DIAMOND = {
 
 // Obsidian
 BLOCK.OBSIDIAN = {
-	id: 16,
+	id: 17,
 	spawnable: true,
 	transparent: false,
 	selflit: false,
@@ -215,7 +227,7 @@ BLOCK.OBSIDIAN = {
 
 // Glass
 BLOCK.GLASS = {
-	id: 17,
+	id: 18,
 	spawnable: true,
 	transparent: true,
 	selflit: false,
@@ -226,7 +238,7 @@ BLOCK.GLASS = {
 
 // Sponge
 BLOCK.SPONGE = {
-	id: 18,
+	id: 19,
 	spawnable: true,
 	transparent: false,
 	selflit: false,
@@ -237,7 +249,7 @@ BLOCK.SPONGE = {
 
 // Leaves
 BLOCK.LEAVES = {
-	id: 19,
+	id: 20,
 	spawnable: false,
 	transparent: true,
 	selflit: false,
@@ -246,9 +258,9 @@ BLOCK.LEAVES = {
 	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 4/16, 3/16, 5/16, 4/16 ]; }
 };
 
-// Lava
+// Water
 BLOCK.WATER = {
-	id: 20,
+	id: 21,
 	spawnable: false,
 	transparent: true,
 	selflit: true,
@@ -257,6 +269,61 @@ BLOCK.WATER = {
 	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 14/16, 0/16, 15/16, 1/16 ]; }
 };
 
+// Iron Ore
+BLOCK.IRON_ORE = {
+	id: 22,
+	spawnable: true,
+	transparent: false,
+	selflit: false,
+	gravity: false,
+	fluid: false,
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 1/16, 2/16, 2/16, 3/16 ]; }
+};
+
+// Gold Ore
+BLOCK.GOLD_ORE = {
+	id: 23,
+	spawnable: true,
+	transparent: false,
+	selflit: false,
+	gravity: false,
+	fluid: false,
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 0/16, 2/16, 1/16, 3/16 ]; }
+};
+
+// Diamon Ore
+BLOCK.DIAMOND_ORE = {
+	id: 24,
+	spawnable: true,
+	transparent: false,
+	selflit: false,
+	gravity: false,
+	fluid: false,
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 2/16, 3/16, 3/16, 4/16 ]; }
+};
+
+// Coal Ore
+BLOCK.COAL_ORE = {
+	id: 25,
+	spawnable: true,
+	transparent: false,
+	selflit: false,
+	gravity: false,
+	fluid: false,
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 2/16, 2/16, 3/16, 3/16 ]; }
+};
+
+
+// Redstone Ore
+BLOCK.REDSTONE_ORE = {
+	id: 26,
+	spawnable: true,
+	transparent: false,
+	selflit: false,
+	gravity: false,
+	fluid: false,
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 3/16, 3/16, 4/16, 4/16 ]; }
+};
 
 // fromId( id )
 //
