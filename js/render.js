@@ -394,11 +394,8 @@ Renderer.prototype.buildChunks = function( count )
 				{
 					for ( var z = world.sz - 1; z >= 0; z-- )
 					{
-<<<<<<< HEAD
 						lightmap[x][y] = world.sz;
-=======
 						lightmap[x][y] = z;
->>>>>>> 71797b9a28b4dfd9bdcd98efe705bb94b69fe68b
 						if ( !world.getBlock( x, y, z ).transparent ) break;
 					}
 				}
