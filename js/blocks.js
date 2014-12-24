@@ -13,32 +13,50 @@ DIRECTION.RIGHT = 4;
 DIRECTION.FORWARD = 5;
 DIRECTION.BACK = 6;
 
-BLOCK = {};
+var BLOCK = {};
 
 // Air
 BLOCK.AIR = {
+	id: 0,
+	spawnable: false,
 	transparent: true
+};
+
+// Bedrock
+BLOCK.BEDROCK = {
+	id: 1,
+	spawnable: false,
+	transparent: false,
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 1/16, 1/16, 2/16, 2/16 ]; }
 };
 
 // Dirt
 BLOCK.DIRT = {
-	transparent: false,
-	selflit: false,
-	gravity: false,
+	id: 2,
+	spawnable: true,
+	fluid: false,
+	texture: function( world, lightmap, lit, x, y, z, dir )
+	{	
+		return [ 2/16, 0/16, 3/16, 1/16 ];
+	}
+};
+// Grass
+BLOCK.GRASS = {
+	id: 3,
+	spawnable: true,
 	fluid: false,
 	texture: function( world, lightmap, lit, x, y, z, dir )
 	{
-		if ( dir == DIRECTION.UP && lit )
-			return [ 14/16, 0/16, 15/16, 1/16 ];
-		else if ( dir == DIRECTION.DOWN || !lit ) 
-			return [ 2/16, 0/16, 3/16, 1/16 ];
-		else
-			return [ 3/16, 0/16, 4/16, 1/16 ];
+		if(dir == DIRECTION.UP)return [ 8/16, 2/16, 9/16, 3/16 ];
+		else if(dir == DIRECTION.DOWN)return [ 2/16, 0/16, 3/16, 1/16 ];
+		else return [ 3/16, 0/16, 4/16, 1/16 ];
 	}
 };
 
 // Wood
 BLOCK.WOOD = {
+	id: 4,
+	spawnable: true,
 	transparent: false,
 	selflit: false,
 	gravity: false,
@@ -54,6 +72,8 @@ BLOCK.WOOD = {
 
 // TNT
 BLOCK.TNT = {
+	id: 5,
+	spawnable: true,
 	transparent: false,
 	selflit: false,
 	gravity: false,
@@ -69,6 +89,8 @@ BLOCK.TNT = {
 
 // Bookcase
 BLOCK.BOOKCASE = {
+	id: 6,
+	spawnable: true,
 	transparent: false,
 	selflit: false,
 	gravity: false,
@@ -84,18 +106,19 @@ BLOCK.BOOKCASE = {
 
 // Lava
 BLOCK.LAVA = {
-	transparent: false,
+	id: 7,
+	spawnable: false,
+	transparent: true,
 	selflit: true,
-	gravity: true,
+	gravity: false,
 	fluid: true,
-	texture: function( world, lightmap, lit, x, y, z, dir )
-	{
-		return [ 13/16, 14/16, 14/16, 15/16 ];
-	}
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 13/16, 14/16, 14/16, 15/16 ]; }
 };
 
 // Plank
 BLOCK.PLANK = {
+	id: 8,
+	spawnable: true,
 	transparent: false,
 	selflit: false,
 	gravity: false,
@@ -105,6 +128,8 @@ BLOCK.PLANK = {
 
 // Cobblestone
 BLOCK.COBBLESTONE = {
+	id: 9,
+	spawnable: true,
 	transparent: false,
 	selflit: false,
 	gravity: false,
@@ -114,6 +139,8 @@ BLOCK.COBBLESTONE = {
 
 // Concrete
 BLOCK.CONCRETE = {
+	id: 10,
+	spawnable: true,
 	transparent: false,
 	selflit: false,
 	gravity: false,
@@ -123,6 +150,8 @@ BLOCK.CONCRETE = {
 
 // Brick
 BLOCK.BRICK = {
+	id: 11,
+	spawnable: true,
 	transparent: false,
 	selflit: false,
 	gravity: false,
@@ -132,6 +161,8 @@ BLOCK.BRICK = {
 
 // Sand
 BLOCK.SAND = {
+	id: 12,
+	spawnable: true,
 	transparent: false,
 	selflit: false,
 	gravity: true,
@@ -141,6 +172,8 @@ BLOCK.SAND = {
 
 // Gravel
 BLOCK.GRAVEL = {
+	id: 13,
+	spawnable: true,
 	transparent: false,
 	selflit: false,
 	gravity: true,
@@ -150,6 +183,8 @@ BLOCK.GRAVEL = {
 
 // Iron
 BLOCK.IRON = {
+	id: 14,
+	spawnable: true,
 	transparent: false,
 	selflit: false,
 	gravity: false,
@@ -159,6 +194,8 @@ BLOCK.IRON = {
 
 // Gold
 BLOCK.GOLD = {
+	id: 15,
+	spawnable: true,
 	transparent: false,
 	selflit: false,
 	gravity: false,
@@ -168,6 +205,8 @@ BLOCK.GOLD = {
 
 // Diamond
 BLOCK.DIAMOND = {
+	id: 16,
+	spawnable: true,
 	transparent: false,
 	selflit: false,
 	gravity: false,
@@ -177,6 +216,8 @@ BLOCK.DIAMOND = {
 
 // Obsidian
 BLOCK.OBSIDIAN = {
+	id: 17,
+	spawnable: true,
 	transparent: false,
 	selflit: false,
 	gravity: false,
@@ -186,6 +227,8 @@ BLOCK.OBSIDIAN = {
 
 // Glass
 BLOCK.GLASS = {
+	id: 18,
+	spawnable: true,
 	transparent: true,
 	selflit: false,
 	gravity: false,
@@ -195,11 +238,103 @@ BLOCK.GLASS = {
 
 // Sponge
 BLOCK.SPONGE = {
+	id: 19,
+	spawnable: true,
 	transparent: false,
 	selflit: false,
 	gravity: false,
 	fluid: false,
 	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 0/16, 3/16, 1/16, 4/16 ]; }
+};
+
+// Leaves
+BLOCK.LEAVES = {
+	id: 20,
+	spawnable: false,
+	transparent: true,
+	selflit: false,
+	gravity: false,
+	fluid: false,
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 4/16, 3/16, 5/16, 4/16 ]; }
+};
+
+// Water
+BLOCK.WATER = {
+	id: 21,
+	spawnable: false,
+	transparent: true,
+	selflit: true,
+	gravity: false,
+	fluid: true,
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 14/16, 0/16, 15/16, 1/16 ]; }
+};
+
+// Iron Ore
+BLOCK.IRON_ORE = {
+	id: 22,
+	spawnable: true,
+	transparent: false,
+	selflit: false,
+	gravity: false,
+	fluid: false,
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 1/16, 2/16, 2/16, 3/16 ]; }
+};
+
+// Gold Ore
+BLOCK.GOLD_ORE = {
+	id: 23,
+	spawnable: true,
+	transparent: false,
+	selflit: false,
+	gravity: false,
+	fluid: false,
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 0/16, 2/16, 1/16, 3/16 ]; }
+};
+
+// Diamon Ore
+BLOCK.DIAMOND_ORE = {
+	id: 24,
+	spawnable: true,
+	transparent: false,
+	selflit: false,
+	gravity: false,
+	fluid: false,
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 2/16, 3/16, 3/16, 4/16 ]; }
+};
+
+// Coal Ore
+BLOCK.COAL_ORE = {
+	id: 25,
+	spawnable: true,
+	transparent: false,
+	selflit: false,
+	gravity: false,
+	fluid: false,
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 2/16, 2/16, 3/16, 3/16 ]; }
+};
+
+
+// Redstone Ore
+BLOCK.REDSTONE_ORE = {
+	id: 26,
+	spawnable: true,
+	transparent: false,
+	selflit: false,
+	gravity: false,
+	fluid: false,
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 3/16, 3/16, 4/16, 4/16 ]; }
+};
+
+// fromId( id )
+//
+// Returns a block structure for the given id.
+
+BLOCK.fromId = function( id )
+{
+	for ( var mat in BLOCK )
+		if ( typeof( BLOCK[mat] ) == "object" && BLOCK[mat].id == id )
+			return BLOCK[mat];
+	return null;
 };
 
 // pushVertices( vertices, world, lightmap, x, y, z )
@@ -212,9 +347,10 @@ BLOCK.pushVertices = function( vertices, world, lightmap, x, y, z )
 	var blocks = world.blocks;
 	var blockLit = z >= lightmap[x][y];
 	var block = blocks[x][y][z];
+	var bH = block.fluid && ( z == world.sz - 1 || !blocks[x][y][z+1].fluid ) ? 0.9 : 1.0;
 	
 	// Top
-	if ( z == world.sz - 1 || world.blocks[x][y][z+1].transparent )
+	if ( z == world.sz - 1 || world.blocks[x][y][z+1].transparent || block.fluid )
 	{
 		var c = block.texture( world, lightmap, blockLit, x, y, z, DIRECTION.UP );
 		
@@ -223,10 +359,10 @@ BLOCK.pushVertices = function( vertices, world, lightmap, x, y, z )
 		
 		pushQuad(
 			vertices,
-			[ x, y, z + 1.0, c[0], c[1], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ],
-			[ x + 1.0, y, z + 1.0, c[2], c[1], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ],
-			[ x + 1.0, y + 1.0, z + 1.0, c[2], c[3], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ],
-			[ x, y + 1.0, z + 1.0, c[0], c[3], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ]
+			[ x, y, z + bH, c[0], c[1], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ],
+			[ x + 1.0, y, z + bH, c[2], c[1], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ],
+			[ x + 1.0, y + 1.0, z + bH, c[2], c[3], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ],
+			[ x, y + 1.0, z + bH, c[0], c[3], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ]
 		);
 	}
 	
@@ -258,8 +394,8 @@ BLOCK.pushVertices = function( vertices, world, lightmap, x, y, z )
 			vertices,
 			[ x, y, z, c[0], c[3], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ],
 			[ x + 1.0, y, z, c[2], c[3], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ],
-			[ x + 1.0, y, z + 1.0, c[2], c[1], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ],
-			[ x, y, z + 1.0, c[0], c[1], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ]
+			[ x + 1.0, y, z + bH, c[2], c[1], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ],
+			[ x, y, z + bH, c[0], c[1], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ]
 		);
 	}
 	
@@ -272,8 +408,8 @@ BLOCK.pushVertices = function( vertices, world, lightmap, x, y, z )
 		
 		pushQuad(
 			vertices,
-			[ x, y + 1.0, z + 1.0, c[2], c[1], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ],
-			[ x + 1.0, y + 1.0, z + 1.0, c[0], c[1], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ],
+			[ x, y + 1.0, z + bH, c[2], c[1], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ],
+			[ x + 1.0, y + 1.0, z + bH, c[0], c[1], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ],
 			[ x + 1.0, y + 1.0, z, c[0], c[3], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ],
 			[ x, y + 1.0, z, c[2], c[3], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ]
 		);
@@ -288,8 +424,8 @@ BLOCK.pushVertices = function( vertices, world, lightmap, x, y, z )
 		
 		pushQuad(
 			vertices,
-			[ x, y, z + 1.0, c[2], c[1], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ],
-			[ x, y + 1.0, z + 1.0, c[0], c[1], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ],
+			[ x, y, z + bH, c[2], c[1], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ],
+			[ x, y + 1.0, z + bH, c[0], c[1], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ],
 			[ x, y + 1.0, z, c[0], c[3], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ],
 			[ x, y, z, c[2], c[3], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ]
 		);
@@ -307,8 +443,76 @@ BLOCK.pushVertices = function( vertices, world, lightmap, x, y, z )
 			vertices,
 			[ x + 1.0, y, z, c[0], c[3], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ],
 			[ x + 1.0, y + 1.0, z, c[2], c[3], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ],
-			[ x + 1.0, y + 1.0, z + 1.0, c[2], c[1], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ],
-			[ x + 1.0, y, z + 1.0, c[0], c[1], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ]
+			[ x + 1.0, y + 1.0, z + bH, c[2], c[1], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ],
+			[ x + 1.0, y, z + bH, c[0], c[1], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ]
 		);
 	}
+};
+
+// pushPickingVertices( vertices, x, y, z )
+//
+// Pushes vertices with the data needed for picking.
+
+BLOCK.pushPickingVertices = function( vertices, x, y, z )
+{
+	var color = { r: x/255, g: y/255, b: z/255 };
+	// Top
+	pushQuad(
+		vertices,
+		[ x, y, z + 1, 0, 0, color.r, color.g, color.b, 1/255 ],
+		[ x + 1, y, z + 1, 1, 0, color.r, color.g, color.b, 1/255 ],
+		[ x + 1, y + 1, z + 1, 1, 1, color.r, color.g, color.b, 1/255 ],
+		[ x, y + 1, z + 1, 0, 0, color.r, color.g, color.b, 1/255 ]
+	);
+	
+	// Bottom
+	pushQuad(
+		vertices,
+		[ x, y + 1, z, 0, 0, color.r, color.g, color.b, 2/255 ],
+		[ x + 1, y + 1, z, 1, 0, color.r, color.g, color.b, 2/255 ],
+		[ x + 1, y, z, 1, 1, color.r, color.g, color.b, 2/255 ],
+		[ x, y, z, 0, 0, color.r, color.g, color.b, 2/255 ]
+	);
+	
+	// Front
+	pushQuad(
+		vertices,
+		[ x, y, z, 0, 0, color.r, color.g, color.b, 3/255 ],
+		[ x + 1, y, z, 1, 0, color.r, color.g, color.b, 3/255 ],
+		[ x + 1, y, z + 1, 1, 1, color.r, color.g, color.b, 3/255 ],
+		[ x, y, z + 1, 0, 0, color.r, color.g, color.b, 3/255 ]
+	);
+	
+	// Back
+	pushQuad(
+		vertices,
+		[ x, y + 1, z + 1, 0, 0, color.r, color.g, color.b, 4/255 ],
+		[ x + 1, y + 1, z + 1, 1, 0, color.r, color.g, color.b, 4/255 ],
+		[ x + 1, y + 1, z, 1, 1, color.r, color.g, color.b, 4/255 ],
+		[ x, y + 1, z, 0, 0, color.r, color.g, color.b, 4/255 ]
+	);
+	
+	// Left
+	pushQuad(
+		vertices,
+		[ x, y, z + 1, 0, 0, color.r, color.g, color.b, 5/255 ],
+		[ x, y + 1, z + 1, 1, 0, color.r, color.g, color.b, 5/255 ],
+		[ x, y + 1, z, 1, 1, color.r, color.g, color.b, 5/255 ],
+		[ x, y, z, 0, 0, color.r, color.g, color.b, 5/255 ]
+	);
+	
+	// Right
+	pushQuad(
+		vertices,
+		[ x + 1, y, z, 0, 0, color.r, color.g, color.b, 6/255 ],
+		[ x + 1, y + 1, z, 1, 0, color.r, color.g, color.b, 6/255 ],
+		[ x + 1, y + 1, z + 1, 1, 1, color.r, color.g, color.b, 6/255 ],
+		[ x + 1, y, z + 1, 0, 0, color.r, color.g, color.b, 6/255 ]
+	);
+};
+
+// Export to node.js
+if ( typeof( exports ) != "undefined" )
+{
+	exports.BLOCK = BLOCK;
 }

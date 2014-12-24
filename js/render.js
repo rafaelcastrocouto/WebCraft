@@ -6,16 +6,19 @@
 // ==========================================
 
 // Shaders
+var mat4;
+
 var vertexSource =
 	"uniform mat4 uProjMatrix;"+
 	"uniform mat4 uViewMatrix;"+
+	"uniform mat4 uModelMatrix;"+
 	"attribute vec3 aPos;"+
 	"attribute vec4 aColor;"+
 	"attribute vec2 aTexCoord;"+
 	"varying vec4 vColor;"+
 	"varying vec2 vTexCoord;"+
 	"void main() {"+
-	"	gl_Position = uProjMatrix * uViewMatrix * vec4( aPos, 1.0 );"+
+	"	gl_Position = uProjMatrix * uViewMatrix * ( uModelMatrix * vec4( aPos, 1.0 ) );"+
 	"	vColor = aColor;"+
 	"	vTexCoord = aTexCoord;"+
 	"}";
@@ -25,10 +28,12 @@ var fragmentSource =
 	"varying vec4 vColor;"+
 	"varying vec2 vTexCoord;"+
 	"void main() {"+
-	"	vec4 color = texture2D( uSampler, vec2( vTexCoord.s, vTexCoord.t ) ) * vec4( vColor );"+
+	"	vec4 color = texture2D( uSampler, vec2( vTexCoord.s, vTexCoord.t ) ) * vec4( vColor.rgb, 1.0 );"+
 	"	if ( color.a < 0.1 ) discard;"+
-	"	gl_FragColor = color;"+
+	"	gl_FragColor = vec4( color.rgb, vColor.a );"+
 	"}";
+	
+
 
 // Constructor( id )
 //
@@ -39,6 +44,7 @@ var fragmentSource =
 function Renderer( id )
 {
 	var canvas = this.canvas = document.getElementById( id );
+	canvas.renderer = this;
 	canvas.width = canvas.clientWidth;
 	canvas.height = canvas.clientHeight;
 	
@@ -54,9 +60,10 @@ function Renderer( id )
 	gl.viewportWidth = canvas.width;
 	gl.viewportHeight = canvas.height;
 	
-	gl.clearColor( 0.0, 0.0, 0.0, 1.0 );
+	gl.clearColor( 0.62, 0.81, 1.0, 1.0 );
 	gl.enable( gl.DEPTH_TEST );
 	gl.enable( gl.CULL_FACE );
+	gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA );
 	
 	// Load shaders
 	this.loadShaders();
@@ -65,19 +72,32 @@ function Renderer( id )
 	var projMatrix = this.projMatrix = mat4.create();
 	var viewMatrix = this.viewMatrix = mat4.create();
 	
+	// Create dummy model matrix
+	var modelMatrix = this.modelMatrix = mat4.create();
+	mat4.identity( modelMatrix );
+	gl.uniformMatrix4fv( this.uModelMat, false, modelMatrix );
+	
+	// Create 1px white texture for pure vertex color operations (e.g. picking)
+	var whiteTexture = this.texWhite = gl.createTexture();
+	gl.activeTexture( gl.TEXTURE0 );
+	gl.bindTexture( gl.TEXTURE_2D, whiteTexture );
+	var white = new Uint8Array( [ 255, 255, 255, 255 ] );
+	gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, white );
+	gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST );
+	gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST );
+	gl.uniform1i(  this.uSampler, 0 );
+	
 	// Load terrain texture
-	var texture = this.texTerrain = gl.createTexture();
-	texture.image = new Image();
-	texture.image.onload = function()
+	var terrainTexture = this.texTerrain = gl.createTexture();
+	terrainTexture.image = new Image();
+	terrainTexture.image.onload = function()
 	{
-		gl.activeTexture( gl.TEXTURE0 );
-		gl.bindTexture( gl.TEXTURE_2D, texture );
-		gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image );
+		gl.bindTexture( gl.TEXTURE_2D, terrainTexture );
+		gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, terrainTexture.image );
 		gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST );
 		gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST );
-		gl.uniform1i(  this.uSampler, 0 );
 	};
-	texture.image.src = "media/terrain.png";
+	terrainTexture.image.src = "media/terrain.png";
 }
 
 // draw()
@@ -95,6 +115,9 @@ Renderer.prototype.draw = function()
 	
 	// Draw level chunks
 	var chunks = this.chunks;
+	
+	gl.bindTexture( gl.TEXTURE_2D, this.texTerrain );
+	
 	if ( chunks != null )
 	{
 		for ( var i = 0; i < chunks.length; i++ )
@@ -103,7 +126,108 @@ Renderer.prototype.draw = function()
 				this.drawBuffer( chunks[i].buffer );
 		}
 	}
-}
+	
+	mat4.identity( this.modelMatrix );
+	gl.uniformMatrix4fv( this.uModelMat, false, this.modelMatrix );
+};
+
+// pickAt( min, max, mx, myy )
+//
+// Returns the block at mouse position mx and my.
+// The blocks that can be reached lie between min and max.
+//
+// Each side is rendered with the X, Y and Z position of the
+// block in the RGB color values and the normal of the side is
+// stored in the color alpha value. In that way, all information
+// can be retrieved by simply reading the pixel the mouse is over.
+//
+// WARNING: This implies that the level can never be larger than
+// 254x254x254 blocks! (Value 255 is used for sky.)
+
+Renderer.prototype.pickAt = function( min, max, mx, my )
+{
+	var gl = this.gl;
+	var world = this.world;
+	
+	// Create framebuffer for picking render
+	var fbo = gl.createFramebuffer();
+	gl.bindFramebuffer( gl.FRAMEBUFFER, fbo );
+	
+	var bt = gl.createTexture();
+	gl.bindTexture( gl.TEXTURE_2D, bt );
+	gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST );
+	gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST );
+	gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGBA, 512, 512, 0, gl.RGBA, gl.UNSIGNED_BYTE, null );
+	
+	var renderbuffer = gl.createRenderbuffer();
+	gl.bindRenderbuffer( gl.RENDERBUFFER, renderbuffer );
+	gl.renderbufferStorage( gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, 512, 512 );
+	
+	gl.framebufferTexture2D( gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, bt, 0 );
+	gl.framebufferRenderbuffer( gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, renderbuffer );
+	
+	// Build buffer with block pick candidates
+	var vertices = [];
+	
+	for ( var x = min.x; x <= max.x; x++ ) {
+		for ( var y = min.y; y <= max.y; y++ ) {
+			for ( var z = min.z; z <= max.z; z++ ) {
+				if ( world.getBlock( x, y, z ) != BLOCK.AIR )
+					BLOCK.pushPickingVertices( vertices, x, y, z );
+			}
+		}
+	}
+	
+	var buffer = gl.createBuffer();
+	buffer.vertices = vertices.length / 9;
+	gl.bindBuffer( gl.ARRAY_BUFFER, buffer );
+	gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( vertices ), gl.STREAM_DRAW );
+	
+	// Draw buffer
+	gl.bindTexture( gl.TEXTURE_2D, this.texWhite );
+	
+	gl.viewport( 0, 0, 512, 512 );
+	gl.clearColor( 1.0, 1.0, 1.0, 1.0 );
+	gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
+	
+	this.drawBuffer( buffer );
+	
+	// Read pixel
+	var pixel = new Uint8Array( 4 );
+	gl.readPixels( mx/gl.viewportWidth*512, (1-my/gl.viewportHeight)*512, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixel );
+	
+	// Reset states
+	gl.bindTexture( gl.TEXTURE_2D, this.texTerrain );
+	gl.bindFramebuffer( gl.FRAMEBUFFER, null );
+	gl.clearColor( 0.62, 0.81, 1.0, 1.0 );
+	
+	// Clean up
+	gl.deleteBuffer( buffer );
+	gl.deleteRenderbuffer( renderbuffer );
+	gl.deleteTexture( bt );
+	gl.deleteFramebuffer( fbo );
+	
+	// Build result
+	if ( pixel[0] != 255 )
+	{
+		var normal;
+		if ( pixel[3] == 1 ) normal = new Vector( 0, 0, 1 );
+		else if ( pixel[3] == 2 ) normal = new Vector( 0, 0, -1 );
+		else if ( pixel[3] == 3 ) normal = new Vector( 0, -1, 0 );
+		else if ( pixel[3] == 4 ) normal = new Vector( 0, 1, 0 );
+		else if ( pixel[3] == 5 ) normal = new Vector( -1, 0, 0 );
+		else if ( pixel[3] == 6 ) normal = new Vector( 1, 0, 0 );
+		
+		return {
+			x: pixel[0],
+			y: pixel[1],
+			z: pixel[2],
+			n: normal
+		};
+	} else {
+		return false;
+	}
+};
 
 // updateViewport()
 //
@@ -126,7 +250,7 @@ Renderer.prototype.updateViewport = function()
 		// Update perspective projection based on new w/h ratio
 		this.setPerspective( this.fov, this.min, this.max );
 	}
-}
+};
 
 // loadShaders()
 //
@@ -146,7 +270,7 @@ Renderer.prototype.loadShaders = function()
 	gl.attachShader( program, vertexShader );
 	
 	if ( !gl.getShaderParameter( vertexShader, gl.COMPILE_STATUS ) )
-		throw "Could not compile vertex shader!\n" + gl.getShaderInfoLog( vertexShader );
+		throw "Could not compile vertex shader!";
 	
 	// Compile fragment shader
 	var fragmentShader = gl.createShader( gl.FRAGMENT_SHADER );
@@ -155,7 +279,7 @@ Renderer.prototype.loadShaders = function()
 	gl.attachShader( program, fragmentShader );
 	
 	if ( !gl.getShaderParameter( fragmentShader, gl.COMPILE_STATUS ) )
-		throw "Could not compile fragment shader!\n" + gl.getShaderInfoLog( fragmentShader );
+		throw "Could not compile fragment shader!";
 	
 	// Finish program
 	gl.linkProgram( program );
@@ -168,6 +292,7 @@ Renderer.prototype.loadShaders = function()
 	// Store variable locations
 	this.uProjMat = gl.getUniformLocation( program, "uProjMatrix" );
 	this.uViewMat= gl.getUniformLocation( program, "uViewMatrix" );
+	this.uModelMat= gl.getUniformLocation( program, "uModelMatrix" );
 	this.uSampler = gl.getUniformLocation( program, "uSampler" );
 	this.aPos = gl.getAttribLocation( program, "aPos" );
 	this.aColor = gl.getAttribLocation( program, "aColor" );
@@ -177,7 +302,7 @@ Renderer.prototype.loadShaders = function()
 	gl.enableVertexAttribArray( this.aPos );
 	gl.enableVertexAttribArray( this.aColor );
 	gl.enableVertexAttribArray( this.aTexCoord );
-}
+};
 
 // setWorld( world, chunkSize )
 //
@@ -205,7 +330,7 @@ Renderer.prototype.setWorld = function( world, chunkSize )
 			}
 		}
 	}
-}
+};
 
 // onBlockChanged( x, y, z )
 //
@@ -219,10 +344,16 @@ Renderer.prototype.onBlockChanged = function( x, y, z )
 	{
 		// Neighbouring chunks are updated as well if the block is on a chunk border
 		// Also, all chunks below the block are updated because of lighting
-		if ( x >= chunks[i].start[0] - 1 && x <= chunks[i].end[0] && y >= chunks[i].start[1] - 1 && y <= chunks[i].end[1] && z >= chunks[i].start[2] )
+		if ( x >= chunks[i].start[0] && x < chunks[i].end[0] && y >= chunks[i].start[1] && y < chunks[i].end[1] && z >= chunks[i].start[2] && z < chunks[i].end[2] )
+			chunks[i].dirty = true;
+		else if ( x >= chunks[i].start[0] && x < chunks[i].end[0] && y >= chunks[i].start[1] && y < chunks[i].end[1] && ( z >= chunks[i].end[2] || z == chunks[i].start[2] - 1 ) )
+			chunks[i].dirty = true;
+		else if ( x >= chunks[i].start[0] && x < chunks[i].end[0] && z >= chunks[i].start[2] && z < chunks[i].end[2] && ( y == chunks[i].end[1] || y == chunks[i].start[1] - 1 ) )
+			chunks[i].dirty = true;
+		else if ( y >= chunks[i].start[1] && y < chunks[i].end[1] && z >= chunks[i].start[2] && z < chunks[i].end[2] && ( x == chunks[i].end[0] || x == chunks[i].start[0] - 1 ) )
 			chunks[i].dirty = true;
 	}
-}
+};
 
 // buildChunks( count )
 //
@@ -255,16 +386,16 @@ Renderer.prototype.buildChunks = function( count )
 			
 			// Create map of lowest blocks that are still lit
 			var lightmap = {};
-			for ( var x = chunk.start[0]; x < chunk.end[0]; x++ )
+			for ( var x = chunk.start[0] - 1; x < chunk.end[0] + 1; x++ )
 			{
 				lightmap[x] = {};
 				
-				for ( var y = chunk.start[1]; y < chunk.end[1]; y++ )
+				for ( var y = chunk.start[1] - 1; y < chunk.end[1] + 1; y++ )
 				{
 					for ( var z = world.sz - 1; z >= 0; z-- )
 					{
-						lightmap[x][y] = z;
-						if ( !world.blocks[x][y][z].transparent ) break;
+						lightmap[x][y] = world.sz;
+						if ( !world.getBlock( x, y, z ).transparent ) break;
 					}
 				}
 			}
@@ -291,9 +422,9 @@ Renderer.prototype.buildChunks = function( count )
 			count--;
 		}
 		
-		if ( count == 0 ) break;
+		if ( count === 0 ) break;
 	}
-}
+};
 
 // setPerspective( fov, min, max )
 //
@@ -309,19 +440,31 @@ Renderer.prototype.setPerspective = function( fov, min, max )
 	
 	mat4.perspective( fov, gl.viewportWidth / gl.viewportHeight, min, max, this.projMatrix );
 	gl.uniformMatrix4fv( this.uProjMat, false, this.projMatrix );
-}
+};
 
-// setCamera( pos, target )
+// setCamera( pos, ang )
 //
-// Moves the camera to the specified position and makes it look at <target>.
+// Moves the camera to the specified orientation.
+//
+// pos - Position in world coordinates.
+// ang - Pitch, yaw and roll.
 
-Renderer.prototype.setCamera = function( pos, target )
+Renderer.prototype.setCamera = function( pos, ang )
 {
 	var gl = this.gl;
 	
-	mat4.lookAt( pos, target, [ 0, 0, 1 ], this.viewMatrix );
+	this.camPos = pos;
+	
+	mat4.identity( this.viewMatrix );
+	
+	mat4.rotate( this.viewMatrix, -ang[0] - Math.PI / 2, [ 1, 0, 0 ], this.viewMatrix );
+	mat4.rotate( this.viewMatrix, ang[1], [ 0, 0, 1 ], this.viewMatrix );
+	mat4.rotate( this.viewMatrix, -ang[2], [ 0, 1, 0 ], this.viewMatrix );
+	
+	mat4.translate( this.viewMatrix, [ -pos[0], -pos[1], -pos[2] ], this.viewMatrix );
+	
 	gl.uniformMatrix4fv( this.uViewMat, false, this.viewMatrix );
-}
+};
 
 Renderer.prototype.drawBuffer = function( buffer )
 {
@@ -334,4 +477,4 @@ Renderer.prototype.drawBuffer = function( buffer )
 	gl.vertexAttribPointer( this.aTexCoord, 2, gl.FLOAT, false, 9*4, 3*4 );
 	
 	gl.drawArrays( gl.TRIANGLES, 0, buffer.vertices );
-}
+};
