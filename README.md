@@ -18,6 +18,7 @@ Struktura plikow
 + *media/* - Zawiera pliki graficzne
 + *style/* - Zqwiera czcionki oraz pliki CSS
 + *singleplayer.html* - Klient singleplayer
++ *mobile.html* - Klient dla urzadzen mobilnych (głownie smartfony z FirefoxOS)
 
 Moduły
 ---------------------
