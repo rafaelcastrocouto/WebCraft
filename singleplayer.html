@@ -27,10 +27,7 @@
 		
 		<!-- Material selection -->
 
-		
-		<div id="blockselector">
-			
-		</div>
+
 		
 		<div id="blocks" style="display: none;">
 			Wybor klocka:
@@ -38,17 +35,9 @@
 		</div>
 		<!-- Infobox -->
 		<div id="chatbox">
-			<span id="chatbox_text">WebCraft v0.1.73</br>
+			<span id="chatbox_text">WebCraft v0.2</br>
 			<div id="fps"></div></span>
 		</div>
-		<div id="pad">
-			<div id="pad_up"></div>
-			<div id="pad_left"></div>
-			<div id="pad_right"></div>
-			<div id="pad_down"></div>
-			<div id="pad_center"></div>
-		</div>
-		
 		<table id="materialSelector">
 			<tr></tr>
 		</table>
@@ -71,7 +60,7 @@
 			// Create new local player
 			var player = new Player();
 			player.setWorld( world );
-			player.setInputCanvas( "renderSurface" );
+			player.setInputCanvas( "renderSurface", 1 );
 			player.setMaterialSelector( "materialSelector" );
 			
 			// Render loop			

@@ -17,6 +17,17 @@ body {
 	background: url( '../media/background.png' );
 }
 
+
+#eq {
+	position: absolute;
+	left: 50px;
+	bottom: 55px;
+	width: 500px;
+	height: 220px;
+	background: rgba( 0, 0, 0, 0.6 );
+}
+
+
 /* Render surface */
 
 #renderSurface {
@@ -28,7 +39,25 @@ body {
 	height: 100%;
 }
 
-/* Material selector */
+
+#active_block {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	width: 80px;
+	height: 80px;
+	background: rgba( 0, 0, 0, 0.6 );
+}
+
+#active_block #active_item{
+	position: relative;
+	top: 8px;
+	left: 8px;
+	width: 64px;
+	height: 64px;
+	background: url('../media/items/sand.png');
+
+}
 
 #materialSelector {
 	position: relative;
@@ -62,11 +91,11 @@ body {
 
 #chatbox {
 	position: absolute;
-	left: 20px;
-	bottom: 55px;
+	left: 0px;
+	bottom: 0px;
 	
 	width: 320px;
-	height: 115px;
+	height: 140px;
 	overflow: hidden;
 	
 	padding-left: 10px;
@@ -79,39 +108,39 @@ body {
 }
 
 #pad div {
-	width: 50px;
-	height: 50px;
+	width: 65px;
+	height: 65px;
 	background: rgba( 0, 0, 0, 0.6 );
 }
 
 #pad #pad_down {
 	position: absolute;
-	right: 105px;
+	right: 120px;
 	bottom: 55px;
 }
 
 #pad #pad_up {
 	position: absolute;
-	right: 105px;
-	bottom: 165px;
+	right: 120px;
+	bottom: 195px;
 }
 
 #pad #pad_right {
 	position: absolute;
 	right: 50px;
-	bottom: 110px;
+	bottom: 125px;
 }
 
 #pad #pad_left {
 	position: absolute;
-	right: 160px;
-	bottom: 110px;
+	right: 190px;
+	bottom: 125px;
 }
 
 #pad #pad_center {
 	position: absolute;
-	right: 105px;
-	bottom: 110px;
+	right: 120px;
+	bottom: 125px;
 }
 
 #chatbox_text {
