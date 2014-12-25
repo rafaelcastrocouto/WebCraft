@@ -6,9 +6,9 @@ both foolish and inefficient to use a 3D engine for rendering large amount of bl
 
 Credits
 ---------------------
-+ *@Overv - stworzenie podstawy dla tej wspanialej gry
-+ *@artur9010 - prace nad rozwojem wersji desktop
-+ *@joda17 - prace nad rozwojem wersji mobilnej i naprawa błędów po tym nupie ↑↑↑
++ @Overv - stworzenie podstawy dla tej wspanialej gry
++ @artur9010 - prace nad rozwojem wersji desktop
++ @joda17 - prace nad rozwojem wersji mobilnej i naprawa błędów po tym nupie ↑↑↑
 
 =======
 Struktura plikow
