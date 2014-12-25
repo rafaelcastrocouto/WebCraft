@@ -8,7 +8,7 @@ Credits
 ---------------------
 + *@Overv - stworzenie podstawy dla tej wspanialej gry
 + *@artur9010 - prace nad rozwojem wersji desktop
-+ *@joda17 - prace nad rozwojem wersji mobilnej
++ *@joda17 - prace nad rozwojem wersji mobilnej i naprawa błędów po tym nupie ↑↑↑
 
 =======
 Struktura plikow
