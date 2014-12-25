@@ -15,8 +15,8 @@
 // sy - World size in the Y-direction.
 // sz - World size in the Z-direction.
 
-function World( sx, sy, sz )
-{
+function World(sx, sy, sz, roughness, smoothAmount, smoothAmt){
+
 	// Initialise world array
 	this.blocks = new Array( sx );
 	for ( var x = 0; x < sx; x++ )
@@ -39,6 +39,10 @@ function World( sx, sy, sz )
 	this.sy = sy;
 	this.sz = sz;
 	
+	this.roughness = roughness;
+	this.smoothAmount = smoothAmount;
+	this.smoothAmt = smoothAmt;
+
 	this.players = {};
 }
 
@@ -63,7 +67,7 @@ World.prototype.getPowerOfTwo = function(a,b){
 World.prototype.createWorld = function()
 {
 
-	var map = generate(this.getPower(2, this.getPowerOfTwo(this.sx, this.sy)), 80);
+	var map = generate(this.getPower(2, this.getPowerOfTwo(this.sx, this.sy)), this.roughness, this.smoothAmount, this.smoothAmt);
 	
 	for ( var x = 0; x < this.sx; x++ ){
 		for ( var y = 0; y < this.sy; y++ ){

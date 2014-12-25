@@ -13,6 +13,7 @@ MOUSE.MOVE = 3;
 VERSION = {};
 VERSION.DESKTOP = 1;
 VERSION.MOBILE = 2;
+VERSION.DEBUG = 3;
 // Constructor()
 //
 // Creates a new local player manager.
@@ -97,8 +98,35 @@ Player.prototype.setInputCanvas = function( id , version)
 			return false;
 		};
 	}
-	else {
+	else if(version == VERSION.DESKTOP) {
 	
+		document.onkeydown = function( e ) { if ( e.target.tagName != "INPUT" ) { t.onKeyEvent( e.keyCode, true ); return false; } };
+		document.onkeyup = function( e ) { if ( e.target.tagName != "INPUT" ) { t.onKeyEvent( e.keyCode, false ); return false; } };
+		canvas.onmousedown = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.DOWN, e.which == 3 ); return false; };
+		canvas.onmouseup = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.UP, e.which == 3 ); return false; };
+		canvas.onmousemove = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.MOVE, e.which == 3 ); return false; };
+	}
+	else if(version == VERSION.DEBUG) {
+
+		var debugInput = this.debugInput = {roughness: document.getElementById("roughness"), smoothAmount: document.getElementById("smoothAmount"), smoothAmt: document.getElementById("smoothAmt"), visible: document.getElementById("debugVisible")};
+
+		debugInput.roughness.onblur = debugInput.smoothAmount.onblur = debugInput.smoothAmt.onblur = function(e){
+			world = new World(60, 60, 100, debugInput.roughness.value, debugInput.smoothAmount.value, debugInput.smoothAmt.value);
+			world.createWorld();
+			render = new Renderer( "renderSurface" );
+			render.setWorld( world, 8 );
+			render.setPerspective( 80, 0.01, 220 );
+			player.setWorld( world );
+		 };
+
+		debugInput.visible.onclick = function(e) {
+			debugInput.roughness.blur();
+			debugInput.smoothAmount.blur();
+			debugInput.smoothAmt.blur();
+			debugInput.visible.blur();
+		}
+
+
 		document.onkeydown = function( e ) { if ( e.target.tagName != "INPUT" ) { t.onKeyEvent( e.keyCode, true ); return false; } };
 		document.onkeyup = function( e ) { if ( e.target.tagName != "INPUT" ) { t.onKeyEvent( e.keyCode, false ); return false; } };
 		canvas.onmousedown = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.DOWN, e.which == 3 ); return false; };
