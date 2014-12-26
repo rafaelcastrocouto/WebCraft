@@ -10,6 +10,10 @@ MOUSE.DOWN = 1;
 MOUSE.UP = 2;
 MOUSE.MOVE = 3;
 
+VERSION = {};
+VERSION.DESKTOP = 1;
+VERSION.MOBILE = 2;
+VERSION.DEBUG = 3;
 // Constructor()
 //
 // Creates a new local player manager.
@@ -47,55 +51,97 @@ Player.prototype.setClient = function( client )
 //
 // Set the canvas the renderer uses for some input operations.
 
-Player.prototype.setInputCanvas = function( id )
+Player.prototype.setInputCanvas = function( id , version)
 {
 	var canvas = this.canvas = document.getElementById( id );
 	
-	var pad = this.pad = {center: document.getElementById("pad_center"), up: document.getElementById("pad_up"), down: document.getElementById("pad_down"), left: document.getElementById("pad_left"), right: document.getElementById("pad_right")};
 
-	
 	var t = this;
-	pad.center.ontouchstart = function( e ) { t.onKeyEvent( "32" , true) };
-	pad.center.ontouchend = function( e ) { t.onKeyEvent( "32" , false) };
-	pad.up.ontouchstart = function( e ) { t.onKeyEvent( "119" , true) };
-	pad.up.ontouchend = function( e ) { t.onKeyEvent( "119" , false) };
-	pad.down.ontouchstart = function( e ) { t.onKeyEvent( "115" , true) };
-	pad.down.ontouchend = function( e ) { t.onKeyEvent( "115" , false) };
-	pad.left.ontouchstart = function( e ) { t.onKeyEvent( "97" , true) };
-	pad.left.ontouchend = function( e ) { t.onKeyEvent( "97" , false) };
-	pad.right.ontouchstart = function( e ) { t.onKeyEvent( "100" , true) };
-	pad.right.ontouchend = function( e ) { t.onKeyEvent( "100" , false) };
 	
-	document.onkeydown = function( e ) { if ( e.target.tagName != "INPUT" ) { t.onKeyEvent( e.keyCode, true ); return false; } };
-	document.onkeyup = function( e ) { if ( e.target.tagName != "INPUT" ) { t.onKeyEvent( e.keyCode, false ); return false; } };
-	canvas.onmousedown = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.DOWN, e.which == 3 ); return false; };
-	canvas.onmouseup = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.UP, e.which == 3 ); return false; };
-	canvas.onmousemove = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.MOVE, e.which == 3 ); return false; };
-	canvas.ontouchstart = function( e ) {
-		var touches = e.changedTouches;
-		var length = touches.length;
-		t.onTouchEvent( e.changedTouches[length - 1].pageX, e.changedTouches[length - 1].pageY, MOUSE.DOWN, e.which == 3 );
-		return false;
-	};
-	canvas.ontouchend = function( e ) {  
-		var touches = e.changedTouches;
-		var length = touches.length;
-		t.onTouchEvent( e.changedTouches[length - 1].pageX, e.changedTouches[length - 1].pageY, MOUSE.UP, e.which == 3 );
-		return false;
-	};
-	canvas.ontouchleave = function( e ) {
-		var touches = e.changedTouches;
-		var length = touches.length;
-		t.onTouchEvent( e.changedTouches[length - 1].pageX, e.changedTouches[length - 1].pageY, MOUSE.UP, e.which == 3 );
-		return false;
-	};
-	canvas.ontouchmove = function( e ) {
-		var touches = e.changedTouches;
-		var length = touches.length;
-		t.onTouchEvent(e.changedTouches[length - 1].pageX, e.changedTouches[length - 1].pageY, MOUSE.MOVE, e.which == 3 );
-		return false;
-	};
+	if(version == VERSION.MOBILE){
+		var pad = this.pad = {center: document.getElementById("pad_center"), up: document.getElementById("pad_up"), down: document.getElementById("pad_down"), left: document.getElementById("pad_left"), right: document.getElementById("pad_right")};
+		var itemSelector = this.itemSelector = document.getElementById("active_item");
+		itemSelector.ontouchend = function( e ) { t.openEq() };
+		itemSelector.onmouseup = function( e ) { t.openEq() };
+		pad.center.ontouchstart = function( e ) { t.onKeyEvent( "32" , true) };
+		pad.center.ontouchend = function( e ) { t.onKeyEvent( "32" , false) };
+		pad.up.ontouchstart = function( e ) { t.onKeyEvent( "119" , true) };
+		pad.up.ontouchend = function( e ) { t.onKeyEvent( "119" , false) };
+		pad.down.ontouchstart = function( e ) { t.onKeyEvent( "115" , true) };
+		pad.down.ontouchend = function( e ) { t.onKeyEvent( "115" , false) };
+		pad.left.ontouchstart = function( e ) { t.onKeyEvent( "97" , true) };
+		pad.left.ontouchend = function( e ) { t.onKeyEvent( "97" , false) };
+		pad.right.ontouchstart = function( e ) { t.onKeyEvent( "100" , true) };
+		pad.right.ontouchend = function( e ) { t.onKeyEvent( "100" , false) };
+		canvas.ontouchstart = function( e ) {
+			var touches = e.changedTouches;
+			var length = touches.length;
+			t.onTouchEvent( e.changedTouches[length - 1].pageX, e.changedTouches[length - 1].pageY, MOUSE.DOWN, e.which == 3 );
+			return false;
+		};
+		canvas.ontouchend = function( e ) {  
+			var touches = e.changedTouches;
+			var length = touches.length;
+			t.onTouchEvent( e.changedTouches[length - 1].pageX, e.changedTouches[length - 1].pageY, MOUSE.UP, e.which == 3 );
+			return false;
+		};
+		canvas.ontouchleave = function( e ) {
+			var touches = e.changedTouches;
+			var length = touches.length;
+			t.onTouchEvent( e.changedTouches[length - 1].pageX, e.changedTouches[length - 1].pageY, MOUSE.UP, e.which == 3 );
+			return false;
+		};
+		canvas.ontouchmove = function( e ) {
+			var touches = e.changedTouches;
+			var length = touches.length;
+			t.onTouchEvent(e.changedTouches[length - 1].pageX, e.changedTouches[length - 1].pageY, MOUSE.MOVE, e.which == 3 );
+			return false;
+		};
+	}
+	else if(version == VERSION.DESKTOP) {
+	
+		document.onkeydown = function( e ) { if ( e.target.tagName != "INPUT" ) { t.onKeyEvent( e.keyCode, true ); return false; } };
+		document.onkeyup = function( e ) { if ( e.target.tagName != "INPUT" ) { t.onKeyEvent( e.keyCode, false ); return false; } };
+		canvas.onmousedown = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.DOWN, e.which == 3 ); return false; };
+		canvas.onmouseup = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.UP, e.which == 3 ); return false; };
+		canvas.onmousemove = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.MOVE, e.which == 3 ); return false; };
+	}
+	else if(version == VERSION.DEBUG) {
+
+		var debugInput = this.debugInput = {roughness: document.getElementById("roughness"), smoothAmount: document.getElementById("smoothAmount"), smoothAmt: document.getElementById("smoothAmt"), visible: document.getElementById("debugVisible")};
+
+		debugInput.roughness.onblur = debugInput.smoothAmount.onblur = debugInput.smoothAmt.onblur = function(e){
+			world = new World(60, 60, 100, debugInput.roughness.value, debugInput.smoothAmount.value, debugInput.smoothAmt.value);
+			world.createWorld();
+			render = new Renderer( "renderSurface" );
+			render.setWorld( world, 8 );
+			render.setPerspective( 80, 0.01, 220 );
+			player.setWorld( world );
+		 };
+
+		debugInput.visible.onclick = function(e) {
+			debugInput.roughness.blur();
+			debugInput.smoothAmount.blur();
+			debugInput.smoothAmt.blur();
+			debugInput.visible.blur();
+		}
+
+
+		document.onkeydown = function( e ) { if ( e.target.tagName != "INPUT" ) { t.onKeyEvent( e.keyCode, true ); return false; } };
+		document.onkeyup = function( e ) { if ( e.target.tagName != "INPUT" ) { t.onKeyEvent( e.keyCode, false ); return false; } };
+		canvas.onmousedown = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.DOWN, e.which == 3 ); return false; };
+		canvas.onmouseup = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.UP, e.which == 3 ); return false; };
+		canvas.onmousemove = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.MOVE, e.which == 3 ); return false; };
+	}
 };
+
+
+Player.prototype.openEq = function() {
+	document.getElementById("pad").style.display = "none";	
+	document.getElementById("chatbox").style.display = "none";
+	document.getElementById("active_block").style.display = "none";	
+	document.getElementById("eq").style.display = "block";		
+}
 
 // setMaterialSelector( id )
 //
@@ -158,11 +204,15 @@ Player.prototype.onKeyEvent = function( keyCode, down )
 	if (key == "r" ){
 		this.pos = this.world.spawnPoint;
 	}
-	if (key == "b"){
+	if (key == "e"){
 		var blockSelect = document.getElementById("blocks").style;
 		if(blockSelect.display == "none"){
 			blockSelect.display = "";
-		}else{
+		}
+	}
+	if (keyCode == 27){
+		var blockSelect = document.getElementById("blocks").style;
+		if(blockSelect.display == ""){
 			blockSelect.display = "none";
 		}
 	}
@@ -182,15 +232,13 @@ Player.prototype.onMouseEvent = function( x, y, type, rmb )
 	} else if ( type == MOUSE.UP ) {
 		if ( Math.abs( this.dragStart.x - x ) + Math.abs( this.dragStart.y - y ) < 4 )	
 			this.doBlockAction( x, y, !rmb );
-
 		this.dragging = false;
 		this.mouseDown = false;
 		this.canvas.style.cursor = "default";
-	} else if ( type == MOUSE.MOVE && this.mouseDown ) {
+	} else if ( type == MOUSE.MOVE && this.mouseDown) {
 		this.dragging = true;
-		this.targetPitch = this.pitchStart - ( y - this.dragStart.y ) / 200;
-		this.targetYaw = this.yawStart + ( x - this.dragStart.x ) / 200;
-
+		this.angles[0] = this.targetPitch = this.pitchStart - ( y - this.dragStart.y ) / 200;
+		this.angles[1] = this.targetYaw = this.yawStart + ( x - this.dragStart.x ) / 200;
 		this.canvas.style.cursor = "default";
 	}
 };
@@ -212,8 +260,8 @@ Player.prototype.onTouchEvent = function( x, y, type, rmb )
 		this.canvas.style.cursor = "default";
 	} else if ( type == MOUSE.MOVE && this.mouseDown ) {
 		this.dragging = true;
-		this.targetPitch = this.pitchStart + ( y - this.dragStart.y ) / 500;
-		this.targetYaw = this.yawStart - ( x - this.dragStart.x ) / 500;
+		this.angles[0] = this.targetPitch = this.pitchStart + ( y - this.dragStart.y ) / 200;
+		this.angles[1] = this.targetYaw = this.yawStart - ( x - this.dragStart.x ) / 200;
 
 		this.canvas.style.cursor = "default";
 	}

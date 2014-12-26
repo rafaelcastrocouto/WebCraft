@@ -8,7 +8,7 @@ Credits
 ---------------------
 + *@Overv - stworzenie podstawy dla tej wspanialej gry
 + *@artur9010 - prace nad rozwojem wersji desktop
-+ *@joda17 - prace nad rozwojem wersji mobilnej
++ *@joda17 - prace nad rozwojem wersji mobilnej i naprawa błędów po tym nupie ↑↑↑
 
 =======
 Struktura plikow
@@ -18,6 +18,7 @@ Struktura plikow
 + *media/* - Zawiera pliki graficzne
 + *style/* - Zqwiera czcionki oraz pliki CSS
 + *singleplayer.html* - Klient singleplayer
++ *mobile.html* - Klient dla urzadzen mobilnych (głownie smartfony z FirefoxOS)
 
 Moduły
 ---------------------
