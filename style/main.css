@@ -110,6 +110,11 @@ body {
 	text-shadow: none;
 }
 
+.block{
+	width: 64px;
+	height: 64px;
+}
+
 #blocks_entry {
 	position: absolute;
 	left: 20px;

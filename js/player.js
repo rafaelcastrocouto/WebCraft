@@ -204,11 +204,15 @@ Player.prototype.onKeyEvent = function( keyCode, down )
 	if (key == "r" ){
 		this.pos = this.world.spawnPoint;
 	}
-	if (key == "b"){
+	if (key == "e"){
 		var blockSelect = document.getElementById("blocks").style;
 		if(blockSelect.display == "none"){
 			blockSelect.display = "";
-		}else{
+		}
+	}
+	if (keyCode == 27){
+		var blockSelect = document.getElementById("blocks").style;
+		if(blockSelect.display == ""){
 			blockSelect.display = "none";
 		}
 	}
