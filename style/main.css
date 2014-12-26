@@ -5,15 +5,11 @@
 }
 
 /* General page style */
-
 body {
 	height: 100%;
-	
 	font-family: minecraftia;
 	font-size: 16px;
-	
 	text-shadow: #3f3f3f 2px 2px 0px;
-	
 	background: url( '../media/background.png' );
 }
 
@@ -23,13 +19,11 @@ body {
 	position: absolute;
 	left: 0;
 	top: 0;
-	
 	width: 100%;
 	height: 100%;
 }
 
 /* Material selector */
-
 #materialSelector {
 	position: relative;
 	margin: auto;
@@ -45,11 +39,8 @@ body {
 	width: 70px;
 	margin: 0;
 	padding: 0;
-	
 	cursor: pointer;
-	
 	opacity: 0.3;
-	
 	background: url( '../media/blockthumbs.png' );
 	background-position: 0px 0px;
 }
@@ -59,39 +50,23 @@ body {
 }
 
 /* Chatbox */
-
 #chatbox {
 	position: absolute;
 	left: 20px;
 	bottom: 55px;
-	
 	width: 320px;
 	height: 115px;
 	overflow: hidden;
-	
 	padding-left: 10px;
 	padding-right: 10px;
-	
 	cursor: default;
-	
 	background: rgba( 0, 0, 0, 0.6 );
 	color: white;
-}
-
-#pad div {
-	display: none;
-}
-
-#pad #pad_down {
-	position: absolute;
-	right: 105px;
-	bottom: 55px;
 }
 
 #chatbox_text {
 	position: absolute;
 	bottom: 8px;
-	
 	text-shadow: none;
 }
 
@@ -118,17 +93,13 @@ body {
 
 #blocks {
 	position: absolute;
-	
 	width: 720px;
 	height: 600px;
-	
 	margin-left: 30%;
 	margin-right: 30%;
 	margin-top: 100px;
 	margin-bottom: 30px;
-	
 	cursor: default;
-	
 	background: rgba( 0, 0, 0, 0.6 );
 	color: white;
 }
@@ -136,7 +107,6 @@ body {
 #blocks_text {
 	position: absolute;
 	bottom: 8px;
-	
 	text-shadow: none;
 }
 
@@ -144,17 +114,13 @@ body {
 	position: absolute;
 	left: 20px;
 	bottom: 18px;
-	
 	width: 310px;
 	height: 30px;
-	
 	padding-left: 10px;
 	padding-bottom: 2px;
-	
 	background: rgba( 0, 0, 0, 0.6 );
 	border: none;
 	outline: none;
-	
 	color: white;
 	font-family: minecraftia;
 	font-size: 15px;
