@@ -106,4 +106,9 @@ body {
 	border-radius: 1px;
 	width: 64px;
 	height: 64px;
+	opacity: 0.8;
+}
+
+.block:hover{
+	opacity: 1.0;
 }
