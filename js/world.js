@@ -17,7 +17,6 @@
 
 function World(sx, sy, sz, roughness, smoothAmount, smoothAmt){
 
-	// Initialise world array
 	this.blocks = new Array( sx );
 	for ( var x = 0; x < sx; x++ )
 	{
@@ -45,11 +44,6 @@ function World(sx, sy, sz, roughness, smoothAmount, smoothAmt){
 
 	this.players = {};
 }
-
-// createFlatWorld()
-//
-// Sets up the world so that the bottom half is filled with dirt
-// and the top half with air.
 
 World.prototype.getPower = function(a,b){
 	if(b == 0)return 1;

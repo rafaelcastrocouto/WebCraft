@@ -3,13 +3,13 @@
 	<head>
 		<title>WebCraft</title>
 		
-		<!-- Character encoding -->
+		<!-- Kodowanie -->
 		<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 		
-		<!-- Stylesheet -->
+		<!-- Style -->
 		<link href="style/main.css" rel="stylesheet" type="text/css">
 		
-		<!-- Modules -->
+		<!-- Moduly -->
 		<script src="js/glMatrix-1.2.min.js" type="text/javascript"></script> 
 		<script src="js/blocks.js" type="text/javascript"></script>
 		<script src="js/helpers.js" type="text/javascript"></script>
@@ -24,11 +24,7 @@
 	<body oncontextmenu="return false">
 		<!-- Render surface -->
 		<canvas id="renderSurface"></canvas>
-		
-		<!-- Material selection -->
-
-
-		
+	
 		<div id="blocks" style="display: none;">
 			<center>Wybor klocka:</center></br>
 			<img class="block" src="media/items/stone.png" alt="Zmien klocek" onclick="player.buildMaterial = BLOCK.CONCRETE;">
@@ -43,38 +39,36 @@
 			<img class="block" src="media/items/diamondore.png" alt="Zmien klocek" onclick="player.buildMaterial = BLOCK.DIAMOND_ORE;">
 			<br><center>Aby zamknac wcisnij <b>Esc</b></center>
 		</div>
+        
 		<!-- Infobox -->
 		<div id="infobox">
 			<span id="infobox_text">WebCraft v0.2.1 Desktop</br>
 			<div id="fps"></div></br>
 			Wybor klocka pod E</span>
 		</div>
-		<!--<table id="materialSelector">
-			<tr></tr>
-		</table> -->
 		
 		<!-- Initialisation code -->
 		<script type="text/javascript">			
-			// Create a new flat world
+			// Tworzenie mapy
 			var world = new World( 60,60, 100, 80, 2, 0.1 );
 			world.createWorld();
 			
-			// Set up renderer
+			// Render
 			var render = new Renderer( "renderSurface" );
 			render.setWorld( world, 8 );
 			render.setPerspective( 80, 0.01, 220 );
 			
-			// Create physics simulator
+			// Fizyka
 			//var physics = new Physics();
 			//physics.setWorld( world );
 			
-			// Create new local player
+			// Stworzenie playera
 			var player = new Player();
 			player.setWorld( world );
 			player.setInputCanvas( "renderSurface", 1 );
 			//player.setMaterialSelector( "materialSelector" );
 			
-			// Render loop			
+			// Render		
 			setInterval( function()
 			{
 				var time = new Date().getTime() / 1000.0;

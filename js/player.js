@@ -10,10 +10,12 @@ MOUSE.DOWN = 1;
 MOUSE.UP = 2;
 MOUSE.MOVE = 3;
 
+// Podzial na wersje
 VERSION = {};
 VERSION.DESKTOP = 1;
 VERSION.MOBILE = 2;
 VERSION.DEBUG = 3;
+
 // Constructor()
 //
 // Creates a new local player manager.
@@ -54,8 +56,6 @@ Player.prototype.setClient = function( client )
 Player.prototype.setInputCanvas = function( id , version)
 {
 	var canvas = this.canvas = document.getElementById( id );
-	
-
 	var t = this;
 	
 	if(version == VERSION.MOBILE){
@@ -135,6 +135,10 @@ Player.prototype.setInputCanvas = function( id , version)
 	}
 };
 
+
+// openEq()
+//
+// Otwiera ekwipunek
 
 Player.prototype.openEq = function() {
 	document.getElementById("pad").style.display = "none";	

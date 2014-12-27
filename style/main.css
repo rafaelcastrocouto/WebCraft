@@ -1,10 +1,10 @@
-/* Minecraft-like pixely font */
+/* Font */
 @font-face {
 	font-family: minecraftia;
 	src: url( 'minecraftia.ttf' );
 }
 
-/* General page style */
+/* Ogolnie */
 body {
 	height: 100%;
 	font-family: minecraftia;
@@ -13,7 +13,7 @@ body {
 	background: url( '../media/background.png' );
 }
 
-/* Render surface */
+/* Render */
 
 #renderSurface {
 	position: absolute;
@@ -23,7 +23,7 @@ body {
 	height: 100%;
 }
 
-/* Material selector */
+/* Selector */
 #materialSelector {
 	position: relative;
 	margin: auto;
@@ -86,6 +86,7 @@ body {
 	font-size: 15px;
 }
 
+/* Block selector */
 
 #blocks {
 	position: absolute;

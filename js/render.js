@@ -54,7 +54,7 @@ function Renderer( id )
 	{
 		gl = this.gl = canvas.getContext( "experimental-webgl" );
 	} catch ( e ) {
-		throw "Your browser doesn't support WebGL!";
+		throw "Twoja przegladarka nie obsluguje WebGL !!!";
 	}
 	
 	gl.viewportWidth = canvas.width;
