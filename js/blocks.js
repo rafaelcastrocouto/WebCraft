@@ -137,7 +137,8 @@ BLOCK.COBBLESTONE = {
 	selflit: false,
 	gravity: false,
 	fluid: false,
-	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 0/16, 1/16, 1/16, 2/16 ]; }
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 0/16, 1/16, 1/16, 2/16 ]; },
+    icon: "cobblestone.png"
 };
 
 // Concrete
@@ -148,7 +149,8 @@ BLOCK.CONCRETE = {
 	selflit: false,
 	gravity: false,
 	fluid: false,
-	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 1/16, 0/16, 2/16, 1/16 ]; }
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 1/16, 0/16, 2/16, 1/16 ]; },
+    icon: "stone.png"
 };
 
 // Brick
@@ -170,7 +172,8 @@ BLOCK.SAND = {
 	selflit: false,
 	gravity: true,
 	fluid: false,
-	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 2/16, 1/16, 3/16, 2/16 ]; }
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 2/16, 1/16, 3/16, 2/16 ]; },
+    icon: "sand.png"
 };
 
 // Gravel
@@ -203,7 +206,8 @@ BLOCK.GOLD = {
 	selflit: false,
 	gravity: false,
 	fluid: false,
-	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 7/16, 1/16, 8/16, 2/16 ]; }
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 7/16, 1/16, 8/16, 2/16 ]; },
+    icon: "goldblock.png"
 };
 
 // Diamond
@@ -214,7 +218,8 @@ BLOCK.DIAMOND = {
 	selflit: false,
 	gravity: false,
 	fluid: false,
-	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 8/16, 1/16, 9/16, 2/16 ]; }
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 8/16, 1/16, 9/16, 2/16 ]; },
+    icon: "diamondblock.png"
 };
 
 // Obsidian
@@ -291,7 +296,8 @@ BLOCK.GOLD_ORE = {
 	selflit: false,
 	gravity: false,
 	fluid: false,
-	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 0/16, 2/16, 1/16, 3/16 ]; }
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 0/16, 2/16, 1/16, 3/16 ]; },
+    icon: "goldore.png"
 };
 
 // Diamon Ore
@@ -302,7 +308,8 @@ BLOCK.DIAMOND_ORE = {
 	selflit: false,
 	gravity: false,
 	fluid: false,
-	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 2/16, 3/16, 3/16, 4/16 ]; }
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 2/16, 3/16, 3/16, 4/16 ]; },
+    icon: "diamondore.png"
 };
 
 // Coal Ore
