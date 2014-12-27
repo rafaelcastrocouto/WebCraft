@@ -230,7 +230,8 @@ BLOCK.OBSIDIAN = {
 	selflit: false,
 	gravity: false,
 	fluid: false,
-	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 5/16, 2/16, 6/16, 3/16 ]; }
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 5/16, 2/16, 6/16, 3/16 ]; },
+    icon: "obsidian.png"
 };
 
 // Glass
