@@ -27,7 +27,8 @@ BLOCK.BEDROCK = {
 	id: 1,
 	spawnable: false,
 	transparent: false,
-	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 1/16, 1/16, 2/16, 2/16 ]; }
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 1/16, 1/16, 2/16, 2/16 ]; },
+    icon: "bedrock.png"
 };
 
 // Dirt
@@ -38,7 +39,8 @@ BLOCK.DIRT = {
 	texture: function( world, lightmap, lit, x, y, z, dir )
 	{	
 		return [ 2/16, 0/16, 3/16, 1/16 ];
-	}
+	},
+    icon: "dirt.png"
 };
 // Grass
 BLOCK.GRASS = {
@@ -50,7 +52,8 @@ BLOCK.GRASS = {
 		if(dir == DIRECTION.UP)return [ 8/16, 2/16, 9/16, 3/16 ];
 		else if(dir == DIRECTION.DOWN)return [ 2/16, 0/16, 3/16, 1/16 ];
 		else return [ 3/16, 0/16, 4/16, 1/16 ];
-	}
+	},
+    icon: "grass.png"
 };
 
 // Wood

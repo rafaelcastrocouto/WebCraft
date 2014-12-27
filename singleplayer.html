@@ -27,16 +27,24 @@
 	
 		<div id="blocks" style="display: none;">
 			<center>Wybor klocka:</center></br>
-			<img class="block" src="media/items/stone.png" alt="Zmien klocek" onclick="player.buildMaterial = BLOCK.CONCRETE;">
-			<img class="block" src="media/items/dirt.png" alt="Zmien klocek" onclick="player.buildMaterial = BLOCK.DIRT;">
-			<img class="block" src="media/items/grass.png" alt="Zmien klocek" onclick="player.buildMaterial = BLOCK.GRASS;">
-			<img class="block" src="media/items/bedrock.png" alt="Zmien klocek" onclick="player.buildMaterial = BLOCK.BEDROCK;">
-			<img class="block" src="media/items/cobblestone.png" alt="Zmien klocek" onclick="player.buildMaterial = BLOCK.COBBLESTONE;">
-			<img class="block" src="media/items/sand.png" alt="Zmien klocek" onclick="player.buildMaterial = BLOCK.SAND;">
-			<img class="block" src="media/items/goldblock.png" alt="Zmien klocek" onclick="player.buildMaterial = BLOCK.GOLD;">
-			<img class="block" src="media/items/goldore.png" alt="Zmien klocek" onclick="player.buildMaterial = BLOCK.GOLD_ORE;">
-			<img class="block" src="media/items/diamondblock.png" alt="Zmien klocek" onclick="player.buildMaterial = BLOCK.DIAMOND;">
-			<img class="block" src="media/items/diamondore.png" alt="Zmien klocek" onclick="player.buildMaterial = BLOCK.DIAMOND_ORE;">
+            <script>
+            var selector = document.getElementById( "blocks" );
+            for ( var mat in BLOCK ){
+                if(BLOCK[mat].icon != null){
+                    var block = document.createElement( "img" );
+                    block.className = "block";
+                    block.src = "media/items/" + BLOCK[mat].icon;
+                    block.alt = "Zmiana klocka";
+                    block.material = BLOCK[mat];
+                    block.onclick = function(){
+                        player.buildMaterial = this.material;
+                  		var blockSelect = document.getElementById("blocks").style;
+                        blockSelect.display = "none";
+                    }
+                    selector.appendChild( block );
+                }
+            }
+            </script>
 			<br><center>Aby zamknac wcisnij <b>Esc</b></center>
 		</div>
         
