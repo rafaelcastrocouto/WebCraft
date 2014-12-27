@@ -100,8 +100,9 @@ body {
 	margin-top: 100px;
 	margin-bottom: 30px;
 	cursor: default;
-	background: rgba( 0, 0, 0, 0.6 );
+	background: #C5C7C7;
 	color: white;
+	border-radius: 7px;
 }
 
 #blocks_text {
