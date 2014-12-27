@@ -1,9 +1,9 @@
 
-function generate(mapSize, roughness){
+function generate(mapSize, roughness, smoothAmount, smoothAmt){
 	var map;
 	map = generateMapTerrain(mapSize, roughness);
-	for(var i = 0; i < 2; i++){
-	  map = smooth(map, mapSize, 0.1);
+	for(var i = 0; i < smoothAmount; i++){
+	  map = smooth(map, mapSize,smoothAmt);
 	}
   
 	function round(n)

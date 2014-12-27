@@ -30,22 +30,23 @@
 
 		
 		<div id="blocks" style="display: none;">
-			Wybor klocka:
-			<tr></tr>
+			<center>Wybor klocka:</center></br>
+			<img class="block" src="media/items/sand.png" alt="Wybierz: piasek" onclick="player.buildMaterial = BLOCK.SAND;">
+			<br><center>Aby zamknac wcisnij <b>Esc</b></center>
 		</div>
 		<!-- Infobox -->
 		<div id="chatbox">
 			<span id="chatbox_text">WebCraft v0.2</br>
 			<div id="fps"></div></span>
 		</div>
-		<table id="materialSelector">
+		<!--<table id="materialSelector">
 			<tr></tr>
-		</table>
+		</table> -->
 		
 		<!-- Initialisation code -->
 		<script type="text/javascript">			
 			// Create a new flat world
-			var world = new World( 60,60, 100 );
+			var world = new World( 60,60, 100, 80, 2, 0.1 );
 			world.createWorld();
 			
 			// Set up renderer
@@ -61,7 +62,7 @@
 			var player = new Player();
 			player.setWorld( world );
 			player.setInputCanvas( "renderSurface", 1 );
-			player.setMaterialSelector( "materialSelector" );
+			//player.setMaterialSelector( "materialSelector" );
 			
 			// Render loop			
 			setInterval( function()

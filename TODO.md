@@ -1,0 +1,18 @@
+- [ ] Nieskonczona mapa
+- [ ] Normalny generator
+- [ ] HP (i pasek głodu?)
+- [ ] Niszczenie klockow jak na surivalu w mc
+- [ ] "blokowanie" kursora (jak w minecrafcie)
+- [ ] Optymalizacja
+- [ ] Zapis i ładowanie map
+- [ ] Przepisać render
+- [ ] Ekwipunek
+- [ ] Tryb survival
+- [ ] Informacja gdy przegladarka niewspiera WebGL
+- [ ] Multiplayer
+- [ ] Wiecej blokow
+- [ ] Moby
+- [ ] Chat
+- [ ] Opcje
+- [ ] Menu
+- [ ] Menu generatora mapy (plaska/normalna, wysokosc gor itd.)
