@@ -49,8 +49,8 @@ body {
 	opacity: 0.8;
 }
 
-/* Chatbox */
-#chatbox {
+/* Info box */
+#infobox {
 	position: absolute;
 	left: 20px;
 	bottom: 55px;
@@ -64,13 +64,13 @@ body {
 	color: white;
 }
 
-#chatbox_text {
+#infobox_text {
 	position: absolute;
 	bottom: 8px;
 	text-shadow: none;
 }
 
-#chatbox_entry {
+#infobox_entry {
 	position: absolute;
 	left: 20px;
 	bottom: 18px;
