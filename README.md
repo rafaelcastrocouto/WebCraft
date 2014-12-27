@@ -20,6 +20,10 @@ Struktura plikow
 + *singleplayer.html* - Klient singleplayer
 + *mobile.html* - Klient dla urzadzen mobilnych (głownie smartfony z FirefoxOS)
 
+Chrome
+---------------------
+Uruchamiać z argumentami --allow-file-access-from-files --disable-web-security (żeby gra działała przy uruchamianiu z dysku, z serwera jest juz dobrze)
+
 Moduły
 ---------------------
 
