@@ -19,3 +19,13 @@
 .button:hover{
 	background: url('../media/btn2.png') no-repeat;
 }
+
+.button a:link {
+    text-decoration: none;
+    color: white;
+}
+
+.button a:visited {
+    text-decoration: none;
+    color: white;
+}

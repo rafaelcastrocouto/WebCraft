@@ -5,13 +5,13 @@
 // ==========================================
 
 // Mouse event enumeration
-MOUSE = {};
+var MOUSE = {};
 MOUSE.DOWN = 1;
 MOUSE.UP = 2;
 MOUSE.MOVE = 3;
 
 // Podzial na wersje
-VERSION = {};
+var VERSION = {};
 VERSION.DESKTOP = 1;
 VERSION.MOBILE = 2;
 VERSION.DEBUG = 3;
@@ -21,6 +21,12 @@ VERSION.DEBUG = 3;
 // Creates a new local player manager.
 function Player()
 {
+    this.keys = {};
+    this.falling = false;
+   	this.buildMaterial = BLOCK.DIRT;
+	this.eventHandlers = {};
+	this.velocity = new Vector( 0, 0, 0 );
+	this.angles = [ 0, Math.PI, 0 ];
 }
 
 // setWorld( world )
@@ -32,12 +38,6 @@ Player.prototype.setWorld = function( world )
 	this.world = world;
 	this.world.localPlayer = this;
 	this.pos = world.spawnPoint;
-	this.velocity = new Vector( 0, 0, 0 );
-	this.angles = [ 0, Math.PI, 0 ];
-	this.falling = false;
-	this.keys = {};
-	this.buildMaterial = BLOCK.DIRT;
-	this.eventHandlers = {};
 };
 
 // setClient( client )
@@ -218,6 +218,7 @@ Player.prototype.onKeyEvent = function( keyCode, down )
 		var blockSelect = document.getElementById("blocks").style;
 		if(blockSelect.display == ""){
 			blockSelect.display = "none";
+            return;
 		}
 	}
 };
@@ -303,7 +304,7 @@ Player.prototype.getEyePos = function()
 
 // update()
 //
-// Updates this local player (gravity, movement)
+// Aktualizuje gracza
 
 Player.prototype.update = function()
 {
@@ -324,15 +325,15 @@ Player.prototype.update = function()
 			if ( this.angles[0] > Math.PI/2 ) this.angles[0] = Math.PI/2;
 		}
 
-		// Gravity
+		// Grawitacja
 		if ( this.falling )
 			velocity.z += -0.5;
 
-		// Jumping
+		// Skakanie
 		if ( this.keys[" "] && !this.falling )
 			velocity.z = 7.7;
 
-		// Walking
+		// Poruszanie sie
 		var walkVelocity = new Vector( 0, 0, 0 );
 		if ( this.keys["w"] ) {
 			walkVelocity.x += Math.cos( Math.PI / 2 - this.angles[1] );
@@ -365,7 +366,8 @@ Player.prototype.update = function()
 	if(this.pos.z < 0){
 		this.pos = this.world.spawnPoint;
 	}
-	this.lastUpdate = new Date().getTime();
+    
+   	this.lastUpdate = new Date().getTime();
 };
 
 // resolveCollision( pos, bPos, velocity )
