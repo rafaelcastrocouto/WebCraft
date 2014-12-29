@@ -21,12 +21,9 @@ VERSION.DEBUG = 3;
 // Creates a new local player manager.
 function Player()
 {
-    this.keys = {};
-    this.falling = false;
-   	this.buildMaterial = BLOCK.DIRT;
-	this.eventHandlers = {};
-	this.velocity = new Vector( 0, 0, 0 );
-	this.angles = [ 0, Math.PI, 0 ];
+	this.onLockedMouseMove = this.onLockedMouseMove.bind(this);
+	this.onPointerLockChange = this.onPointerLockChange.bind(this);
+	this.onLockedMouseDown = this.onLockedMouseDown.bind(this);
 }
 
 // setWorld( world )
@@ -35,6 +32,12 @@ function Player()
 
 Player.prototype.setWorld = function( world )
 {
+    this.keys = {};
+    this.falling = false;
+   	this.buildMaterial = BLOCK.DIRT;
+	this.eventHandlers = {};
+	this.velocity = new Vector( 0, 0, 0 );
+	this.angles = [ 0, Math.PI, 0 ];
 	this.world = world;
 	this.world.localPlayer = this;
 	this.pos = world.spawnPoint;
@@ -102,9 +105,18 @@ Player.prototype.setInputCanvas = function( id , version)
 	
 		document.onkeydown = function( e ) { if ( e.target.tagName != "INPUT" ) { t.onKeyEvent( e.keyCode, true ); return false; } };
 		document.onkeyup = function( e ) { if ( e.target.tagName != "INPUT" ) { t.onKeyEvent( e.keyCode, false ); return false; } };
+		//canvas.onclick = function ( e ) { t.requestPointerLock(); }; - chwilowo brak pomyslu jak pobrac poruszenie kursorem XD
 		canvas.onmousedown = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.DOWN, e.which == 3 ); return false; };
 		canvas.onmouseup = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.UP, e.which == 3 ); return false; };
 		canvas.onmousemove = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.MOVE, e.which == 3 ); return false; };
+		window.onmousewheel = function(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			t.onScrollEvent(e.wheelDeltaX||0, e.wheelDeltaY||0)
+		}
+		document.addEventListener('pointerlockchange', t.onPointerLockChange, false);
+		document.addEventListener('mozpointerlockchange', t.onPointerLockChange, false);
+		document.addEventListener('webkitpointerlockchange', t.onPointerLockChange, false);
 	}
 	else if(version == VERSION.DEBUG) {
 
@@ -133,6 +145,49 @@ Player.prototype.setInputCanvas = function( id , version)
 		canvas.onmouseup = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.UP, e.which == 3 ); return false; };
 		canvas.onmousemove = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.MOVE, e.which == 3 ); return false; };
 	}
+};
+
+Player.prototype.requestPointerLock = function() {
+	this.canvas.requestPointerLock = this.canvas.requestPointerLock ||
+		this.canvas.mozRequestPointerLock ||
+		this.canvas.webkitRequestPointerLock;
+
+	this.canvas.requestPointerLock();
+};
+
+Player.prototype.onPointerLockChange = function(event) {
+  var pointerLockElement = document.pointerLockElement ||
+  	document.mozPointerLockElement ||
+    document.webkitPointerLockElement;
+
+	if (!!pointerLockElement) {
+		document.addEventListener("mousemove", this.onLockedMouseMove, false);
+		document.addEventListener("mousedown", this.onLockedMouseDown, false);
+  } else {
+		document.removeEventListener("mousemove", this.onLockedMouseMove, false);
+		document.removeEventListener("mousedown", this.onLockedMouseDown, false);
+  }
+};
+
+Player.prototype.onLockedMouseMove = function(e) {
+  var movementX = e.movementX       ||
+                  e.mozMovementX    ||
+                  e.webkitMovementX ||
+                  0,
+      movementY = e.movementY       ||
+                  e.mozMovementY    ||
+                  e.webkitMovementY ||
+                  0;
+ 
+	this.scrolling= true;
+	this.targetPitch = this.angles[0] - movementY*0.007;
+	this.targetYaw = this.angles[1] + movementX*0.007;
+};
+
+Player.prototype.onLockedMouseDown = function(e) {
+	var middleX = window.innerWidth / 2;
+	var middleY = window.innerHeight / 2;
+	this.doBlockAction( middleX, middleY, !(e.which == 3 || e.ctrlKey) );
 };
 
 

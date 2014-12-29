@@ -12,6 +12,14 @@
 		<link href="style/main.css" rel="stylesheet">
         <link href="style/button.css" rel="stylesheet">
 		
+		<script type="text/javascript">
+			requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||  
+                        window.webkitRequestAnimationFrame || window.msRequestAnimationFrame 
+                        || function(func) {
+                        	setTimeout(func, 16);
+                        }
+		</script>
+		
 		<!-- Moduly -->
 		<script src="js/glMatrix-1.2.min.js"></script> 
 		<script src="js/blocks.js"></script>
@@ -60,6 +68,9 @@
 		
 		<!-- Initialisation code -->
 		<script>			
+		
+			var renderCanvas = document.getElementById("renderSurface");
+			
 			// Tworzenie mapy
 			var world = new World( 60,60, 100, 80, 2, 0.1 );
 			world.createWorld();
@@ -77,21 +88,30 @@
 			var player = new Player();
 			player.setWorld( world );
 			player.setInputCanvas( "renderSurface", 1 );
-			// Render		
-			setInterval( function()
+			
+			
+			// Render loop			
+			requestAnimationFrame( function loop()
 			{
 				var time = new Date().getTime() / 1000.0;
 				
 				// Simulate physics
 				//physics.simulate();
 				
+				// Update local player
 				player.update();
+				
+				// Build a chunk
 				render.buildChunks( 30 );
+				
+				// Draw world
 				render.setCamera( player.getEyePos().toArray(), player.angles );
 				render.draw();
 				
-				while ( new Date().getTime() / 1000 - time < 0.016 );
-			}, 1 );
+				//while ( new Date().getTime() / 1000 - time < 0.016 );
+				requestAnimationFrame(loop, renderCanvas);
+			}, renderCanvas );
+			
 		</script>
 	</body>
 </html>
