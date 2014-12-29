@@ -386,7 +386,7 @@ Player.prototype.update = function()
 
 		// Skakanie
 		if ( this.keys[" "] && !this.falling )
-			velocity.z = 7.7;
+			velocity.z = 8;
 
 		// Poruszanie sie
 		var walkVelocity = new Vector( 0, 0, 0 );
@@ -418,7 +418,7 @@ Player.prototype.update = function()
 		// Resolve collision
 		this.pos = this.resolveCollision( pos, bPos, velocity.mul( delta ) );
 	}
-	if(this.pos.z < 0){
+	if(this.pos.z < -4){
 		this.pos = this.world.spawnPoint;
 	}
     

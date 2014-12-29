@@ -12,14 +12,6 @@
 		<link href="style/main.css" rel="stylesheet">
         <link href="style/button.css" rel="stylesheet">
 		
-		<script type="text/javascript">
-			requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||  
-                        window.webkitRequestAnimationFrame || window.msRequestAnimationFrame 
-                        || function(func) {
-                        	setTimeout(func, 16);
-                        }
-		</script>
-		
 		<!-- Moduly -->
 		<script src="js/glMatrix-1.2.min.js"></script> 
 		<script src="js/blocks.js"></script>
@@ -78,7 +70,7 @@
 			// Render
 			var render = new Renderer( "renderSurface" );
 			render.setWorld( world, 8 );
-			render.setPerspective( 80, 0.01, 220 );
+			render.setPerspective( 80, 0.01, 210 );
 			
 			// Fizyka
 			//var physics = new Physics();
@@ -112,6 +104,11 @@
 				requestAnimationFrame(loop, renderCanvas);
 			}, renderCanvas );
 			
+			requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||  
+                        window.webkitRequestAnimationFrame || window.msRequestAnimationFrame 
+                        || function(func) {
+                        	setTimeout(func, 16);
+                        }
 		</script>
 	</body>
 </html>
