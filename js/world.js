@@ -91,7 +91,7 @@ World.prototype.createWorld = function()
 					}
 					else this.blocks[x][y][z] = BLOCK.DIRT;
 				}
-				else if(z < 45){
+				else if(z < 42){
 					this.blocks[x][y][z] = BLOCK.WATER;
 				}
 				else if(y != this.sy/2 && x != this.sx/2 && ( z < pointHeight + 1 && z > pointHeight - 1) && (x > 2 && x < this.sx - 2) && (y > 2 && y < this.sy - 2)){
