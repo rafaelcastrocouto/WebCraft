@@ -35,7 +35,6 @@ BLOCK.BEDROCK = {
 BLOCK.DIRT = {
 	id: 2,
 	spawnable: true,
-	fluid: false,
 	texture: function( world, lightmap, lit, x, y, z, dir )
 	{	
 		return [ 2/16, 0/16, 3/16, 1/16 ];
@@ -46,7 +45,6 @@ BLOCK.DIRT = {
 BLOCK.GRASS = {
 	id: 3,
 	spawnable: true,
-	fluid: false,
 	texture: function( world, lightmap, lit, x, y, z, dir )
 	{
 		if(dir == DIRECTION.UP)return [ 8/16, 2/16, 9/16, 3/16 ];
@@ -62,8 +60,6 @@ BLOCK.WOOD = {
 	spawnable: true,
 	transparent: false,
 	selflit: false,
-	gravity: false,
-	fluid: false,
 	texture: function( world, lightmap, lit, x, y, z, dir )
 	{
 		if ( dir == DIRECTION.UP || dir == DIRECTION.DOWN )
@@ -79,8 +75,6 @@ BLOCK.TNT = {
 	spawnable: true,
 	transparent: false,
 	selflit: false,
-	gravity: false,
-	fluid: false,
 	texture: function( world, lightmap, lit, x, y, z, dir )
 	{
 		if ( dir == DIRECTION.UP || dir == DIRECTION.DOWN )
@@ -96,8 +90,6 @@ BLOCK.BOOKCASE = {
 	spawnable: true,
 	transparent: false,
 	selflit: false,
-	gravity: false,
-	fluid: false,
 	texture: function( world, lightmap, lit, x, y, z, dir )
 	{
 		if ( dir == DIRECTION.FORWARD || dir == DIRECTION.BACK )
@@ -275,7 +267,8 @@ BLOCK.WATER = {
 	selflit: true,
 	gravity: false,
 	fluid: true,
-	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 14/16, 0/16, 15/16, 1/16 ]; }
+	//texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 14/16, 0/16, 15/16, 1/16 ]; }
+    texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 15/16, 16/16, 3/16, 4/16 ]; }
 };
 
 // Iron Ore
