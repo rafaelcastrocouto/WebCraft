@@ -268,7 +268,7 @@ BLOCK.WATER = {
 	gravity: false,
 	fluid: true,
 	//texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 14/16, 0/16, 15/16, 1/16 ]; }
-    texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 15/16, 16/16, 3/16, 4/16 ]; }
+    texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 15/16, 3/16, 16/16, 4/16 ]; }
 };
 
 // Iron Ore
