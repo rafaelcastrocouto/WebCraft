@@ -52,14 +52,13 @@ body {
 /* Info box */
 #infobox {
 	position: absolute;
-	left: 20px;
-	bottom: 55px;
+	left: 0px;
+	bottom: 0px;
 	width: 320px;
-	height: 115px;
+	height: 140px;
 	overflow: hidden;
 	padding-left: 10px;
 	padding-right: 10px;
-	cursor: default;
 	background: rgba( 0, 0, 0, 0.6 );
 	color: white;
 }
