@@ -81,7 +81,8 @@ BLOCK.TNT = {
 			return [ 10/16, 0/16, 11/16, 1/16 ];
 		else
 			return [ 8/16, 0/16, 9/16, 1/16 ];
-	}
+	},
+    icon: "tnt.png"
 };
 
 // Bookcase
@@ -245,7 +246,8 @@ BLOCK.SPONGE = {
 	selflit: false,
 	gravity: false,
 	fluid: false,
-	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 0/16, 3/16, 1/16, 4/16 ]; }
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 0/16, 3/16, 1/16, 4/16 ]; },
+    icon: "sponge.png"
 };
 
 // Leaves
@@ -256,7 +258,8 @@ BLOCK.LEAVES = {
 	selflit: false,
 	gravity: false,
 	fluid: false,
-	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 4/16, 3/16, 5/16, 4/16 ]; }
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 4/16, 3/16, 5/16, 4/16 ]; },
+    icon: "leaves.png"
 };
 
 // Water
@@ -326,7 +329,8 @@ BLOCK.REDSTONE_ORE = {
 	selflit: false,
 	gravity: false,
 	fluid: false,
-	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 3/16, 3/16, 4/16, 4/16 ]; }
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 3/16, 3/16, 4/16, 4/16 ]; },
+    icon: "redstoneore.png"
 };
 
 // fromId( id )

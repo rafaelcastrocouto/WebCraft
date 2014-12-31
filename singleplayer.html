@@ -33,18 +33,20 @@
             <script>
             var selector = document.getElementById( "blocks" );
             for ( var mat in BLOCK ){
-                if(BLOCK[mat].icon != null){
-                    var block = document.createElement( "img" );
-                    block.className = "block";
-                    block.src = "media/items/" + BLOCK[mat].icon;
-                    block.alt = "Zmiana klocka";
-                    block.material = BLOCK[mat];
-                    block.onclick = function(){
-                        player.buildMaterial = this.material;
-                  		var blockSelect = document.getElementById("blocks").style;
-                        blockSelect.display = "none";
+                if(BLOCK[mat].spawnable){
+                    if(BLOCK[mat].icon != null){
+                        var block = document.createElement( "img" );
+                        block.className = "block";
+                        block.src = "media/items/" + BLOCK[mat].icon;
+                        block.alt = "Zmiana klocka";
+                        block.material = BLOCK[mat];
+                        block.onclick = function(){
+                            player.buildMaterial = this.material;
+                      		var blockSelect = document.getElementById("blocks").style;
+                            blockSelect.display = "none";
+                        }
+                        selector.appendChild( block );
                     }
-                    selector.appendChild( block );
                 }
             }
             </script>
@@ -54,7 +56,7 @@
 		<!-- Infobox -->
 		<div id="infobox">
 			<span id="infobox_text">WebCraft v0.2.2 Desktop</br>
-			<div id="fps"></div></br>
+			<div id="fps"></div>
 			Wybor klocka pod E</span>
 		</div>
 		
@@ -107,7 +109,7 @@
 			requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||  
                         window.webkitRequestAnimationFrame || window.msRequestAnimationFrame 
                         || function(func) {
-                        	setTimeout(func, 16);
+                        	setTimeout(func, 10);
                         }
 		</script>
 	</body>

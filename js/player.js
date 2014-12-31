@@ -105,7 +105,7 @@ Player.prototype.setInputCanvas = function( id , version)
 	
 		document.onkeydown = function( e ) { if ( e.target.tagName != "INPUT" ) { t.onKeyEvent( e.keyCode, true ); return false; } };
 		document.onkeyup = function( e ) { if ( e.target.tagName != "INPUT" ) { t.onKeyEvent( e.keyCode, false ); return false; } };
-		//canvas.onclick = function ( e ) { t.requestPointerLock(); }; - chwilowo brak pomyslu jak pobrac poruszenie kursorem XD
+		//canvas.onclick = function ( e ) { t.requestPointerLock(); };
 		canvas.onmousedown = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.DOWN, e.which == 3 ); return false; };
 		canvas.onmouseup = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.UP, e.which == 3 ); return false; };
 		canvas.onmousemove = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.MOVE, e.which == 3 ); return false; };
@@ -262,14 +262,12 @@ Player.prototype.onKeyEvent = function( keyCode, down )
 	
 	if (key == "r" ){
 		this.pos = this.world.spawnPoint;
-	}
-	if (key == "e"){
+	}else if (key == "e"){
 		var blockSelect = document.getElementById("blocks").style;
 		if(blockSelect.display == "none"){
 			blockSelect.display = "";
 		}
-	}
-	if (keyCode == 27){
+	}else if (keyCode == 27){
 		var blockSelect = document.getElementById("blocks").style;
 		if(blockSelect.display == ""){
 			blockSelect.display = "none";
@@ -289,13 +287,13 @@ Player.prototype.onMouseEvent = function( x, y, type, rmb )
 		this.mouseDown = true;
 		this.yawStart = this.targetYaw = this.angles[1];
 		this.pitchStart = this.targetPitch = this.angles[0];
-	} else if ( type == MOUSE.UP ) {
+	}else if ( type == MOUSE.UP ) {
 		if ( Math.abs( this.dragStart.x - x ) + Math.abs( this.dragStart.y - y ) < 4 )	
 			this.doBlockAction( x, y, !rmb );
 		this.dragging = false;
 		this.mouseDown = false;
 		this.canvas.style.cursor = "default";
-	} else if ( type == MOUSE.MOVE && this.mouseDown) {
+	}else if ( type == MOUSE.MOVE && this.mouseDown) {
 		this.dragging = true;
 		this.angles[0] = this.targetPitch = this.pitchStart - ( y - this.dragStart.y ) / 200;
 		this.angles[1] = this.targetYaw = this.yawStart + ( x - this.dragStart.x ) / 200;
