@@ -93,6 +93,7 @@ Player.prototype.setInputCanvas = function( id , version){
 	}else if(version == VERSION.DESKTOP) {
 		document.onkeydown = function( e ) { if ( e.target.tagName != "INPUT" ) { t.onKeyEvent( e.keyCode, true ); return false; } };
 		document.onkeyup = function( e ) { if ( e.target.tagName != "INPUT" ) { t.onKeyEvent( e.keyCode, false ); return false; } };
+		canvas.onclick = function ( e ) { t.requestPointerLock(); };
 		window.onmousewheel = function(e) {
 			e.stopPropagation();
 			e.preventDefault();
@@ -112,12 +113,15 @@ Player.prototype.setInputCanvas = function( id , version){
 			render.setPerspective( 80, 0.01, 220 );
 			player.setWorld( world );
 		 };
+
 		debugInput.visible.onclick = function(e) {
 			debugInput.roughness.blur();
 			debugInput.smoothAmount.blur();
 			debugInput.smoothAmt.blur();
 			debugInput.visible.blur();
 		}
+
+
 		document.onkeydown = function( e ) { if ( e.target.tagName != "INPUT" ) { t.onKeyEvent( e.keyCode, true ); return false; } };
 		document.onkeyup = function( e ) { if ( e.target.tagName != "INPUT" ) { t.onKeyEvent( e.keyCode, false ); return false; } };
 		canvas.onmousedown = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.DOWN, e.which == 3 ); return false; };
