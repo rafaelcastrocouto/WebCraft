@@ -253,7 +253,7 @@ BLOCK.SPONGE = {
 // Leaves
 BLOCK.LEAVES = {
 	id: 20,
-	spawnable: false,
+	spawnable: true,
 	transparent: true,
 	selflit: false,
 	gravity: false,
