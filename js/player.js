@@ -38,12 +38,6 @@ function Player()
 
 Player.prototype.setWorld = function( world )
 {
-    //this.keys = {};
-    //this.falling = false;
-   	//this.buildMaterial = BLOCK.DIRT;
-	//this.eventHandlers = {};
-	//this.velocity = new Vector( 0, 0, 0 );
-	//this.angles = [ 0, Math.PI, 0 ];
 	this.world = world;
 	this.world.localPlayer = this;
 	this.pos = world.spawnPoint;
@@ -121,6 +115,7 @@ Player.prototype.setInputCanvas = function( id , version){
 		document.addEventListener('mozpointerlockchange', t.onPointerLockChange, false);
 		document.addEventListener('webkitpointerlockchange', t.onPointerLockChange, false);
 	}else if(version == VERSION.DEBUG) {
+	    // Moze nie dzialac !
 		var debugInput = this.debugInput = {roughness: document.getElementById("roughness"), smoothAmount: document.getElementById("smoothAmount"), smoothAmt: document.getElementById("smoothAmt"), visible: document.getElementById("debugVisible")};
 
 		debugInput.roughness.onblur = debugInput.smoothAmount.onblur = debugInput.smoothAmt.onblur = function(e){
