@@ -43,15 +43,6 @@ Player.prototype.setWorld = function( world )
 	this.pos = world.spawnPoint;
 };
 
-// setClient( client )
-//
-// Assign the local player to a socket client.
-
-Player.prototype.setClient = function( client )
-{
-	this.client = client;
-};
-
 // setInputCanvas( id, version )
 //
 // Set the canvas the renderer uses for some input operations.
@@ -106,11 +97,10 @@ Player.prototype.setInputCanvas = function( id , version){
 		//canvas.onmousedown = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.DOWN, e.which == 3 ); return false; };
 		//canvas.onmouseup = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.UP, e.which == 3 ); return false; };
 		//canvas.onmousemove = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.MOVE, e.which == 3 ); return false; };
-		//window.onmousewheel = function(e) {
-		//	e.stopPropagation();
-		//	e.preventDefault();
-		//	t.onScrollEvent(e.wheelDeltaX||0, e.wheelDeltaY||0)
-		//}
+		window.onmousewheel = function(e) {
+			e.stopPropagation();
+			e.preventDefault();
+		}
 		document.addEventListener('pointerlockchange', t.onPointerLockChange, false);
 		document.addEventListener('mozpointerlockchange', t.onPointerLockChange, false);
 		document.addEventListener('webkitpointerlockchange', t.onPointerLockChange, false);
@@ -175,10 +165,11 @@ Player.prototype.onLockedMouseMove = function(e) {
                   e.webkitMovementY ||
                   0;
  
+    this.mouseDown = false;
     this.dragging = true;
 	this.scrolling= true;
-	this.targetPitch = this.angles[0] - movementY*0.007;
-	this.targetYaw = this.angles[1] + movementX*0.007;
+	this.targetPitch = this.angles[0] - movementY*0.001;
+	this.targetYaw = this.angles[1] + movementX*0.001;
 };
 
 Player.prototype.onLockedMouseDown = function(e) {
@@ -257,14 +248,14 @@ Player.prototype.onKeyEvent = function( keyCode, down )
 	this.keys[key] = down;
 	this.keys[keyCode] = down;
 	
-	if (key == "r" ){
+	if (!down && key == "r" ){
 		this.pos = this.world.spawnPoint;
-	}else if (key == "e"){
+	}else if (!down && key == "e"){
 		var blockSelect = document.getElementById("blocks").style;
 		if(blockSelect.display == "none"){
 			blockSelect.display = "";
 		}
-	}else if (keyCode == 27){
+	}else if (!down && keyCode == 27){
 		var blockSelect = document.getElementById("blocks").style;
 		if(blockSelect.display == ""){
 			blockSelect.display = "none";
@@ -432,14 +423,10 @@ Player.prototype.resolveCollision = function( pos, bPos, velocity )
 	// Collect XY collision sides
 	var collisionCandidates = [];
 
-	for ( var x = bPos.x - 1; x <= bPos.x + 1; x++ )
-	{
-		for ( var y = bPos.y - 1; y <= bPos.y + 1; y++ )
-		{
-			for ( var z = bPos.z; z <= bPos.z + 1; z++ )
-			{
-				if ( world.getBlock( x, y, z ) != BLOCK.AIR)
-				{
+	for ( var x = bPos.x - 1; x <= bPos.x + 1; x++ ){
+		for ( var y = bPos.y - 1; y <= bPos.y + 1; y++ ){
+			for ( var z = bPos.z; z <= bPos.z + 1; z++ ){
+				if ( world.getBlock( x, y, z ) !== BLOCK.AIR){
 					if ( world.getBlock( x - 1, y, z ) == BLOCK.AIR ) collisionCandidates.push( { x: x, dir: -1, y1: y, y2: y + 1 } );
 					if ( world.getBlock( x + 1, y, z ) == BLOCK.AIR ) collisionCandidates.push( { x: x + 1, dir: 1, y1: y, y2: y + 1 } );
 					if ( world.getBlock( x, y - 1, z ) == BLOCK.AIR ) collisionCandidates.push( { y: y, dir: -1, x1: x, x2: x + 1 } );
@@ -450,16 +437,14 @@ Player.prototype.resolveCollision = function( pos, bPos, velocity )
 	}
 
 	// Solve XY collisions
-	for( var i in collisionCandidates ) 
-	{
+	for( var i in collisionCandidates ) {
 		var side = collisionCandidates[i];
 
-		if ( lineRectCollide( side, playerRect ) )
-		{
-			if ( side.x != null && velocity.x * side.dir < 0 ) {
+		if ( lineRectCollide( side, playerRect ) ){
+			if ( side.x != null && velocity.x * side.dir < 0 ){
 				pos.x = side.x + playerRect.size / 2 * ( velocity.x > 0 ? -1 : 1 );
 				velocity.x = 0;
-			} else if ( side.y != null && velocity.y * side.dir < 0 ) {
+			}else if ( side.y != null && velocity.y * side.dir < 0 ) {
 				pos.y = side.y + playerRect.size / 2 * ( velocity.y > 0 ? -1 : 1 );
 				velocity.y = 0;
 			}
@@ -473,13 +458,11 @@ Player.prototype.resolveCollision = function( pos, bPos, velocity )
 	// Collect Z collision sides
 	collisionCandidates = [];
 
-	for ( var x = bPos.x - 1; x <= bPos.x + 1; x++ ) 
-	{
-		for ( var y = bPos.y - 1; y <= bPos.y + 1; y++ )
-		{
+	for ( var x = bPos.x - 1; x <= bPos.x + 1; x++ ) {
+		for ( var y = bPos.y - 1; y <= bPos.y + 1; y++ ){
 			if ( world.getBlock( x, y, newBZLower ) != BLOCK.AIR )
 				collisionCandidates.push( { z: newBZLower + 1, dir: 1, x1: x, y1: y, x2: x + 1, y2: y + 1 } );
-			if ( world.getBlock( x, y, newBZUpper ) != BLOCK.AIR )
+			else if ( world.getBlock( x, y, newBZUpper ) != BLOCK.AIR )
 				collisionCandidates.push( { z: newBZUpper, dir: -1, x1: x, y1: y, x2: x + 1, y2: y + 1 } );
 		}
 	}

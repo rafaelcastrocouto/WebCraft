@@ -82,7 +82,7 @@
 			player.setWorld( world );
 			player.setInputCanvas( "renderSurface", 1 );
 			
-			
+			var worker = new Worker("js/renderLoopWorker.js");
 			// Render loop			
 			requestAnimationFrame( function loop()
 			{
@@ -95,21 +95,15 @@
 				player.update();
 				
 				// Build a chunk
-				render.buildChunks( 30 );
+				render.buildChunks( 25 );
 				
 				// Draw world
 				render.setCamera( player.getEyePos().toArray(), player.angles );
 				render.draw();
-				
-				//while ( new Date().getTime() / 1000 - time < 0.016 );
+                
 				requestAnimationFrame(loop, renderCanvas);
 			}, renderCanvas );
 			
-			requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||  
-                        window.webkitRequestAnimationFrame || window.msRequestAnimationFrame 
-                        || function(func) {
-                        	setTimeout(func, 10);
-                        }
 		</script>
 	</body>
 </html>
