@@ -70,7 +70,7 @@
 			
 			// Render
 			var render = new Renderer( "renderSurface" );
-			render.setWorld( world, 8 );
+			render.setWorld( world, 16 );
 			render.setPerspective( 80, 0.01, 210 );
 			
 			// Fizyka
@@ -82,11 +82,9 @@
 			player.setWorld( world );
 			player.setInputCanvas( "renderSurface", 1 );
 			
-			var worker = new Worker("js/renderLoopWorker.js");
 			// Render loop			
-			requestAnimationFrame( function loop()
-			{
-				var time = new Date().getTime() / 1000.0;
+			requestAnimationFrame( function loop(){
+				//var time = new Date().getTime() / 1000.0;
 				
 				// Simulate physics
 				//physics.simulate();
@@ -104,6 +102,7 @@
 				requestAnimationFrame(loop, renderCanvas);
 			}, renderCanvas );
 			
+            var workerRender = new Worker("js/renderLoopWorker.js");
 		</script>
 	</body>
 </html>
