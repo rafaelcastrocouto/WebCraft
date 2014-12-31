@@ -102,7 +102,7 @@
 				requestAnimationFrame(loop, renderCanvas);
 			}, renderCanvas );
 			
-            var workerRender = new Worker("js/renderLoopWorker.js");
+            new Worker("js/renderLoopWorker.js");
 		</script>
 	</body>
 </html>

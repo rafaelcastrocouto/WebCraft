@@ -1,7 +1,7 @@
 // ==========================================
 // Helpers
 //
-// This file contains helper classes and functions.
+// Ten plik zawiera rozne pomocne funkcje itd.
 // ==========================================
 
 // ==========================================
@@ -102,4 +102,15 @@ function sleep(milliseconds) {
       break;
     }
   }
+}
+
+// isPointerLockSupport()
+//
+// Sprawdza czy przegladarka wspiera przechwytywanie kursora
+
+function isPointerLockSupport(){
+    var havePointerLock = 'pointerLockElement' in document ||
+    'mozPointerLockElement' in document ||
+    'webkitPointerLockElement' in document;
+    return havePointerLock;
 }

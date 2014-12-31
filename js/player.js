@@ -246,7 +246,7 @@ Player.prototype.onKeyEvent = function( keyCode, down )
 	this.keys[keyCode] = down;
 	
 	if (!down && key == "r" ){
-		this.pos = this.world.spawnPoint;
+        this.pos = this.world.spawnPoint;
 	}else if (!down && key == "e"){
 		var blockSelect = document.getElementById("blocks").style;
 		if(blockSelect.display == "none"){
