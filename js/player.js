@@ -24,6 +24,12 @@ function Player()
 	this.onLockedMouseMove = this.onLockedMouseMove.bind(this);
 	this.onPointerLockChange = this.onPointerLockChange.bind(this);
 	this.onLockedMouseDown = this.onLockedMouseDown.bind(this);
+    this.keys = {};
+    this.falling = false;
+   	this.buildMaterial = BLOCK.DIRT;
+	this.eventHandlers = {};
+	this.velocity = new Vector( 0, 0, 0 );
+	this.angles = [ 0, Math.PI, 0 ];
 }
 
 // setWorld( world )
@@ -32,12 +38,12 @@ function Player()
 
 Player.prototype.setWorld = function( world )
 {
-    this.keys = {};
-    this.falling = false;
-   	this.buildMaterial = BLOCK.DIRT;
-	this.eventHandlers = {};
-	this.velocity = new Vector( 0, 0, 0 );
-	this.angles = [ 0, Math.PI, 0 ];
+    //this.keys = {};
+    //this.falling = false;
+   	//this.buildMaterial = BLOCK.DIRT;
+	//this.eventHandlers = {};
+	//this.velocity = new Vector( 0, 0, 0 );
+	//this.angles = [ 0, Math.PI, 0 ];
 	this.world = world;
 	this.world.localPlayer = this;
 	this.pos = world.spawnPoint;
@@ -52,12 +58,11 @@ Player.prototype.setClient = function( client )
 	this.client = client;
 };
 
-// setInputCanvas( id )
+// setInputCanvas( id, version )
 //
 // Set the canvas the renderer uses for some input operations.
 
-Player.prototype.setInputCanvas = function( id , version)
-{
+Player.prototype.setInputCanvas = function( id , version){
 	var canvas = this.canvas = document.getElementById( id );
 	var t = this;
 	
@@ -100,26 +105,22 @@ Player.prototype.setInputCanvas = function( id , version)
 			t.onTouchEvent(e.changedTouches[length - 1].pageX, e.changedTouches[length - 1].pageY, MOUSE.MOVE, e.which == 3 );
 			return false;
 		};
-	}
-	else if(version == VERSION.DESKTOP) {
-	
+	}else if(version == VERSION.DESKTOP) {
 		document.onkeydown = function( e ) { if ( e.target.tagName != "INPUT" ) { t.onKeyEvent( e.keyCode, true ); return false; } };
 		document.onkeyup = function( e ) { if ( e.target.tagName != "INPUT" ) { t.onKeyEvent( e.keyCode, false ); return false; } };
-		//canvas.onclick = function ( e ) { t.requestPointerLock(); };
-		canvas.onmousedown = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.DOWN, e.which == 3 ); return false; };
-		canvas.onmouseup = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.UP, e.which == 3 ); return false; };
-		canvas.onmousemove = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.MOVE, e.which == 3 ); return false; };
-		window.onmousewheel = function(e) {
-			e.stopPropagation();
-			e.preventDefault();
-			t.onScrollEvent(e.wheelDeltaX||0, e.wheelDeltaY||0)
-		}
+		canvas.onclick = function ( e ) { t.requestPointerLock(); };
+		//canvas.onmousedown = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.DOWN, e.which == 3 ); return false; };
+		//canvas.onmouseup = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.UP, e.which == 3 ); return false; };
+		//canvas.onmousemove = function( e ) { t.onMouseEvent( e.clientX, e.clientY, MOUSE.MOVE, e.which == 3 ); return false; };
+		//window.onmousewheel = function(e) {
+		//	e.stopPropagation();
+		//	e.preventDefault();
+		//	t.onScrollEvent(e.wheelDeltaX||0, e.wheelDeltaY||0)
+		//}
 		document.addEventListener('pointerlockchange', t.onPointerLockChange, false);
 		document.addEventListener('mozpointerlockchange', t.onPointerLockChange, false);
 		document.addEventListener('webkitpointerlockchange', t.onPointerLockChange, false);
-	}
-	else if(version == VERSION.DEBUG) {
-
+	}else if(version == VERSION.DEBUG) {
 		var debugInput = this.debugInput = {roughness: document.getElementById("roughness"), smoothAmount: document.getElementById("smoothAmount"), smoothAmt: document.getElementById("smoothAmt"), visible: document.getElementById("debugVisible")};
 
 		debugInput.roughness.onblur = debugInput.smoothAmount.onblur = debugInput.smoothAmt.onblur = function(e){
@@ -179,6 +180,7 @@ Player.prototype.onLockedMouseMove = function(e) {
                   e.webkitMovementY ||
                   0;
  
+    this.dragging = true;
 	this.scrolling= true;
 	this.targetPitch = this.angles[0] - movementY*0.007;
 	this.targetYaw = this.angles[1] + movementX*0.007;
