@@ -1,7 +1,7 @@
 {
   "name": "WebCraft",
   "description": "WebCraft",
-  "launch_path": "http://artur9010.github.io/WebCraft/mobile.html",
+  "launch_path": "/mobile.html",
   "version": "2.2",
   "orientation": [ "landscape-primary" ],
   "installs_allowed_from": [
