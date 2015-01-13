@@ -8,11 +8,7 @@
     "https://marketplace.firefox.com"
   ],
   "icons": { 	
-<<<<<<< HEAD
-    "128": "icon128.png" 	
-=======
     "128": "https://artur9010.github.io/WebCraft/icon128.png"
->>>>>>> origin/master
   },
   "fullscreen": "true",
   "developer": {
