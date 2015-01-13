@@ -10,7 +10,6 @@
 		
 		<!-- Style -->
 		<link href="style/main.css" rel="stylesheet">
-        <link href="style/button.css" rel="stylesheet">
 		
 		<!-- Moduly -->
 		<script src="js/glMatrix-1.2.min.js"></script> 
@@ -70,7 +69,7 @@
 			
 			// Render
 			var render = new Renderer( "renderSurface" );
-			render.setWorld( world, 8 );
+			render.setWorld( world, 16 );
 			render.setPerspective( 80, 0.01, 210 );
 			
 			// Fizyka
@@ -82,11 +81,9 @@
 			player.setWorld( world );
 			player.setInputCanvas( "renderSurface", 1 );
 			
-			
 			// Render loop			
-			requestAnimationFrame( function loop()
-			{
-				var time = new Date().getTime() / 1000.0;
+			requestAnimationFrame( function loop(){
+				//var time = new Date().getTime() / 1000.0;
 				
 				// Simulate physics
 				//physics.simulate();
@@ -95,21 +92,16 @@
 				player.update();
 				
 				// Build a chunk
-				render.buildChunks( 30 );
+				render.buildChunks( 25 );
 				
 				// Draw world
 				render.setCamera( player.getEyePos().toArray(), player.angles );
 				render.draw();
-				
-				//while ( new Date().getTime() / 1000 - time < 0.016 );
+                
 				requestAnimationFrame(loop, renderCanvas);
 			}, renderCanvas );
 			
-			requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||  
-                        window.webkitRequestAnimationFrame || window.msRequestAnimationFrame 
-                        || function(func) {
-                        	setTimeout(func, 10);
-                        }
+            new Worker("js/renderLoopWorker.js");
 		</script>
 	</body>
 </html>
