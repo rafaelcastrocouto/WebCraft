@@ -2,6 +2,8 @@
   "name": "WebCraft",
   "description": "WebCraft",
   "launch_path": "/mobile.html",
+  "version": "2.x",
+  "orientation": [ "landscape-primary" ],
   "icons": {
     "16": "/icons/icon16x16.png",
     "48": "/icons/icon48x48.png",
