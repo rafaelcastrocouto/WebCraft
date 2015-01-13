@@ -14,5 +14,8 @@
     "https://marketplace.firefox.com"
   ],
   "fullscreen": "true",
-  "developer": "artur9010 joda17"
+  "developer": {
+    "name": "WebCraft",
+    "url": "http://artur9010.github.io/WebCraft"
+  },
 }
