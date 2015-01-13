@@ -13,5 +13,6 @@
   "installs_allowed_from": [
     "https://marketplace.firefox.com"
   ],
-  "fullscreen": "true"
+  "fullscreen": "true",
+  "developer": "artur9010 joda17"
 }
