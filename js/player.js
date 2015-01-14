@@ -437,11 +437,11 @@ Player.prototype.resolveCollision = function( pos, bPos, velocity )
 	for ( var x = bPos.x - 1; x <= bPos.x + 1; x++ ){
 		for ( var y = bPos.y - 1; y <= bPos.y + 1; y++ ){
 			for ( var z = bPos.z; z <= bPos.z + 1; z++ ){
-				if ( world.getBlock( x, y, z ) !== BLOCK.AIR){
-					if ( world.getBlock( x - 1, y, z ) == BLOCK.AIR ) collisionCandidates.push( { x: x, dir: -1, y1: y, y2: y + 1 } );
-					if ( world.getBlock( x + 1, y, z ) == BLOCK.AIR ) collisionCandidates.push( { x: x + 1, dir: 1, y1: y, y2: y + 1 } );
-					if ( world.getBlock( x, y - 1, z ) == BLOCK.AIR ) collisionCandidates.push( { y: y, dir: -1, x1: x, x2: x + 1 } );
-					if ( world.getBlock( x, y + 1, z ) == BLOCK.AIR ) collisionCandidates.push( { y: y + 1, dir: 1, x1: x, x2: x + 1 } );
+				if (world.getBlock( x, y, z ) !== BLOCK.AIR){
+					if (world.getBlock( x - 1, y, z ) == BLOCK.AIR ) collisionCandidates.push( { x: x, dir: -1, y1: y, y2: y + 1 } );
+					else if (world.getBlock( x + 1, y, z ) == BLOCK.AIR ) collisionCandidates.push( { x: x + 1, dir: 1, y1: y, y2: y + 1 } );
+					else if (world.getBlock( x, y - 1, z ) == BLOCK.AIR ) collisionCandidates.push( { y: y, dir: -1, x1: x, x2: x + 1 } );
+					else if (world.getBlock( x, y + 1, z ) == BLOCK.AIR ) collisionCandidates.push( { y: y + 1, dir: 1, x1: x, x2: x + 1 } );
 				}
 			}
 		}
