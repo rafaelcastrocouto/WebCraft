@@ -3,15 +3,14 @@
 	<head>
 		<title>WebCraft Desktop</title>
 		
-		<!-- Kodowanie -->
 		<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
         <meta name="author" content="artur9010 & joda17">
         <meta name="keywords" content="minecraft,webcraft">
 		
-		<!-- Style -->
+		<!-- Styles -->
 		<link href="style/main.css" rel="stylesheet">
 		
-		<!-- Moduly -->
+		<!-- Modules -->
 		<script src="js/glMatrix-1.2.min.js"></script> 
 		<script src="js/blocks.js"></script>
 		<script src="js/helpers.js"></script>
@@ -21,11 +20,21 @@
 		<script src="js/physics.js"></script>
 		<script src="js/player.js"></script>
 		<script src="js/fps.js"></script>
+		<script>
+			//Create varribles
+			var gameVersion = "0.2.2";
+			
+			//Set tab title
+			document.title = "WebCraft v" + gameVersion;
+		</script>
 	</head>
 	
 	<body oncontextmenu="return false">
+	
+		<!-- Game area -->
 		<canvas id="renderSurface"></canvas>
         
+		<!-- Block selector -->
 		<div id="blocks" style="display: none;">
 			<center>Select block:</center></br>
             <script>
@@ -51,6 +60,7 @@
 			<br><center>Press Escape to close.</center>
 		</div>
         
+		<!-- Crosshair -->
         <div id="crosshair">
             <div id="crosshair_vertical"></div>
             <div id="crosshair_horizontal"></div>
@@ -58,7 +68,7 @@
         
 		<!-- Infobox -->
 		<div id="infobox">
-			<span id="infobox_text">WebCraft v0.2.2 Desktop</br>
+			<span id="infobox_text">WebCraft for Desktop
 			<div id="fps"></div>
 			Press E to select block</span>
 		</div>
@@ -68,22 +78,22 @@
 			var renderCanvas = document.getElementById("renderSurface");
 			
 			// Tworzenie mapy
-			var world = new World( 60,60, 100, 80, 2, 0.1 );
-			world.createWorld();
+			var world = new World( 60,60, 100, 80, 2, 0.1 ); //create new world
+			world.createWorld(); //generate map
 			
 			// Render
-			var render = new Renderer( "renderSurface" );
-			render.setWorld( world, 16 );
-			render.setPerspective( 80, 0.01, 210 );
+			var render = new Renderer( "renderSurface" ); //create new render
+			render.setWorld( world, 16 ); //set world for the render
+			render.setPerspective( 80, 0.01, 210 ); //set perspective
 			
 			// Fizyka
 			//var physics = new Physics();
 			//physics.setWorld( world );
 			
 			// Stworzenie playera
-			var player = new Player();
-			player.setWorld( world );
-			player.setInputCanvas( "renderSurface", 1 );
+			var player = new Player(); //create new player
+			player.setWorld( world ); //set's player world
+			player.setInputCanvas( "renderSurface", 1 ); //1 - desktop version
 			
 			// Render loop			
 			requestAnimationFrame( function loop(){
@@ -92,15 +102,12 @@
 				// Simulate physics
 				//physics.simulate();
 				
-				// Update local player
-				player.update();
+				player.update(); //update player
 				
-				// Build a chunk
-				render.buildChunks( 25 );
+				render.buildChunks( 25 ); //build chunks
 				
-				// Draw world
-				render.setCamera( player.getEyePos().toArray(), player.angles );
-				render.draw();
+				render.setCamera( player.getEyePos().toArray(), player.angles ); //set camera
+				render.draw(); //draw the world !
                 
 				requestAnimationFrame(loop, renderCanvas);
 			}, renderCanvas );
