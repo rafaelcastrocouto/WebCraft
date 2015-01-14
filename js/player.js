@@ -29,7 +29,7 @@ function Player()
    	this.buildMaterial = BLOCK.DIRT;
 	this.eventHandlers = {};
 	this.velocity = new Vector( 0, 0, 0 );
-	this.angles = [ 0, 3.14, 0 ];
+	this.angles = [ 0, Math.PI, 0 ];
 }
 
 // setWorld( world )
@@ -373,13 +373,13 @@ Player.prototype.update = function()
 		{
 			this.angles[0] += ( this.targetPitch - this.angles[0] ) * 30 * delta;
 			this.angles[1] += ( this.targetYaw - this.angles[1] ) * 30 * delta;
-			if ( this.angles[0] < -1.57 ) this.angles[0] = -1.57;
-			if ( this.angles[0] > 1.57 ) this.angles[0] = 1.57;
+			if ( this.angles[0] < -Math.PI/2 ) this.angles[0] = -Math.PI/2;
+			if ( this.angles[0] > Math.PI/2 ) this.angles[0] = Math.PI/2;
 		}
 
 		// Gravity
 		if ( this.falling )
-			velocity.z += -0.53;
+			velocity.z += -0.5;
 
 		// Jumping
 		if ( this.keys[" "] && !this.falling )
@@ -388,19 +388,27 @@ Player.prototype.update = function()
 		// Moving
 		var walkVelocity = new Vector( 0, 0, 0 );
 		if ( this.keys["w"] ) {
+			//walkVelocity.x += Math.cos( Math.PI / 2 - this.angles[1] );
             walkVelocity.x += Math.cos(1.57 - this.angles[1]); 
+			//walkVelocity.y += Math.sin( Math.PI / 2 - this.angles[1] );
             walkVelocity.y += Math.sin(1.57 - this.angles[1]);
 		}
 		if ( this.keys["s"] ) {
+			//walkVelocity.x += Math.cos( Math.PI + Math.PI / 2 - this.angles[1] );
             walkVelocity.x += Math.cos(4.71 - this.angles[1]);
+			//walkVelocity.y += Math.sin( Math.PI + Math.PI / 2 - this.angles[1] );
             walkVelocity.y += Math.sin(4.71 - this.angles[1]);
 		}
 		if ( this.keys["a"] ) {
+			//walkVelocity.x += Math.cos( Math.PI / 2 + Math.PI / 2 - this.angles[1] );
             walkVelocity.x += Math.cos(3.14 - this.angles[1]);
+			//walkVelocity.y += Math.sin( Math.PI / 2 + Math.PI / 2 - this.angles[1] );
             walkVelocity.y += Math.sin(3.14 - this.angles[1]);
 		}
 		if ( this.keys["d"] ) {
+			//walkVelocity.x += Math.cos( -Math.PI / 2 + Math.PI / 2 - this.angles[1] );
             walkVelocity.x += Math.cos(this.angles[1]);
+			//walkVelocity.y += Math.sin( -Math.PI / 2 + Math.PI / 2 - this.angles[1] );
             walkVelocity.y += Math.sin(this.angles[1]);
 		}
 		
