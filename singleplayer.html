@@ -1,12 +1,11 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>WebCraft Desktop</title>
+		<title>WebCraft</title>
 		
 		<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
         <meta name="author" content="artur9010,joda17">
         <meta name="keywords" content="minecraft,webcraft">
-		
 		<!-- Styles -->
 		<link href="style/main.css" rel="stylesheet">
 		
@@ -22,7 +21,7 @@
 		<script src="js/fps.js"></script>
 		<script>
 			//Create varribles
-			var gameVersion = "0.2.2";
+			var gameVersion = "0.2.3";
 			
 			//Set tab title
 			document.title = "WebCraft v" + gameVersion;
@@ -45,7 +44,7 @@
                         var block = document.createElement( "img" );
                         block.className = "block";
                         block.src = "media/items/" + BLOCK[mat].icon;
-                        block.alt = "Select block";
+                        block.alt = "Select this block";
                         block.material = BLOCK[mat];
                         block.onclick = function(){
                             player.buildMaterial = this.material;
@@ -63,8 +62,9 @@
         
 		<!-- Crosshair -->
         <div id="crosshair">
-            <div id="crosshair_vertical"></div>
-            <div id="crosshair_horizontal"></div>
+            <div class="crosshair_horizontal_up"></div>
+            <div class="crosshair_vertical"></div>
+            <div class="crosshair_horizontal_down"></div>
         </div>
         
 		<!-- Infobox -->
@@ -90,8 +90,9 @@
 			
 			var player = new Player(); //create new player
 			player.setWorld( world ); //set's player world
-			player.setInputCanvas( "renderSurface", 1 ); //1 - desktop version
+			player.setInputCanvas( "renderSurface", 1 ); //1 - desktop version, 2 - mobile version
 					
+        
 			requestAnimationFrame( function loop(){
 				//var time = new Date().getTime() / 1000.0;
 				

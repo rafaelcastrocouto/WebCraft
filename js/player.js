@@ -90,7 +90,7 @@ Player.prototype.setInputCanvas = function( id , version){
 			t.onTouchEvent(e.changedTouches[length - 1].pageX, e.changedTouches[length - 1].pageY, MOUSE.MOVE, e.which == 3 );
 			return false;
 		};
-	}else if(version == VERSION.DESKTOP) {
+	}else if(version == VERSION.DESKTOP){
 		document.onkeydown = function( e ) { if ( e.target.tagName != "INPUT" ) { t.onKeyEvent( e.keyCode, true ); return false; } };
 		document.onkeyup = function( e ) { if ( e.target.tagName != "INPUT" ) { t.onKeyEvent( e.keyCode, false ); return false; } };
 		canvas.onclick = function ( e ) { t.requestPointerLock(); };
@@ -101,7 +101,7 @@ Player.prototype.setInputCanvas = function( id , version){
 		document.addEventListener('pointerlockchange', t.onPointerLockChange, false);
 		document.addEventListener('mozpointerlockchange', t.onPointerLockChange, false);
 		document.addEventListener('webkitpointerlockchange', t.onPointerLockChange, false);
-	}else if(version == VERSION.DEBUG) {
+	}else if(version == VERSION.DEBUG){
 	    // Moze nie dzialac !
 		var debugInput = this.debugInput = {roughness: document.getElementById("roughness"), smoothAmount: document.getElementById("smoothAmount"), smoothAmt: document.getElementById("smoothAmt"), visible: document.getElementById("debugVisible")};
 
@@ -184,7 +184,7 @@ Player.prototype.onLockedMouseDown = function(e) {
 
 // openEq()
 //
-// Otwiera ekwipunek
+// Open inventory
 
 Player.prototype.openEq = function() {
 	document.getElementById("pad").style.display = "none";	
@@ -196,7 +196,11 @@ Player.prototype.openEq = function() {
 // setMaterialSelector( id )
 //
 // Sets the table with the material selectors.
+//
+// >>> UNUSED <<<
+//
 
+/*
 Player.prototype.setMaterialSelector = function( id )
 {
 	var tableRow = document.getElementById( id ).getElementsByTagName( "tr" )[0];
@@ -231,6 +235,7 @@ Player.prototype.setMaterialSelector = function( id )
 		}
 	}
 };
+*/
 
 // on( event, callback )
 //
@@ -255,11 +260,11 @@ Player.prototype.onKeyEvent = function( keyCode, down )
         this.pos = this.world.spawnPoint;
 	}else if (!down && key == "e"){
 		var blockSelect = document.getElementById("blocks").style;
-        //Player.exitPointerLock();
         document.exitPointerLock();
 		if(blockSelect.display == "none"){
 			blockSelect.display = "";
 		}
+        return;
 	}else if (!down && keyCode == 27){
 		var blockSelect = document.getElementById("blocks").style;
 		if(blockSelect.display == ""){

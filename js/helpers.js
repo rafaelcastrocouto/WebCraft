@@ -1,7 +1,5 @@
 // ==========================================
 // Helpers
-//
-// Ten plik zawiera rozne pomocne funkcje itd.
 // ==========================================
 
 // ==========================================
@@ -106,7 +104,7 @@ function sleep(milliseconds) {
 
 // isPointerLockSupport()
 //
-// Sprawdza czy przegladarka wspiera przechwytywanie kursora
+// Check browser is supports pointer locking
 
 function isPointerLockSupport(){
     var havePointerLock = 'pointerLockElement' in document ||

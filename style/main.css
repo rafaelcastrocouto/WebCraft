@@ -121,7 +121,7 @@ body {
     top:50%;
     margin:-20px 0 0 -20px;
 }
-#crosshair_vertical {
+.crosshair_vertical {
     position: absolute;
     height: 0px;
     width: 40px;
@@ -131,13 +131,26 @@ body {
     border-style: solid;
     border-color: #99aadd;
 }
-#crosshair_horizontal {
+.crosshair_horizontal_up {
     position: absolute;
-    height: 0px;
-    width: 40px;
+    height: 20px;
+    width: 0px;
     top: 0;
-    left: 0px;
-    border-width: 4px 0px 0px 0px;
+    left: 50%;
+    bottom: 50%;
+    border-width: 0px 4px 0px 0px;
+    border-style: solid;
+    border-color: #99aadd;
+    -webkit-transform: rotate(90deg);
+}
+
+.crosshair_horizontal_down {
+    position: absolute;
+    height: 20px;
+    width: 0px;
+    bottom: calc(50% + 18px);
+    left: 50%;
+    border-width: 0px 4px 0px 0px;
     border-style: solid;
     border-color: #99aadd;
     -webkit-transform: rotate(90deg);
