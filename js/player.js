@@ -377,15 +377,15 @@ Player.prototype.update = function()
 			if ( this.angles[0] > Math.PI/2 ) this.angles[0] = Math.PI/2;
 		}
 
-		// Grawitacja
+		// Gravity
 		if ( this.falling )
 			velocity.z += -0.5;
 
-		// Skakanie
+		// Jumping
 		if ( this.keys[" "] && !this.falling )
 			velocity.z = 8;
 
-		// Poruszanie sie
+		// Moving
 		var walkVelocity = new Vector( 0, 0, 0 );
 		if ( this.keys["w"] ) {
 			walkVelocity.x += Math.cos( Math.PI / 2 - this.angles[1] );
