@@ -407,9 +407,9 @@ Player.prototype.update = function()
 		}
 		if ( this.keys["d"] ) {
 			//walkVelocity.x += Math.cos( -Math.PI / 2 + Math.PI / 2 - this.angles[1] );
-            walkVelocity.x += Math.cos(this.angles[1]);
+            walkVelocity.x += Math.cos(-this.angles[1]);
 			//walkVelocity.y += Math.sin( -Math.PI / 2 + Math.PI / 2 - this.angles[1] );
-            walkVelocity.y += Math.sin(this.angles[1]);
+            walkVelocity.y += Math.sin(-this.angles[1]);
 		}
 		
 		if ( walkVelocity.length() > 0 ) {
