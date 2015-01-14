@@ -54,13 +54,13 @@ function Renderer( id )
 	{
 		gl = this.gl = canvas.getContext( "experimental-webgl" );
 	} catch ( e ) {
-		throw "Twoja przegladarka nie obsluguje WebGL !!!";
+		throw "Sorry, your browser dosen't support WebGL :(";
 	}
 	
 	gl.viewportWidth = canvas.width;
 	gl.viewportHeight = canvas.height;
 	
-	gl.clearColor( 0.62, 0.81, 1.0, 1.0 );
+	gl.clearColor( 0.60, 0.81, 1.0, 1.0 );
 	gl.enable( gl.DEPTH_TEST );
 	gl.enable( gl.CULL_FACE );
 	gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA );

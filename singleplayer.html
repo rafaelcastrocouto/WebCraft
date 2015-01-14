@@ -4,7 +4,7 @@
 		<title>WebCraft Desktop</title>
 		
 		<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
-        <meta name="author" content="artur9010 & joda17">
+        <meta name="author" content="artur9010,joda17">
         <meta name="keywords" content="minecraft,webcraft">
 		
 		<!-- Styles -->
@@ -36,7 +36,7 @@
         
 		<!-- Block selector -->
 		<div id="blocks" style="display: none;">
-			<center>Select block:</center></br>
+			<center><b>Select block:</b></center><br/>
             <script>
             var selector = document.getElementById( "blocks" );
             for ( var mat in BLOCK ){
@@ -58,7 +58,7 @@
                 }
             }
             </script>
-			<br><center>Press Escape to close.</center>
+			<br/><center>Press Escape to close.</center>
 		</div>
         
 		<!-- Crosshair -->
@@ -75,14 +75,11 @@
 		</div>
 		
 		<script>			
-		
 			var renderCanvas = document.getElementById("renderSurface");
 			
-			// Tworzenie mapy
 			var world = new World( 60,60, 100, 80, 2, 0.1 ); //create new world
 			world.createWorld(); //generate map
 			
-			// Render
 			var render = new Renderer( "renderSurface" ); //create new render
 			render.setWorld( world, 16 ); //set world for the render
 			render.setPerspective( 80, 0.01, 210 ); //set perspective
@@ -91,21 +88,18 @@
 			//var physics = new Physics();
 			//physics.setWorld( world );
 			
-			// Stworzenie playera
 			var player = new Player(); //create new player
 			player.setWorld( world ); //set's player world
 			player.setInputCanvas( "renderSurface", 1 ); //1 - desktop version
-			
-			// Render loop			
+					
 			requestAnimationFrame( function loop(){
 				//var time = new Date().getTime() / 1000.0;
 				
-				// Simulate physics
 				//physics.simulate();
 				
 				player.update(); //update player
 				
-				render.buildChunks( 25 ); //build chunks
+				render.buildChunks( 20 ); //build chunks
 				
 				render.setCamera( player.getEyePos().toArray(), player.angles ); //set camera
 				render.draw(); //draw the world !
