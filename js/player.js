@@ -138,6 +138,11 @@ Player.prototype.requestPointerLock = function() {
 	this.canvas.requestPointerLock();
 };
 
+document.exitPointerLock = document.exitPointerLock    ||
+                           document.mozExitPointerLock ||
+                           document.webkitExitPointerLock;
+                           
+
 Player.prototype.onPointerLockChange = function(event) {
   var pointerLockElement = document.pointerLockElement ||
   	document.mozPointerLockElement ||
@@ -174,6 +179,7 @@ Player.prototype.onLockedMouseDown = function(e) {
 	var middleY = window.innerHeight / 2;
 	this.doBlockAction( middleX, middleY, !(e.which == 3 || e.ctrlKey) );
 };
+
 
 
 // openEq()
@@ -249,6 +255,8 @@ Player.prototype.onKeyEvent = function( keyCode, down )
         this.pos = this.world.spawnPoint;
 	}else if (!down && key == "e"){
 		var blockSelect = document.getElementById("blocks").style;
+        //Player.exitPointerLock();
+        document.exitPointerLock();
 		if(blockSelect.display == "none"){
 			blockSelect.display = "";
 		}

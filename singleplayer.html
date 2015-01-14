@@ -51,6 +51,7 @@
                             player.buildMaterial = this.material;
                       		var blockSelect = document.getElementById("blocks").style;
                             blockSelect.display = "none";
+                            Player.requestPointerLock();
                         }
                         selector.appendChild( block );
                     }
@@ -70,7 +71,7 @@
 		<div id="infobox">
 			<span id="infobox_text">WebCraft for Desktop
 			<div id="fps"></div>
-			Press E to select block</span>
+			Press <b>E</b> to select block</span>
 		</div>
 		
 		<script>			
