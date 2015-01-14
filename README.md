@@ -6,11 +6,16 @@ WebCraft is Minecraft Clone written in JavaScript (WebGL)
 File structure
 ---------------------
 
-+ *js/* - Zawiera wszystkie pliki odpowiadajace za funkcjonalnosc WebCrafta.
-+ *media/* - Zawiera pliki graficzne
-+ *style/* - Zqwiera czcionki oraz pliki CSS
-+ *singleplayer.html* - Klient dla desktopu
-+ *mobile.html* - Klient dla urzadzen mobilnych (głownie smartfony z FirefoxOS)
+File or directory | Description
+------------ | -------------
+index.html | Version selector
+singleplayer.html | Desktop version of WebCraft
+mobile.html | Mobile version of WebCraft
+manifest.webapp | Application info for Firefox Marketplace
+icon128.png | Icon
+/js | Game modules
+/css | Game styles
+/media | Game images
 
 Init code
 ---------------------
