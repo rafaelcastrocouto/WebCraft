@@ -24,11 +24,10 @@
 	</head>
 	
 	<body oncontextmenu="return false">
-		<!-- Render surface -->
 		<canvas id="renderSurface"></canvas>
         
 		<div id="blocks" style="display: none;">
-			<center>Wybor klocka:</center></br>
+			<center>Select block:</center></br>
             <script>
             var selector = document.getElementById( "blocks" );
             for ( var mat in BLOCK ){
@@ -37,7 +36,7 @@
                         var block = document.createElement( "img" );
                         block.className = "block";
                         block.src = "media/items/" + BLOCK[mat].icon;
-                        block.alt = "Zmiana klocka";
+                        block.alt = "Select block";
                         block.material = BLOCK[mat];
                         block.onclick = function(){
                             player.buildMaterial = this.material;
@@ -49,7 +48,7 @@
                 }
             }
             </script>
-			<br><center>Aby zamknac wcisnij <b>Esc</b></center>
+			<br><center>Press Escape to close.</center>
 		</div>
         
         <div id="crosshair">
@@ -61,7 +60,7 @@
 		<div id="infobox">
 			<span id="infobox_text">WebCraft v0.2.2 Desktop</br>
 			<div id="fps"></div>
-			Wybor klocka pod E</span>
+			Press E to select block</span>
 		</div>
 		
 		<script>			
