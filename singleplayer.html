@@ -25,6 +25,8 @@
 			
 			//Set tab title
 			document.title = "WebCraft v" + gameVersion;
+            
+            console.log("====== WebCraft v" + gameVersion + " ======");
 		</script>
 	</head>
 	
@@ -79,10 +81,12 @@
 			
 			var world = new World( 60,60, 100, 80, 2, 0.1 ); //create new world
 			world.createWorld(); //generate map
+            console.log("World created."); //debug
 			
 			var render = new Renderer( "renderSurface" ); //create new render
 			render.setWorld( world, 16 ); //set world for the render
-			render.setPerspective( 80, 0.01, 210 ); //set perspective
+			render.setPerspective( 83, 0.02, 210 ); //set perspective
+            console.log("Render set."); //debug
 			
 			// Fizyka
 			//var physics = new Physics();

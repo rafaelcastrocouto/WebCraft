@@ -60,7 +60,7 @@ function Renderer( id )
 	gl.viewportWidth = canvas.width;
 	gl.viewportHeight = canvas.height;
 	
-	gl.clearColor( 0.60, 0.81, 1.0, 1.0 );
+	gl.clearColor( 0.50, 0.71, 1.0, 1.0 );
 	gl.enable( gl.DEPTH_TEST );
 	gl.enable( gl.CULL_FACE );
 	gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA );
@@ -78,6 +78,7 @@ function Renderer( id )
 	gl.uniformMatrix4fv( this.uModelMat, false, modelMatrix );
 	
 	// Create 1px white texture for pure vertex color operations (e.g. picking)
+    /*
 	var whiteTexture = this.texWhite = gl.createTexture();
 	gl.activeTexture( gl.TEXTURE0 );
 	gl.bindTexture( gl.TEXTURE_2D, whiteTexture );
@@ -88,20 +89,21 @@ function Renderer( id )
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 	gl.uniform1i(  this.uSampler, 0 );
+    */
 	
 	// Load terrain texture
 	var terrainTexture = this.texTerrain = gl.createTexture();
 	terrainTexture.image = new Image();
-	terrainTexture.image.onload = function()
-	{
-		gl.bindTexture( gl.TEXTURE_2D, terrainTexture );
-		gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, terrainTexture.image );
-		gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST );
-		gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST );
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    terrainTexture.image.src = "media/terrain.png";
+	terrainTexture.image.onload = function(){
+		gl.bindTexture(gl.TEXTURE_2D, terrainTexture);
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, terrainTexture.image);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        //gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        //gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.bindTexture(gl.TEXTURE_2D, null);
 	};
-	terrainTexture.image.src = "media/terrain.png";
 }
 
 // draw()
@@ -122,12 +124,11 @@ Renderer.prototype.draw = function()
 	
 	gl.bindTexture( gl.TEXTURE_2D, this.texTerrain );
 	
-	if ( chunks != null )
-	{
-		for ( var i = 0; i < chunks.length; i++ )
-		{
-			if ( chunks[i].buffer != null ) 
-				this.drawBuffer( chunks[i].buffer );
+	if ( chunks != null ){
+		for ( var i = 0; i < chunks.length; i++ ){
+			if ( chunks[i].buffer != null ){
+			     this.drawBuffer( chunks[i].buffer );
+			}	
 		}
 	}
 	
@@ -139,11 +140,6 @@ Renderer.prototype.draw = function()
 //
 // Returns the block at mouse position mx and my.
 // The blocks that can be reached lie between min and max.
-//
-// Each side is rendered with the X, Y and Z position of the
-// block in the RGB color values and the normal of the side is
-// stored in the color alpha value. In that way, all information
-// can be retrieved by simply reading the pixel the mouse is over.
 //
 // WARNING: This implies that the level can never be larger than
 // 254x254x254 blocks! (Value 255 is used for sky.)
@@ -203,7 +199,7 @@ Renderer.prototype.pickAt = function( min, max, mx, my )
 	// Reset states
 	gl.bindTexture( gl.TEXTURE_2D, this.texTerrain );
 	gl.bindFramebuffer( gl.FRAMEBUFFER, null );
-	gl.clearColor( 0.62, 0.81, 1.0, 1.0 );
+	gl.clearColor( 0.50, 0.71, 1.0, 1.0 );
 	
 	// Clean up
 	gl.deleteBuffer( buffer );
@@ -448,8 +444,6 @@ Renderer.prototype.setPerspective = function( fov, min, max )
 };
 
 // setCamera( pos, ang )
-//
-// Moves the camera to the specified orientation.
 //
 // pos - Position in world coordinates.
 // ang - Pitch, yaw and roll.
