@@ -167,11 +167,11 @@ Player.prototype.onLockedMouseMove = function(e) {
                   e.webkitMovementY ||
                   0;
  
-    this.mouseDown = false;
+    //this.mouseDown = false;
     this.dragging = true;
 	this.scrolling= true;
-	this.targetPitch = this.angles[0] - movementY*0.001;
-	this.targetYaw = this.angles[1] + movementX*0.001;
+	this.targetPitch = this.angles[0] - movementY*0.001213423;
+	this.targetYaw = this.angles[1] + movementX*0.001213423;
 };
 
 Player.prototype.onLockedMouseDown = function(e) {
@@ -417,8 +417,8 @@ Player.prototype.update = function()
 				velocity.x = walkVelocity.x * 4;
 				velocity.y = walkVelocity.y * 4;
 		}else {
-			velocity.x /= this.falling ? 1.01 : 1.5;
-			velocity.y /= this.falling ? 1.01 : 1.5;
+			velocity.x /= this.falling ? 1.013 : 1.51;
+			velocity.y /= this.falling ? 1.013 : 1.51;
 		}
 		// Resolve collision
 		this.pos = this.resolveCollision( pos, bPos, velocity.mul( delta ) );
