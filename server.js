@@ -9,7 +9,6 @@
 var WORLD_SX = 128;
 var WORLD_SY = 128;
 var WORLD_SZ = 32;
-var WORLD_GROUNDHEIGHT = 16;
 var SECONDS_BETWEEN_SAVES = 60;
 var ADMIN_IP = "";
 
@@ -34,7 +33,7 @@ if ( world.loadFromFile( "world" ) ) {
 	log( "Loaded the world from file." );
 } else {
 	log( "Creating a new empty world." );
-	world.createFlatWorld( WORLD_GROUNDHEIGHT );
+	world.createWorld();
 	world.saveToFile( "world" );
 }
 

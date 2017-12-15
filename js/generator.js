@@ -50,9 +50,8 @@ function generate(mapSize, roughness, smoothAmount, smoothAmt){
   return map;
 };
 
-
-
-
+if (typeof module == 'undefined') module = {};
+module.exports = generate;
 
 function generateMapTerrain(mapSize, roughness) {
     var map = create2DArray(mapSize+1);

@@ -39,6 +39,7 @@
 		<div id="blocks" style="display: none;">
 			<center><b>Select block:</b></center><br/>
             <script>
+            var player;
             var selector = document.getElementById( "blocks" );
             for ( var mat in BLOCK ){
                 if(BLOCK[mat].spawnable){
@@ -52,7 +53,7 @@
                             player.buildMaterial = this.material;
                       		var blockSelect = document.getElementById("blocks").style;
                             blockSelect.display = "none";
-                            Player.requestPointerLock();
+                            player.requestPointerLock();
                         }
                         selector.appendChild( block );
                     }
@@ -92,7 +93,7 @@
 			//var physics = new Physics();
 			//physics.setWorld( world );
 			
-			var player = new Player(); //create new player
+			player = new Player(); //create new player
 			player.setWorld( world ); //set's player world
 			player.setInputCanvas( "renderSurface", 1 ); //1 - desktop version, 2 - mobile version
 					

@@ -14,6 +14,7 @@
 // sx - World size in the X-direction.
 // sy - World size in the Y-direction.
 // sz - World size in the Z-direction.
+if (typeof generate == 'undefined' && typeof require != 'undefined') generate = require('./generator.js');
 
 function World(sx, sy, sz, roughness, smoothAmount, smoothAmt){
 
