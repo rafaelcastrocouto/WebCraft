@@ -43,6 +43,10 @@ Player.prototype.setWorld = function( world )
 	this.pos = world.spawnPoint;
 };
 
+Player.prototype.setClient = function( client )	
+{	
+	this.client = client;	
+};
 // setInputCanvas( id, version )
 //
 // Set the canvas the renderer uses for some input operations.
@@ -200,7 +204,7 @@ Player.prototype.openEq = function() {
 // >>> UNUSED <<<
 //
 
-/*
+
 Player.prototype.setMaterialSelector = function( id )
 {
 	var tableRow = document.getElementById( id ).getElementsByTagName( "tr" )[0];
@@ -235,7 +239,7 @@ Player.prototype.setMaterialSelector = function( id )
 		}
 	}
 };
-*/
+
 
 // on( event, callback )
 //
@@ -354,9 +358,7 @@ Player.prototype.getEyePos = function()
 	return this.pos.add( new Vector( 0.0, 0.0, 1.7 ) );
 };
 
-// update()
-//
-// Aktualizuje gracza
+// Updates this local player (gravity, movement)
 
 Player.prototype.update = function()
 {

@@ -90,7 +90,17 @@ function Renderer( id )
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 	gl.uniform1i(  this.uSampler, 0 );
     */
-	
+	// Load player texture	
+	var playerTexture = this.texPlayer = gl.createTexture();	
+	playerTexture.image = new Image();	
+	playerTexture.image.onload = function()	
+	{	
+      gl.bindTexture( gl.TEXTURE_2D, playerTexture );	
+      gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, playerTexture.image );	
+      gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST );	
+      gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST );	
+	};	
+	playerTexture.image.src = "media/player.png";
 	// Load terrain texture
 	var terrainTexture = this.texTerrain = gl.createTexture();
 	terrainTexture.image = new Image();
