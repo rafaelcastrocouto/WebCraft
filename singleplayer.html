@@ -3,72 +3,113 @@
 	<head>
 		<title>WebCraft</title>
 		
-		<!-- Character encoding -->
 		<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
-		
-		<!-- Stylesheet -->
-		<link href="style/main.css" rel="stylesheet" type="text/css">
+        <meta name="author" content="artur9010,joda17">
+        <meta name="keywords" content="minecraft,webcraft">
+		<!-- Styles -->
+		<link href="style/main.css" rel="stylesheet">
 		
 		<!-- Modules -->
-		<script src="js/glMatrix-1.2.min.js" type="text/javascript"></script>
-		<script src="js/blocks.js" type="text/javascript"></script>
-		<script src="js/helpers.js" type="text/javascript"></script>
-		<script src="js/world.js" type="text/javascript"></script>
-		<script src="js/render.js" type="text/javascript"></script>
-		<script src="js/physics.js" type="text/javascript"></script>
-		<script src="js/player.js" type="text/javascript"></script>
+		<script src="js/glMatrix-1.2.min.js"></script> 
+		<script src="js/blocks.js"></script>
+		<script src="js/helpers.js"></script>
+		<script src="js/generator.js"></script>
+		<script src="js/world.js"></script>
+		<script src="js/render.js"></script>
+		<script src="js/physics.js"></script>
+		<script src="js/player.js"></script>
+		<script src="js/fps.js"></script>
+		<script>
+			//Create varribles
+			var gameVersion = "0.2.3";
+			
+			//Set tab title
+			document.title = "WebCraft v" + gameVersion;
+            
+            console.log("====== WebCraft v" + gameVersion + " ======");
+		</script>
 	</head>
 	
 	<body oncontextmenu="return false">
-		<!-- Render surface -->
+	
+		<!-- Game area -->
 		<canvas id="renderSurface"></canvas>
+        
+		<!-- Block selector -->
+		<div id="blocks" style="display: none;">
+			<center><b>Select block:</b></center><br/>
+            <script>
+            var selector = document.getElementById( "blocks" );
+            for ( var mat in BLOCK ){
+                if(BLOCK[mat].spawnable){
+                    if(BLOCK[mat].icon != null){
+                        var block = document.createElement( "img" );
+                        block.className = "block";
+                        block.src = "media/items/" + BLOCK[mat].icon;
+                        block.alt = "Select this block";
+                        block.material = BLOCK[mat];
+                        block.onclick = function(){
+                            player.buildMaterial = this.material;
+                      		var blockSelect = document.getElementById("blocks").style;
+                            blockSelect.display = "none";
+                            Player.requestPointerLock();
+                        }
+                        selector.appendChild( block );
+                    }
+                }
+            }
+            </script>
+			<br/><center>Press Escape to close.</center>
+		</div>
+        
+		<!-- Crosshair -->
+        <div id="crosshair">
+            <div class="crosshair_horizontal_up"></div>
+            <div class="crosshair_vertical"></div>
+            <div class="crosshair_horizontal_down"></div>
+        </div>
+        
+		<!-- Infobox -->
+		<div id="infobox">
+			<span id="infobox_text">WebCraft for Desktop
+			<div id="fps"></div>
+			Press <b>E</b> to select block</span>
+		</div>
 		
-		<!-- Material selection -->
-		<table id="materialSelector">
-			<tr></tr>
-		</table>
-		
-		<!-- Initialisation code -->
-		<script type="text/javascript">			
-			// Create a new flat world
-			var world = new World( 16, 16, 16 );
-			world.createFlatWorld( 6 );
+		<script>			
+			var renderCanvas = document.getElementById("renderSurface");
 			
-			// Set up renderer
-			var render = new Renderer( "renderSurface" );
-			render.setWorld( world, 8 );
-			render.setPerspective( 60, 0.01, 200 );
+			var world = new World( 60,60, 100, 80, 2, 0.1 ); //create new world
+			world.createWorld(); //generate map
+            console.log("World created."); //debug
 			
-			// Create physics simulator
-			var physics = new Physics();
-			physics.setWorld( world );
+			var render = new Renderer( "renderSurface" ); //create new render
+			render.setWorld( world, 16 ); //set world for the render
+			render.setPerspective( 83, 0.02, 210 ); //set perspective
+            console.log("Render set."); //debug
 			
-			// Create new local player
-			var player = new Player();
-			player.setWorld( world );
-			player.setInputCanvas( "renderSurface" );
-			player.setMaterialSelector( "materialSelector" );
+			// Fizyka
+			//var physics = new Physics();
+			//physics.setWorld( world );
 			
-			// Render loop			
-			setInterval( function()
-			{
-				var time = new Date().getTime() / 1000.0;
+			var player = new Player(); //create new player
+			player.setWorld( world ); //set's player world
+			player.setInputCanvas( "renderSurface", 1 ); //1 - desktop version, 2 - mobile version
+					
+        
+			requestAnimationFrame( function loop(){
 				
-				// Simulate physics
-				physics.simulate();
+				//physics.simulate();
 				
-				// Update local player
-				player.update();
+				player.update(); //update player
 				
-				// Build a chunk
-				render.buildChunks( 1 );
+				render.buildChunks( 20 ); //build chunks
 				
-				// Draw world
-				render.setCamera( player.getEyePos().toArray(), player.angles );
-				render.draw();
-				
-				while ( new Date().getTime() / 1000 - time < 0.016 );
-			}, 1 );
+				render.setCamera( player.getEyePos().toArray(), player.angles ); //set camera
+				render.draw(); //draw the world !
+                
+				requestAnimationFrame(loop, renderCanvas);
+			}, renderCanvas );
 		</script>
 	</body>
 </html>

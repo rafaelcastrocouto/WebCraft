@@ -13,7 +13,7 @@ DIRECTION.RIGHT = 4;
 DIRECTION.FORWARD = 5;
 DIRECTION.BACK = 6;
 
-BLOCK = {};
+var BLOCK = {};
 
 // Air
 BLOCK.AIR = {
@@ -27,36 +27,39 @@ BLOCK.BEDROCK = {
 	id: 1,
 	spawnable: false,
 	transparent: false,
-	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 1/16, 1/16, 2/16, 2/16 ]; }
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 1/16, 1/16, 2/16, 2/16 ]; },
+    icon: "bedrock.png"
 };
 
 // Dirt
 BLOCK.DIRT = {
 	id: 2,
 	spawnable: true,
-	transparent: false,
-	selflit: false,
-	gravity: false,
-	fluid: false,
+	texture: function( world, lightmap, lit, x, y, z, dir )
+	{	
+		return [ 2/16, 0/16, 3/16, 1/16 ];
+	},
+    icon: "dirt.png"
+};
+// Grass
+BLOCK.GRASS = {
+	id: 3,
+	spawnable: true,
 	texture: function( world, lightmap, lit, x, y, z, dir )
 	{
-		if ( dir == DIRECTION.UP && lit )
-			return [ 14/16, 0/16, 15/16, 1/16 ];
-		else if ( dir == DIRECTION.DOWN || !lit ) 
-			return [ 2/16, 0/16, 3/16, 1/16 ];
-		else
-			return [ 3/16, 0/16, 4/16, 1/16 ];
-	}
+		if(dir == DIRECTION.UP)return [ 8/16, 2/16, 9/16, 3/16 ];
+		else if(dir == DIRECTION.DOWN)return [ 2/16, 0/16, 3/16, 1/16 ];
+		else return [ 3/16, 0/16, 4/16, 1/16 ];
+	},
+    icon: "grass.png"
 };
 
 // Wood
 BLOCK.WOOD = {
-	id: 3,
+	id: 4,
 	spawnable: true,
 	transparent: false,
 	selflit: false,
-	gravity: false,
-	fluid: false,
 	texture: function( world, lightmap, lit, x, y, z, dir )
 	{
 		if ( dir == DIRECTION.UP || dir == DIRECTION.DOWN )
@@ -68,29 +71,26 @@ BLOCK.WOOD = {
 
 // TNT
 BLOCK.TNT = {
-	id: 4,
+	id: 5,
 	spawnable: true,
 	transparent: false,
 	selflit: false,
-	gravity: false,
-	fluid: false,
 	texture: function( world, lightmap, lit, x, y, z, dir )
 	{
 		if ( dir == DIRECTION.UP || dir == DIRECTION.DOWN )
 			return [ 10/16, 0/16, 11/16, 1/16 ];
 		else
 			return [ 8/16, 0/16, 9/16, 1/16 ];
-	}
+	},
+    icon: "tnt.png"
 };
 
 // Bookcase
 BLOCK.BOOKCASE = {
-	id: 5,
+	id: 6,
 	spawnable: true,
 	transparent: false,
 	selflit: false,
-	gravity: false,
-	fluid: false,
 	texture: function( world, lightmap, lit, x, y, z, dir )
 	{
 		if ( dir == DIRECTION.FORWARD || dir == DIRECTION.BACK )
@@ -102,18 +102,18 @@ BLOCK.BOOKCASE = {
 
 // Lava
 BLOCK.LAVA = {
-	id: 6,
+	id: 7,
 	spawnable: false,
 	transparent: true,
 	selflit: true,
-	gravity: true,
+	gravity: false,
 	fluid: true,
 	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 13/16, 14/16, 14/16, 15/16 ]; }
 };
 
 // Plank
 BLOCK.PLANK = {
-	id: 7,
+	id: 8,
 	spawnable: true,
 	transparent: false,
 	selflit: false,
@@ -124,29 +124,31 @@ BLOCK.PLANK = {
 
 // Cobblestone
 BLOCK.COBBLESTONE = {
-	id: 8,
-	spawnable: true,
-	transparent: false,
-	selflit: false,
-	gravity: false,
-	fluid: false,
-	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 0/16, 1/16, 1/16, 2/16 ]; }
-};
-
-// Concrete
-BLOCK.CONCRETE = {
 	id: 9,
 	spawnable: true,
 	transparent: false,
 	selflit: false,
 	gravity: false,
 	fluid: false,
-	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 1/16, 0/16, 2/16, 1/16 ]; }
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 0/16, 1/16, 1/16, 2/16 ]; },
+    icon: "cobblestone.png"
+};
+
+// Concrete
+BLOCK.CONCRETE = {
+	id: 10,
+	spawnable: true,
+	transparent: false,
+	selflit: false,
+	gravity: false,
+	fluid: false,
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 1/16, 0/16, 2/16, 1/16 ]; },
+    icon: "stone.png"
 };
 
 // Brick
 BLOCK.BRICK = {
-	id: 10,
+	id: 11,
 	spawnable: true,
 	transparent: false,
 	selflit: false,
@@ -157,18 +159,19 @@ BLOCK.BRICK = {
 
 // Sand
 BLOCK.SAND = {
-	id: 11,
+	id: 12,
 	spawnable: true,
 	transparent: false,
 	selflit: false,
 	gravity: true,
 	fluid: false,
-	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 2/16, 1/16, 3/16, 2/16 ]; }
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 2/16, 1/16, 3/16, 2/16 ]; },
+    icon: "sand.png"
 };
 
 // Gravel
 BLOCK.GRAVEL = {
-	id: 12,
+	id: 13,
 	spawnable: true,
 	transparent: false,
 	selflit: false,
@@ -179,7 +182,7 @@ BLOCK.GRAVEL = {
 
 // Iron
 BLOCK.IRON = {
-	id: 13,
+	id: 14,
 	spawnable: true,
 	transparent: false,
 	selflit: false,
@@ -190,40 +193,43 @@ BLOCK.IRON = {
 
 // Gold
 BLOCK.GOLD = {
-	id: 14,
-	spawnable: true,
-	transparent: false,
-	selflit: false,
-	gravity: false,
-	fluid: false,
-	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 7/16, 1/16, 8/16, 2/16 ]; }
-};
-
-// Diamond
-BLOCK.DIAMOND = {
 	id: 15,
 	spawnable: true,
 	transparent: false,
 	selflit: false,
 	gravity: false,
 	fluid: false,
-	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 8/16, 1/16, 9/16, 2/16 ]; }
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 7/16, 1/16, 8/16, 2/16 ]; },
+    icon: "goldblock.png"
 };
 
-// Obsidian
-BLOCK.OBSIDIAN = {
+// Diamond
+BLOCK.DIAMOND = {
 	id: 16,
 	spawnable: true,
 	transparent: false,
 	selflit: false,
 	gravity: false,
 	fluid: false,
-	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 5/16, 2/16, 6/16, 3/16 ]; }
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 8/16, 1/16, 9/16, 2/16 ]; },
+    icon: "diamondblock.png"
+};
+
+// Obsidian
+BLOCK.OBSIDIAN = {
+	id: 17,
+	spawnable: true,
+	transparent: false,
+	selflit: false,
+	gravity: false,
+	fluid: false,
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 5/16, 2/16, 6/16, 3/16 ]; },
+    icon: "obsidian.png"
 };
 
 // Glass
 BLOCK.GLASS = {
-	id: 17,
+	id: 18,
 	spawnable: true,
 	transparent: true,
 	selflit: false,
@@ -234,13 +240,97 @@ BLOCK.GLASS = {
 
 // Sponge
 BLOCK.SPONGE = {
-	id: 18,
+	id: 19,
 	spawnable: true,
 	transparent: false,
 	selflit: false,
 	gravity: false,
 	fluid: false,
-	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 0/16, 3/16, 1/16, 4/16 ]; }
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 0/16, 3/16, 1/16, 4/16 ]; },
+    icon: "sponge.png"
+};
+
+// Leaves
+BLOCK.LEAVES = {
+	id: 20,
+	spawnable: true,
+	transparent: true,
+	selflit: false,
+	gravity: false,
+	fluid: false,
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 4/16, 3/16, 5/16, 4/16 ]; },
+    icon: "leaves.png"
+};
+
+// Water
+BLOCK.WATER = {
+	id: 21,
+	spawnable: false,
+	transparent: true,
+	selflit: true,
+	gravity: false,
+	fluid: true,
+	//texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 14/16, 0/16, 15/16, 1/16 ]; }
+    texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 15/16, 13/16, 16/16, 14/16 ]; }
+};
+
+// Iron Ore
+BLOCK.IRON_ORE = {
+	id: 22,
+	spawnable: true,
+	transparent: false,
+	selflit: false,
+	gravity: false,
+	fluid: false,
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 1/16, 2/16, 2/16, 3/16 ]; }
+};
+
+// Gold Ore
+BLOCK.GOLD_ORE = {
+	id: 23,
+	spawnable: true,
+	transparent: false,
+	selflit: false,
+	gravity: false,
+	fluid: false,
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 0/16, 2/16, 1/16, 3/16 ]; },
+    icon: "goldore.png"
+};
+
+// Diamon Ore
+BLOCK.DIAMOND_ORE = {
+	id: 24,
+	spawnable: true,
+	transparent: false,
+	selflit: false,
+	gravity: false,
+	fluid: false,
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 2/16, 3/16, 3/16, 4/16 ]; },
+    icon: "diamondore.png"
+};
+
+// Coal Ore
+BLOCK.COAL_ORE = {
+	id: 25,
+	spawnable: true,
+	transparent: false,
+	selflit: false,
+	gravity: false,
+	fluid: false,
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 2/16, 2/16, 3/16, 3/16 ]; }
+};
+
+
+// Redstone Ore
+BLOCK.REDSTONE_ORE = {
+	id: 26,
+	spawnable: true,
+	transparent: false,
+	selflit: false,
+	gravity: false,
+	fluid: false,
+	texture: function( world, lightmap, lit, x, y, z, dir ) { return [ 3/16, 3/16, 4/16, 4/16 ]; },
+    icon: "redstoneore.png"
 };
 
 // fromId( id )
@@ -253,7 +343,7 @@ BLOCK.fromId = function( id )
 		if ( typeof( BLOCK[mat] ) == "object" && BLOCK[mat].id == id )
 			return BLOCK[mat];
 	return null;
-}
+};
 
 // pushVertices( vertices, world, lightmap, x, y, z )
 //
@@ -365,7 +455,7 @@ BLOCK.pushVertices = function( vertices, world, lightmap, x, y, z )
 			[ x + 1.0, y, z + bH, c[0], c[1], lightMultiplier, lightMultiplier, lightMultiplier, 1.0 ]
 		);
 	}
-}
+};
 
 // pushPickingVertices( vertices, x, y, z )
 //
@@ -374,7 +464,6 @@ BLOCK.pushVertices = function( vertices, world, lightmap, x, y, z )
 BLOCK.pushPickingVertices = function( vertices, x, y, z )
 {
 	var color = { r: x/255, g: y/255, b: z/255 };
-	
 	// Top
 	pushQuad(
 		vertices,
@@ -428,7 +517,7 @@ BLOCK.pushPickingVertices = function( vertices, x, y, z )
 		[ x + 1, y + 1, z + 1, 1, 1, color.r, color.g, color.b, 6/255 ],
 		[ x + 1, y, z + 1, 0, 0, color.r, color.g, color.b, 6/255 ]
 	);
-}
+};
 
 // Export to node.js
 if ( typeof( exports ) != "undefined" )
