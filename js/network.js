@@ -265,7 +265,7 @@ function Server( socketio, slots )
 
 	this.oneUserPerIp = true;
 
-    http.listen(3000, function() {});
+    http.listen(process.env.PORT || 5000, process.env.HOST, function() {});
 }
 
 // setWorld( world )
